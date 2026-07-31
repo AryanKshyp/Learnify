@@ -1,0 +1,502 @@
+{
+  "roles": [
+    {
+      "role_id": "ai-research",
+      "name": "AI Research",
+      "priority_rank": 1
+    },
+    {
+      "role_id": "ai-engineer",
+      "name": "AI Engineer",
+      "priority_rank": 2
+    },
+    {
+      "role_id": "data-science",
+      "name": "Data Science",
+      "priority_rank": 3
+    },
+    {
+      "role_id": "software-engineering",
+      "name": "Software Engineering",
+      "priority_rank": 4
+    },
+    {
+      "role_id": "product-management",
+      "name": "Product Management",
+      "priority_rank": 5
+    },
+    {
+      "role_id": "finance-quant",
+      "name": "Finance / Quantitative",
+      "priority_rank": 6
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "prob-axioms",
+      "type": "assessable",
+      "name": "Probability Axioms & Sample Spaces",
+      "section": "probability",
+      "competency": "foundations",
+      "description": "Sample spaces, events, and Kolmogorov's axioms of probability.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.8,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.9,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-conditional",
+      "type": "assessable",
+      "name": "Conditional Probability",
+      "section": "probability",
+      "competency": "foundations",
+      "description": "P(A|B) and the chain rule; reasoning about probabilities under given information.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.9,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.95,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-bayes",
+      "type": "assessable",
+      "name": "Bayes' Theorem",
+      "section": "probability",
+      "competency": "bayesian",
+      "description": "Inverting conditional probabilities; priors, likelihoods, and posteriors.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.92,
+          "required_depth": "derivation"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.92,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.93,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-vectors",
+      "type": "assessable",
+      "name": "Vectors & Vector Spaces",
+      "section": "linear-algebra",
+      "competency": "foundations",
+      "description": "Vectors, linear combinations, span, and basis.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.8,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-matrix-multiplication",
+      "type": "assessable",
+      "name": "Matrix Multiplication",
+      "section": "linear-algebra",
+      "competency": "operations",
+      "description": "Matrix products, their meaning as composed linear maps, and complexity.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-dot-product",
+      "type": "assessable",
+      "name": "Dot Product & Norms",
+      "section": "linear-algebra",
+      "competency": "geometry",
+      "description": "Inner products, norms, orthogonality, and projections.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.58,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-derivatives",
+      "type": "assessable",
+      "name": "Derivatives & Chain Rule",
+      "section": "calculus-optimization",
+      "competency": "calculus",
+      "description": "Single/multivariable derivatives, gradients, and the chain rule.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.88,
+          "required_depth": "derivation"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.78,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-gradients",
+      "type": "assessable",
+      "name": "Gradients & Jacobians",
+      "section": "calculus-optimization",
+      "competency": "calculus",
+      "description": "Gradient vectors, Jacobians, and Hessians for multivariable functions.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.88,
+          "required_depth": "derivation"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.7,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-gradient-descent",
+      "type": "assessable",
+      "name": "Gradient Descent",
+      "section": "calculus-optimization",
+      "competency": "algorithms",
+      "description": "First-order optimization via gradient steps; learning rate effects.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.9,
+          "required_depth": "derivation"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-linear-regression",
+      "type": "assessable",
+      "name": "Linear Regression (ML)",
+      "section": "classical-ml",
+      "competency": "models",
+      "description": "Regression as an ML model: loss, fitting, and evaluation.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-logistic-regression",
+      "type": "assessable",
+      "name": "Logistic Regression",
+      "section": "classical-ml",
+      "competency": "models",
+      "description": "Binary classification via the sigmoid and cross-entropy loss.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.9,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-attention",
+      "type": "assessable",
+      "name": "Self-Attention",
+      "section": "deep-learning",
+      "competency": "transformers",
+      "description": "Scaled dot-product attention: queries, keys, values, and weighting.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.95,
+          "required_depth": "derivation"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.9,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    }
+  ],
+  "edges": [
+    {
+      "from_node_id": "prob-conditional",
+      "to_node_id": "prob-axioms",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-bayes",
+      "to_node_id": "prob-conditional",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-matrix-multiplication",
+      "to_node_id": "linalg-vectors",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-dot-product",
+      "to_node_id": "linalg-vectors",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-gradients",
+      "to_node_id": "opt-derivatives",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-gradient-descent",
+      "to_node_id": "opt-gradients",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "ml-linear-regression",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "ml-logistic-regression",
+      "to_node_id": "ml-linear-regression",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-logistic-regression",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "ml-logistic-regression",
+      "to_node_id": "prob-bayes",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-attention",
+      "to_node_id": "linalg-matrix-multiplication",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dl-attention",
+      "to_node_id": "linalg-dot-product",
+      "type": "prerequisite",
+      "weight": 1.0
+    }
+  ]
+}
