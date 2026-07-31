@@ -33,8 +33,8 @@ d:\Learnify\
 └── .claude/agents/               # section-author, graph-integrator subagents
 ```
 
-**Planned scaffold** (Stage 0, not yet created) — folder names mirror the four layers so a boundary
-violation is visible as a bad import:
+**Backend scaffold** (created at Stage 0) — folder names mirror the four layers so a boundary
+violation is visible as a bad import, and `lint-imports` fails the build on one:
 
 ```
 backend/
@@ -44,11 +44,14 @@ backend/
 │   ├── engine/       # L3 — pure deterministic calculation; NO I/O
 │   │   └── config.py #      every [TUNABLE] parameter, in one place
 │   ├── assessment/   # L4 boundary — Schema A generation, Schema B validation/ingest
-│   └── api/          # FastAPI routers over L1–L4
-├── tests/
-└── pyproject.toml
+│   ├── api/          # FastAPI routers over L1–L4
+│   └── config.py     # infrastructure settings only (kept apart from engine tuning)
+├── tests/conftest.py
+├── pyproject.toml    # deps + pytest + ruff + import-linter contracts
+└── .env.example
 
-frontend/             # Stage 7 — React + Vite + TypeScript
+docker-compose.yml    # local postgres:16 (repo root)
+frontend/             # Stage 7 — React + Vite + TypeScript (not yet created)
 ```
 
 ---
@@ -124,6 +127,11 @@ The boundary is enforceable in code review as a dependency rule:
 
 The critical rule: **`engine/` imports no I/O of any kind.** Time is an *input parameter*, never
 `datetime.now()` read inside a formula — otherwise determinism dies silently.
+
+This is **enforced, not reviewed**: `backend/pyproject.toml` declares import-linter contracts for
+the layer ordering, the engine's purity (no storage, transport, filesystem, `random`, `time`, or
+`datetime`), and curriculum's independence. Run `lint-imports` from `backend/`. The contracts were
+verified to fail on injected violations, not merely to pass on an empty tree.
 
 ---
 

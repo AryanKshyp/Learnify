@@ -1,0 +1,101 @@
+[project]
+name = "knowledgeos"
+version = "0.1.0"
+description = "KnowledgeOS - evidence-based interview-readiness modelling"
+requires-python = ">=3.12"
+
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "sqlalchemy>=2.0",
+    "psycopg[binary]>=3.2",
+    "alembic>=1.14",
+    "networkx>=3.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "ruff>=0.8",
+    "import-linter>=2.1",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["knowledgeos*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q --strict-markers"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+
+# ---------------------------------------------------------------------------
+# Layer boundaries (ARCHITECTURE.md SS4), enforced rather than reviewed.
+# Run: lint-imports
+# ---------------------------------------------------------------------------
+[tool.importlinter]
+root_package = "knowledgeos"
+# required because the "engine is pure" contract forbids third-party/stdlib modules
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "Layers are strictly ordered (higher may import lower, never the reverse)"
+type = "layers"
+layers = [
+    "knowledgeos.api",
+    "knowledgeos.assessment",
+    "knowledgeos.engine",
+    "knowledgeos.state",
+    "knowledgeos.curriculum",
+]
+
+[[tool.importlinter.contracts]]
+name = "Engine is pure: no I/O, no clock, no randomness"
+type = "forbidden"
+source_modules = ["knowledgeos.engine"]
+forbidden_modules = [
+    # storage / transport — the engine takes state as arguments, never fetches it
+    "sqlalchemy",
+    "psycopg",
+    "alembic",
+    "fastapi",
+    "httpx",
+    "requests",
+    # filesystem
+    "os",
+    "pathlib",
+    "io",
+    # non-determinism: identical inputs must always produce identical outputs.
+    # Time enters the engine as an explicit parameter (e.g. days_elapsed: float),
+    # never by reading a clock inside a formula.
+    "random",
+    "time",
+    "datetime",
+    "secrets",
+    "uuid",
+]
+
+[[tool.importlinter.contracts]]
+name = "Curriculum (Layer 1) depends on nothing internal"
+type = "forbidden"
+source_modules = ["knowledgeos.curriculum"]
+forbidden_modules = [
+    "knowledgeos.state",
+    "knowledgeos.engine",
+    "knowledgeos.assessment",
+    "knowledgeos.api",
+]

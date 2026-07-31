@@ -108,14 +108,28 @@ Full detail — layer import rules, contract map, pipeline ordering, stack: **[A
 
 ## 6. Commands
 
+**Curriculum (repo root):**
 ```bash
 python build_graph.py     # regenerate + validate curriculum_graph.json.
                           # Must print "ERRORS: 0" before you trust the output.
                           # Validates: unique section-prefixed node_ids, referential integrity,
                           # prerequisite-DAG acyclicity (Kahn), duplicate concepts, rubric ranges.
+python make_fixture.py    # regenerate curriculum_fixture.json as an exact, edge-closed subset
+                          # of curriculum_graph.json. Re-run after changing the graph.
 ```
 
-Application build/test/lint commands do not exist yet; add them here when Stage 0 scaffolds them.
+**Backend (`cd backend`, venv activated — Python 3.12):**
+```bash
+pytest                    # test suite
+pytest -k <pattern>       # a single test / subset
+ruff check .              # lint
+lint-imports              # enforce the ARCHITECTURE.md layer boundaries
+```
+
+Run all four before considering a stage done. `lint-imports` is the machine check on Layer 3's
+purity — it fails the build if the engine imports storage, transport, a clock, or randomness.
+
+Setup steps are in [backend/README.md](backend/README.md). Frontend does not exist until Stage 7.
 
 ---
 

@@ -33,6 +33,37 @@
   ],
   "nodes": [
     {
+      "node_id": "prob-counting",
+      "type": "assessable",
+      "name": "Counting & Combinatorics",
+      "section": "probability",
+      "competency": "foundations",
+      "description": "Permutations, combinations, and the multiplication principle for counting outcomes.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.92,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
       "node_id": "prob-axioms",
       "type": "assessable",
       "name": "Probability Axioms & Sample Spaces",
@@ -110,6 +141,37 @@
       "tags": []
     },
     {
+      "node_id": "prob-independence",
+      "type": "assessable",
+      "name": "Independence",
+      "section": "probability",
+      "competency": "foundations",
+      "description": "Independent and conditionally independent events and their implications.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.78,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.9,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
       "node_id": "prob-bayes",
       "type": "assessable",
       "name": "Bayes' Theorem",
@@ -146,6 +208,269 @@
           "role_id": "finance-quant",
           "importance": 0.93,
           "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-random-variables",
+      "type": "assessable",
+      "name": "Random Variables",
+      "section": "probability",
+      "competency": "random-variables",
+      "description": "Discrete and continuous random variables, PMFs, PDFs, and CDFs.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.8,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.92,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-distributions",
+      "type": "assessable",
+      "name": "Common Distributions",
+      "section": "probability",
+      "competency": "random-variables",
+      "description": "Bernoulli, Binomial, Poisson, Uniform, Normal, Exponential, and Geometric distributions.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.82,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.92,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-expectation",
+      "type": "assessable",
+      "name": "Expectation & Variance",
+      "section": "probability",
+      "competency": "moments",
+      "description": "Expected value, variance, and linearity of expectation.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.9,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.95,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-covariance",
+      "type": "assessable",
+      "name": "Covariance & Correlation",
+      "section": "probability",
+      "competency": "moments",
+      "description": "Joint variability of random variables and the correlation coefficient.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.9,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-descriptive",
+      "type": "assessable",
+      "name": "Descriptive Statistics",
+      "section": "statistics",
+      "competency": "foundations",
+      "description": "Mean, median, variance, quantiles, and summary statistics.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.8,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-estimation",
+      "type": "assessable",
+      "name": "Point Estimation & Bias",
+      "section": "statistics",
+      "competency": "estimation",
+      "description": "Estimators, bias, variance, consistency, and efficiency.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.85,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-mle",
+      "type": "assessable",
+      "name": "Maximum Likelihood Estimation",
+      "section": "statistics",
+      "competency": "estimation",
+      "description": "Estimating parameters by maximizing the likelihood function.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.9,
+          "required_depth": "derivation"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.82,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-linear-regression",
+      "type": "assessable",
+      "name": "Linear Regression (Statistical)",
+      "section": "statistics",
+      "competency": "regression",
+      "description": "OLS estimation, assumptions, coefficient interpretation, and diagnostics.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.92,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.6,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.82,
+          "required_depth": "deep"
         }
       ],
       "tags": []
@@ -244,6 +569,27 @@
       "tags": []
     },
     {
+      "node_id": "linalg-matrix-calculus",
+      "type": "assessable",
+      "name": "Matrix Calculus",
+      "section": "linear-algebra",
+      "competency": "calculus-bridge",
+      "description": "Gradients and Jacobians of vector/matrix expressions.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.85,
+          "required_depth": "derivation"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
       "node_id": "opt-derivatives",
       "type": "assessable",
       "name": "Derivatives & Chain Rule",
@@ -301,6 +647,32 @@
           "role_id": "finance-quant",
           "importance": 0.7,
           "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-convexity",
+      "type": "assessable",
+      "name": "Convexity",
+      "section": "calculus-optimization",
+      "competency": "theory",
+      "description": "Convex sets/functions and why convexity guarantees global optima.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.78,
+          "required_depth": "deep"
         }
       ],
       "tags": []
@@ -399,6 +771,58 @@
       "tags": []
     },
     {
+      "node_id": "ml-naive-bayes",
+      "type": "assessable",
+      "name": "Naive Bayes",
+      "section": "classical-ml",
+      "competency": "models",
+      "description": "Probabilistic classification under the conditional-independence assumption.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.78,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-perceptron",
+      "type": "assessable",
+      "name": "Perceptron & MLP",
+      "section": "deep-learning",
+      "competency": "foundations",
+      "description": "Neurons, layers, and the multilayer perceptron.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
       "node_id": "dl-attention",
       "type": "assessable",
       "name": "Self-Attention",
@@ -433,10 +857,82 @@
       "weight": 1.0
     },
     {
+      "from_node_id": "prob-independence",
+      "to_node_id": "prob-conditional",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
       "from_node_id": "prob-bayes",
       "to_node_id": "prob-conditional",
       "type": "prerequisite",
       "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-random-variables",
+      "to_node_id": "prob-axioms",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-distributions",
+      "to_node_id": "prob-random-variables",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-expectation",
+      "to_node_id": "prob-random-variables",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-covariance",
+      "to_node_id": "prob-expectation",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-bayes",
+      "to_node_id": "prob-counting",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-estimation",
+      "to_node_id": "stat-descriptive",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "stat-estimation",
+      "to_node_id": "prob-expectation",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "stat-mle",
+      "to_node_id": "stat-estimation",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "stat-mle",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "stat-linear-regression",
+      "to_node_id": "stat-mle",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "stat-linear-regression",
+      "to_node_id": "prob-covariance",
+      "type": "prerequisite",
+      "weight": 0.7
     },
     {
       "from_node_id": "linalg-matrix-multiplication",
@@ -451,16 +947,52 @@
       "weight": 1.0
     },
     {
+      "from_node_id": "linalg-matrix-calculus",
+      "to_node_id": "linalg-matrix-multiplication",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-matrix-calculus",
+      "to_node_id": "linalg-dot-product",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
       "from_node_id": "opt-gradients",
       "to_node_id": "opt-derivatives",
       "type": "prerequisite",
       "weight": 1.0
     },
     {
+      "from_node_id": "opt-gradients",
+      "to_node_id": "linalg-matrix-calculus",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-convexity",
+      "to_node_id": "opt-derivatives",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
       "from_node_id": "opt-gradient-descent",
       "to_node_id": "opt-gradients",
       "type": "prerequisite",
       "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-gradient-descent",
+      "to_node_id": "opt-convexity",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-linear-regression",
+      "to_node_id": "stat-linear-regression",
+      "type": "prerequisite",
+      "weight": 0.7
     },
     {
       "from_node_id": "ml-linear-regression",
@@ -485,6 +1017,36 @@
       "to_node_id": "prob-bayes",
       "type": "prerequisite",
       "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-naive-bayes",
+      "to_node_id": "prob-bayes",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "ml-naive-bayes",
+      "to_node_id": "prob-independence",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dl-perceptron",
+      "to_node_id": "linalg-matrix-multiplication",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dl-perceptron",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dl-attention",
+      "to_node_id": "dl-perceptron",
+      "type": "prerequisite",
+      "weight": 1.0
     },
     {
       "from_node_id": "dl-attention",
