@@ -105,6 +105,51 @@ n("prob-markov-chains", "Markov Chains", "probability", "stochastic",
 n("prob-mgf", "Moment Generating Functions", "probability", "moments",
   "MGFs for deriving moments and characterizing distributions.",
   [(R,0.68,DP),(F,0.82,DV)])
+n("prob-joint-marginal", "Joint & Marginal Distributions", "probability", "random-variables",
+  "Joint PMFs/PDFs over multiple random variables and recovering marginals by summing or integrating them out.",
+  [(R,0.85,DP),(E,0.78,WK),(D,0.82,WK),(F,0.88,DV)])
+n("prob-transformations", "Transformations of Random Variables", "probability", "random-variables",
+  "Deriving the distribution of a function of a random variable via the CDF technique or the change-of-variables Jacobian formula.",
+  [(R,0.78,DP),(E,0.65,WK),(D,0.68,WK),(F,0.85,DV)])
+n("prob-order-statistics", "Order Statistics", "probability", "random-variables",
+  "Distributions of the minimum, maximum, and general k-th order statistic of i.i.d. samples.",
+  [(R,0.65,WK),(D,0.60,WK),(F,0.75,DP)])
+n("prob-poisson-process", "Poisson Processes", "probability", "stochastic",
+  "Continuous-time counting processes with independent, stationary increments, and their link to exponential interarrival times.",
+  [(R,0.68,WK),(E,0.55,AW),(D,0.62,WK),(F,0.82,DP)])
+n("prob-entropy-kl", "Entropy & KL Divergence", "probability", "information-theory",
+  "Shannon entropy, cross-entropy, and KL divergence as a measure of the difference between two distributions.",
+  [(R,0.85,DP),(E,0.75,WK),(D,0.62,WK)])
+n("prob-sampling-methods", "Sampling Methods", "probability", "computation",
+  "Generating samples from a target distribution via inverse-CDF sampling, rejection sampling, and importance sampling.",
+  [(R,0.72,WK),(E,0.62,WK),(D,0.65,WK),(F,0.78,DP)])
+n("prob-convergence-modes", "Modes of Stochastic Convergence", "probability", "limit-theorems",
+  "Convergence in probability, in distribution, and almost surely, and how each relates to the LLN and CLT.",
+  [(R,0.72,DP),(D,0.55,WK),(F,0.75,DP)])
+n("prob-multivariate-normal", "Multivariate Normal Distribution", "probability", "random-variables",
+  "The multivariate Gaussian, its covariance-matrix parameterization, and conditional/marginal Gaussian identities.",
+  [(R,0.82,DP),(E,0.70,WK),(D,0.68,WK),(F,0.80,DP)])
+n("prob-characteristic-functions", "Characteristic Functions", "probability", "moments",
+  "Fourier-transform-like functions that uniquely determine a distribution and simplify analysis of sums of independent variables.",
+  [(R,0.55,WK),(F,0.70,DP)])
+n("prob-concentration-inequalities", "Concentration Inequalities & Tail Bounds", "probability", "limit-theorems",
+  "Chernoff bounds and Hoeffding's inequality for exponentially tight tail probability bounds beyond Chebyshev.",
+  [(R,0.75,DP),(E,0.60,WK),(F,0.80,DP)])
+n("prob-random-walks", "Random Walks", "probability", "stochastic",
+  "Simple random walks on the integers, expected displacement, and the gambler's ruin problem.",
+  [(R,0.60,WK),(F,0.78,DP)])
+n("prob-variance-reduction", "Variance Reduction Techniques", "probability", "computation",
+  "Antithetic variates, control variates, and stratified sampling for reducing Monte Carlo estimator variance.",
+  [(R,0.55,WK),(F,0.75,DP)])
+n("prob-hypergeometric-negbinom", "Hypergeometric & Negative Binomial Distributions", "probability", "random-variables",
+  "Sampling without replacement and counting trials until r successes, extending the binomial family.",
+  [(R,0.55,AW),(D,0.60,WK),(F,0.72,WK)])
+n("prob-multinomial-dirichlet", "Multinomial & Dirichlet Distributions", "probability", "random-variables",
+  "The multivariate generalizations of the binomial and beta distributions, used to model categorical outcomes and their conjugate priors.",
+  [(R,0.68,WK),(D,0.55,AW)])
+n("prob-total-variance", "Law of Total Variance", "probability", "moments",
+  "Eve's law: decomposing variance into the expected conditional variance plus the variance of the conditional expectation.",
+  [(R,0.65,WK),(D,0.55,AW),(F,0.75,WK)])
 
 e("prob-conditional","prob-axioms",1.0)
 e("prob-independence","prob-conditional",0.7)
@@ -122,6 +167,33 @@ e("prob-clt","prob-distributions",0.7)
 e("prob-mgf","prob-expectation",1.0)
 e("prob-markov-chains","prob-conditional",1.0)
 e("prob-bayes","prob-counting",0.4)
+e("prob-joint-marginal","prob-random-variables",1.0)
+e("prob-joint-marginal","prob-independence",0.4)
+e("prob-transformations","prob-random-variables",1.0)
+e("prob-transformations","prob-joint-marginal",0.4)
+e("prob-order-statistics","prob-distributions",1.0)
+e("prob-order-statistics","prob-joint-marginal",0.7)
+e("prob-poisson-process","prob-distributions",1.0)
+e("prob-poisson-process","prob-markov-chains",0.4)
+e("prob-entropy-kl","prob-expectation",1.0)
+e("prob-entropy-kl","prob-distributions",0.7)
+e("prob-sampling-methods","prob-distributions",1.0)
+e("prob-sampling-methods","prob-expectation",0.4)
+e("prob-convergence-modes","prob-lln",0.7)
+e("prob-convergence-modes","prob-clt",0.7)
+e("prob-multivariate-normal","prob-covariance",1.0)
+e("prob-multivariate-normal","prob-distributions",0.7)
+e("prob-multivariate-normal","linalg-pd-matrices",0.7)
+e("prob-characteristic-functions","prob-mgf",0.7)
+e("prob-concentration-inequalities","prob-inequalities",1.0)
+e("prob-concentration-inequalities","prob-mgf",0.7)
+e("prob-random-walks","prob-markov-chains",1.0)
+e("prob-variance-reduction","prob-sampling-methods",1.0)
+e("prob-variance-reduction","prob-covariance",0.4)
+e("prob-hypergeometric-negbinom","prob-distributions",1.0)
+e("prob-hypergeometric-negbinom","prob-counting",0.4)
+e("prob-multinomial-dirichlet","prob-distributions",1.0)
+e("prob-total-variance","prob-conditional-expectation",1.0)
 
 # ---- statistics -----------------------------------------------------------
 n("stat-descriptive", "Descriptive Statistics", "statistics", "foundations",
@@ -221,6 +293,59 @@ n("linalg-orthogonality", "Orthogonal & Projection Matrices", "linear-algebra", 
   "Orthonormal bases, Gram-Schmidt, and projection onto subspaces.",
   [(R,0.72,DP),(E,0.60,WK),(F,0.55,WK)])
 
+# ---- linear-algebra (deepened) ----
+n("linalg-linear-transformations", "Linear Transformations & Change of Basis", "linear-algebra", "foundations",
+  "Linear maps represented as matrices, how they act geometrically, and representing them under different bases.",
+  [(R,0.75,DP),(E,0.65,WK)])
+n("linalg-determinants", "Determinants", "linear-algebra", "operations",
+  "Determinants as signed volume scaling, their relation to invertibility, and computation via cofactor expansion or decomposition.",
+  [(R,0.70,WK),(E,0.62,WK),(F,0.60,WK)])
+n("linalg-null-column-space", "Null Space & Column Space", "linear-algebra", "operations",
+  "The four fundamental subspaces, the rank-nullity theorem, and their geometric meaning for solvability.",
+  [(R,0.72,DP),(E,0.65,WK),(D,0.45,AW)])
+n("linalg-linear-systems", "Solving Linear Systems", "linear-algebra", "operations",
+  "Solving Ax=b via Gaussian elimination; existence, uniqueness, and row-reduced echelon form.",
+  [(R,0.68,WK),(E,0.70,WK),(F,0.58,WK)])
+n("linalg-lu-decomposition", "LU Decomposition", "linear-algebra", "decompositions",
+  "Factoring a matrix into lower and upper triangular factors for efficient solving of linear systems.",
+  [(R,0.60,WK),(E,0.65,WK)])
+n("linalg-qr-decomposition", "QR Decomposition", "linear-algebra", "decompositions",
+  "Factoring a matrix into an orthogonal matrix and an upper-triangular matrix via Gram-Schmidt or Householder reflections.",
+  [(R,0.68,WK),(E,0.65,WK)])
+n("linalg-cholesky", "Cholesky Decomposition", "linear-algebra", "decompositions",
+  "Factoring a positive-definite matrix into a lower-triangular matrix and its transpose.",
+  [(R,0.62,WK),(E,0.60,WK)])
+n("linalg-diagonalization", "Diagonalization", "linear-algebra", "decompositions",
+  "Diagonalizing a matrix via its eigenvectors, computing matrix powers efficiently, and when diagonalization fails.",
+  [(R,0.75,DP),(E,0.62,WK)])
+n("linalg-pseudoinverse", "Moore-Penrose Pseudoinverse", "linear-algebra", "operations",
+  "Generalizing matrix inversion to non-square or singular matrices via the pseudoinverse, and its use in least-squares.",
+  [(R,0.70,DP),(E,0.62,WK)])
+n("linalg-least-squares", "Projections & Least Squares", "linear-algebra", "geometry",
+  "Orthogonal projection onto a subspace and deriving the least-squares solution via normal equations.",
+  [(R,0.78,DP),(E,0.70,WK),(D,0.55,WK)])
+n("linalg-quadratic-forms", "Quadratic Forms", "linear-algebra", "special-matrices",
+  "Quadratic forms x^T A x, their relation to positive-definiteness, and geometric interpretation as ellipsoids/level sets.",
+  [(R,0.70,DP),(E,0.58,WK),(F,0.55,WK)])
+n("linalg-matrix-norms", "Matrix Norms", "linear-algebra", "geometry",
+  "Operator/spectral norm and Frobenius norm, and their use in bounding transformations.",
+  [(R,0.65,WK),(E,0.60,WK)])
+n("linalg-trace", "Trace & Trace Tricks", "linear-algebra", "operations",
+  "Trace's cyclic property, its relation to eigenvalues, and common trace-based simplifications used in derivations.",
+  [(R,0.62,WK),(E,0.55,AW)])
+n("linalg-condition-number", "Condition Number & Numerical Stability", "linear-algebra", "special-matrices",
+  "How a matrix's condition number governs sensitivity to perturbation and numerical error in computation.",
+  [(R,0.68,DP),(E,0.70,WK)])
+n("linalg-low-rank-approx", "Low-Rank Approximation", "linear-algebra", "decompositions",
+  "Approximating a matrix with a lower-rank one that minimizes reconstruction error (Eckart-Young theorem).",
+  [(R,0.78,DP),(E,0.72,WK)])
+n("linalg-tensor-ops", "Tensor Operations & Broadcasting", "linear-algebra", "operations",
+  "Multi-dimensional array operations, broadcasting rules, and reshaping as used throughout deep learning frameworks.",
+  [(R,0.72,WK),(E,0.82,DP)])
+n("linalg-kronecker", "Kronecker Product", "linear-algebra", "operations",
+  "The Kronecker product of matrices and its use in structured transformations and efficient parameterization.",
+  [(R,0.55,AW)])
+
 e("linalg-matrix-multiplication","linalg-vectors",1.0)
 e("linalg-dot-product","linalg-vectors",1.0)
 e("linalg-matrix-inverse","linalg-matrix-multiplication",1.0)
@@ -231,6 +356,28 @@ e("linalg-orthogonality","linalg-dot-product",1.0)
 e("linalg-pd-matrices","linalg-eigen",1.0)
 e("linalg-matrix-calculus","linalg-matrix-multiplication",1.0)
 e("linalg-matrix-calculus","linalg-dot-product",0.7)
+
+e("linalg-linear-transformations","linalg-vectors",1.0)
+e("linalg-linear-transformations","linalg-matrix-multiplication",0.7)
+e("linalg-determinants","linalg-matrix-multiplication",0.7)
+e("linalg-null-column-space","linalg-matrix-inverse",0.7)
+e("linalg-linear-systems","linalg-matrix-inverse",0.7)
+e("linalg-linear-systems","linalg-determinants",0.4)
+e("linalg-lu-decomposition","linalg-linear-systems",1.0)
+e("linalg-qr-decomposition","linalg-orthogonality",1.0)
+e("linalg-cholesky","linalg-pd-matrices",1.0)
+e("linalg-diagonalization","linalg-eigen",1.0)
+e("linalg-pseudoinverse","linalg-svd",1.0)
+e("linalg-pseudoinverse","linalg-matrix-inverse",0.4)
+e("linalg-least-squares","linalg-orthogonality",1.0)
+e("linalg-quadratic-forms","linalg-pd-matrices",1.0)
+e("linalg-matrix-norms","linalg-dot-product",0.7)
+e("linalg-matrix-norms","linalg-eigen",0.4)
+e("linalg-trace","linalg-eigen",0.4)
+e("linalg-condition-number","linalg-eigen",0.7)
+e("linalg-low-rank-approx","linalg-svd",1.0)
+e("linalg-tensor-ops","linalg-matrix-multiplication",0.7)
+e("linalg-kronecker","linalg-matrix-multiplication",0.7)
 
 # ---- calculus-optimization ------------------------------------------------
 n("opt-derivatives", "Derivatives & Chain Rule", "calculus-optimization", "calculus",
@@ -260,6 +407,60 @@ n("opt-convex-optimization", "Convex Optimization Problems", "calculus-optimizat
 n("opt-second-order", "Newton's Method", "calculus-optimization", "algorithms",
   "Second-order optimization using curvature information.",
   [(R,0.68,DP),(F,0.60,WK)])
+n("opt-taylor-expansion", "Taylor Expansion & Local Approximation", "calculus-optimization", "calculus",
+  "Approximating functions locally via Taylor series; linear and quadratic approximations used throughout optimization theory.",
+  [(R,0.75,DP),(E,0.60,WK),(D,0.45,AW),(F,0.75,DP)])
+n("opt-hessian-second-order", "Hessians & Second-Order Optimality Conditions", "calculus-optimization", "theory",
+  "Using the Hessian's eigenvalues to classify critical points as minima, maxima, or saddle points.",
+  [(R,0.78,DP),(E,0.65,WK),(F,0.68,WK)])
+n("opt-convexity-tests", "Convexity Tests & Verification", "calculus-optimization", "theory",
+  "First- and second-order conditions (gradient inequality, PSD Hessian) for verifying convexity of a function.",
+  [(R,0.72,WK),(E,0.60,WK),(F,0.70,WK)])
+n("opt-saddle-points", "Saddle Points & Critical Point Classification", "calculus-optimization", "theory",
+  "Why saddle points dominate high-dimensional non-convex loss landscapes and how they slow first-order optimization.",
+  [(R,0.75,DP),(E,0.62,WK)])
+n("opt-duality", "Lagrangian Duality", "calculus-optimization", "constrained",
+  "Weak/strong duality, the duality gap, and complementary slackness in constrained optimization.",
+  [(R,0.72,WK),(E,0.55,WK),(F,0.75,DP)])
+n("opt-quasi-newton", "Quasi-Newton Methods & L-BFGS", "calculus-optimization", "algorithms",
+  "Approximating curvature without computing the full Hessian; BFGS and limited-memory L-BFGS updates.",
+  [(R,0.65,WK),(E,0.60,WK),(F,0.60,WK)])
+n("opt-line-search", "Line Search & Step Size Selection", "calculus-optimization", "algorithms",
+  "Choosing step sizes via exact/backtracking line search and the Wolfe conditions.",
+  [(R,0.60,WK),(E,0.55,WK),(F,0.55,WK)])
+n("opt-convergence-rates", "Convergence Rates of Optimization Algorithms", "calculus-optimization", "theory",
+  "Comparing linear, sublinear, and quadratic convergence rates across gradient descent, Newton, and quasi-Newton methods.",
+  [(R,0.70,WK),(E,0.62,WK),(F,0.60,WK)])
+n("opt-coordinate-descent", "Coordinate Descent", "calculus-optimization", "algorithms",
+  "Optimizing one coordinate (or block) at a time; used in Lasso, SVM SMO, and large-scale sparse problems.",
+  [(R,0.60,WK),(E,0.65,WK),(F,0.55,WK),(D,0.45,AW)])
+n("opt-proximal-methods", "Proximal Gradient Methods", "calculus-optimization", "algorithms",
+  "Handling non-smooth regularizers (e.g. L1) via proximal operators and soft-thresholding.",
+  [(R,0.62,WK),(E,0.65,WK),(F,0.55,WK)])
+n("opt-subgradient-methods", "Subgradient Methods for Non-Smooth Optimization", "calculus-optimization", "algorithms",
+  "Generalizing gradients to non-differentiable convex functions via subgradients, as in hinge loss and L1 penalties.",
+  [(R,0.60,WK),(E,0.62,WK)])
+n("opt-automatic-differentiation", "Automatic Differentiation", "calculus-optimization", "algorithms",
+  "Forward-mode vs reverse-mode automatic differentiation via computational graphs, the general technique underlying backpropagation.",
+  [(R,0.80,DP),(E,0.85,DP),(D,0.45,AW)])
+n("opt-change-of-variables", "Multivariate Integration & Change of Variables", "calculus-optimization", "calculus",
+  "Transforming integrals under a change of variables using the Jacobian determinant.",
+  [(R,0.68,WK),(E,0.55,WK),(F,0.65,WK)])
+n("opt-lipschitz-smoothness", "Lipschitz Continuity & Smoothness", "calculus-optimization", "theory",
+  "Lipschitz-continuous gradients and smoothness constants that bound step sizes and drive convergence proofs.",
+  [(R,0.65,WK),(E,0.55,WK),(F,0.55,WK)])
+n("opt-minimax-optimization", "Minimax & Saddle-Point Optimization", "calculus-optimization", "theory",
+  "Game-theoretic min-max formulations underlying adversarial training, GANs, and robust optimization.",
+  [(R,0.72,WK),(E,0.60,WK),(F,0.55,WK)])
+n("opt-natural-gradient", "Natural Gradient Descent", "calculus-optimization", "algorithms",
+  "Rescaling gradient steps by the Fisher information metric for parameterization-invariant updates.",
+  [(R,0.62,WK),(E,0.50,WK)])
+n("opt-variance-reduction", "Variance Reduction in Stochastic Optimization", "calculus-optimization", "algorithms",
+  "SVRG/SAGA-style techniques that reduce gradient-estimate variance to accelerate SGD convergence.",
+  [(R,0.58,WK),(E,0.60,WK)])
+n("opt-trust-region", "Trust-Region Methods", "calculus-optimization", "algorithms",
+  "Constraining each optimization step to a region where a local model is trusted, as an alternative to line search.",
+  [(R,0.60,WK),(E,0.55,WK),(F,0.55,WK)])
 
 e("opt-gradients","opt-derivatives",1.0)
 e("opt-gradients","linalg-matrix-calculus",0.7)
@@ -274,6 +475,42 @@ e("opt-convex-optimization","opt-convexity",1.0)
 e("opt-convex-optimization","opt-lagrange",0.7)
 e("opt-second-order","opt-gradients",1.0)
 e("opt-second-order","linalg-pd-matrices",0.7)
+e("opt-taylor-expansion","opt-derivatives",1.0)
+e("opt-hessian-second-order","opt-gradients",1.0)
+e("opt-hessian-second-order","opt-taylor-expansion",0.7)
+e("opt-hessian-second-order","linalg-pd-matrices",0.7)
+e("opt-convexity-tests","opt-convexity",1.0)
+e("opt-convexity-tests","opt-hessian-second-order",0.7)
+e("opt-saddle-points","opt-hessian-second-order",1.0)
+e("opt-saddle-points","opt-gradient-descent",0.4)
+e("opt-duality","opt-lagrange",1.0)
+e("opt-duality","opt-convex-optimization",0.7)
+e("opt-quasi-newton","opt-second-order",1.0)
+e("opt-quasi-newton","linalg-pd-matrices",0.4)
+e("opt-line-search","opt-gradient-descent",1.0)
+e("opt-convergence-rates","opt-gradient-descent",1.0)
+e("opt-convergence-rates","opt-convexity",0.7)
+e("opt-coordinate-descent","opt-gradient-descent",0.7)
+e("opt-coordinate-descent","opt-convexity",0.4)
+e("opt-subgradient-methods","opt-convexity",0.7)
+e("opt-subgradient-methods","opt-gradient-descent",0.7)
+e("opt-proximal-methods","opt-coordinate-descent",0.4)
+e("opt-proximal-methods","opt-convexity",0.7)
+e("opt-proximal-methods","opt-subgradient-methods",0.7)
+e("opt-automatic-differentiation","opt-derivatives",1.0)
+e("opt-automatic-differentiation","opt-gradients",0.7)
+e("opt-change-of-variables","opt-derivatives",0.7)
+e("opt-change-of-variables","opt-gradients",0.7)
+e("opt-lipschitz-smoothness","opt-derivatives",0.7)
+e("opt-lipschitz-smoothness","opt-convexity",0.4)
+e("opt-minimax-optimization","opt-convexity",0.4)
+e("opt-minimax-optimization","opt-gradient-descent",0.7)
+e("opt-minimax-optimization","opt-saddle-points",0.7)
+e("opt-natural-gradient","opt-gradient-descent",1.0)
+e("opt-natural-gradient","linalg-pd-matrices",0.4)
+e("opt-variance-reduction","opt-sgd",1.0)
+e("opt-trust-region","opt-second-order",0.7)
+e("opt-trust-region","opt-line-search",0.4)
 
 # ---- dsa ------------------------------------------------------------------
 n("dsa-big-o", "Big-O & Complexity Analysis", "dsa", "foundations",
@@ -511,10 +748,93 @@ n("beh-why-company", "Motivation & Fit", "behavioral", "communication",
 n("beh-communication", "Communicating Complexity", "behavioral", "communication",
   "Explaining technical work clearly to varied audiences.",
   [(R,0.72,WK),(E,0.75,WK),(D,0.80,WK),(S,0.72,WK),(P,0.88,DP),(F,0.70,WK)])
+n("beh-story-selection", "Story Selection & Portfolio Building", "behavioral", "preparation",
+  "Curating a portfolio of 6-8 stories that map to common behavioral themes and can be adapted across question types.",
+  [(R,0.68,WK),(E,0.72,WK),(D,0.70,WK),(S,0.72,WK),(P,0.85,DP),(F,0.68,WK)])
+n("beh-manager-disagreement", "Disagreeing with a Manager", "behavioral", "collaboration",
+  "Describing a professional disagreement with a manager or senior stakeholder and how it was resolved without damaging the relationship.",
+  [(R,0.65,WK),(E,0.72,WK),(D,0.70,WK),(S,0.72,WK),(P,0.82,DP),(F,0.75,WK)])
+n("beh-feedback-receiving", "Receiving and Acting on Feedback", "behavioral", "growth",
+  "Describing how critical feedback was received, internalized, and acted upon to improve performance.",
+  [(R,0.65,WK),(E,0.70,WK),(D,0.68,WK),(S,0.72,WK),(P,0.80,DP),(F,0.70,WK)])
+n("beh-feedback-giving", "Giving Constructive Feedback", "behavioral", "growth",
+  "Delivering critical feedback to a peer or report constructively while preserving trust.",
+  [(R,0.60,WK),(E,0.65,WK),(D,0.65,WK),(S,0.68,WK),(P,0.78,DP),(F,0.62,WK)])
+n("beh-influence-stakeholders", "Influencing Without Direct Authority", "behavioral", "collaboration",
+  "Persuading peers or cross-functional stakeholders to adopt an approach without formal reporting authority.",
+  [(R,0.62,WK),(E,0.70,WK),(D,0.65,WK),(S,0.72,WK),(P,0.88,DP),(F,0.65,WK)])
+n("beh-ambiguity", "Navigating Ambiguity", "behavioral", "execution",
+  "Making progress and decisions when requirements, goals, or ownership are unclear or incomplete.",
+  [(R,0.68,WK),(E,0.75,WK),(D,0.70,WK),(S,0.72,WK),(P,0.88,DP),(F,0.65,WK)])
+n("beh-prioritization-pressure", "Prioritizing Under Deadline Pressure", "behavioral", "execution",
+  "Choosing what to work on and what to defer when multiple deadlines or requests compete for limited time.",
+  [(R,0.62,WK),(E,0.72,WK),(D,0.68,WK),(S,0.72,WK),(P,0.85,DP),(F,0.70,WK)])
+n("beh-missed-deadline", "Handling a Missed Deadline", "behavioral", "execution",
+  "Explaining a deadline that was missed, the root cause, communication with stakeholders, and the recovery plan.",
+  [(R,0.55,WK),(E,0.68,WK),(D,0.65,WK),(S,0.68,WK),(P,0.78,DP),(F,0.65,WK)])
+n("beh-teamwork", "Teamwork & Collaboration", "behavioral", "collaboration",
+  "Contributing effectively as part of a team, sharing credit, and adapting to teammates' working styles.",
+  [(R,0.60,WK),(E,0.70,WK),(D,0.68,WK),(S,0.75,WK),(P,0.78,DP),(F,0.65,WK)])
+n("beh-cross-functional", "Cross-Functional Communication", "behavioral", "communication",
+  "Coordinating with people in different functions (e.g. design, sales, legal) who have different priorities and vocabularies.",
+  [(R,0.55,WK),(E,0.65,WK),(D,0.62,WK),(S,0.65,WK),(P,0.90,DP),(F,0.62,WK)])
+n("beh-learning-new-tech", "Learning a New Technology Quickly", "behavioral", "growth",
+  "Ramping up on an unfamiliar tool, language, or domain under time pressure and applying it productively.",
+  [(R,0.55,WK),(E,0.72,WK),(D,0.62,WK),(S,0.75,WK),(P,0.55,AW),(F,0.58,WK)])
+n("beh-strengths-weaknesses", "Strengths & Weaknesses", "behavioral", "preparation",
+  "Articulating genuine strengths and a real weakness with evidence of self-awareness and active improvement.",
+  [(R,0.60,WK),(E,0.62,WK),(D,0.62,WK),(S,0.65,WK),(P,0.70,WK),(F,0.65,WK)])
+n("beh-interviewer-questions", "Questions to Ask the Interviewer", "behavioral", "preparation",
+  "Preparing thoughtful, role-specific questions that signal genuine research and engagement.",
+  [(R,0.50,AW),(E,0.55,AW),(D,0.55,AW),(S,0.55,AW),(P,0.65,WK),(F,0.55,AW)])
+n("beh-offer-negotiation", "Offer & Compensation Conversations", "behavioral", "negotiation",
+  "Discussing compensation expectations and negotiating an offer professionally.",
+  [(R,0.45,AW),(E,0.48,AW),(D,0.48,AW),(S,0.48,AW),(P,0.52,AW),(F,0.55,AW)])
+n("beh-remote-collaboration", "Remote & Async Collaboration", "behavioral", "collaboration",
+  "Working effectively with distributed teammates across time zones using asynchronous communication norms.",
+  [(R,0.55,WK),(E,0.62,WK),(D,0.58,WK),(S,0.60,WK),(P,0.65,WK),(F,0.50,AW)])
+n("beh-mentoring", "Mentoring Others", "behavioral", "growth",
+  "Supporting a less experienced colleague's growth through guidance, work review, and encouragement.",
+  [(R,0.50,AW),(E,0.58,WK),(D,0.55,AW),(S,0.58,WK),(P,0.55,AW),(F,0.48,AW)])
+n("beh-ethical-dilemma", "Ethical Dilemmas & Pushing Back", "behavioral", "judgment",
+  "Recognizing an ethical, compliance, or integrity concern and pushing back or escalating appropriately.",
+  [(R,0.60,WK),(E,0.62,WK),(D,0.65,WK),(S,0.62,WK),(P,0.68,WK),(F,0.92,DP)])
+n("beh-difficult-constraints", "Working Within Difficult Constraints", "behavioral", "execution",
+  "Delivering results despite limited resources, unclear authority, legacy systems, or organizational friction.",
+  [(R,0.55,WK),(E,0.65,WK),(D,0.60,WK),(S,0.65,WK),(P,0.68,WK),(F,0.60,WK)])
+n("beh-technical-tradeoff", "Explaining a Technical Tradeoff Decision", "behavioral", "communication",
+  "Justifying an engineering or modeling decision by walking through the tradeoffs considered and why one was chosen.",
+  [(R,0.75,DP),(E,0.85,DP),(D,0.78,DP),(S,0.82,DP),(P,0.55,WK),(F,0.60,WK)])
+n("beh-difficult-stakeholder", "Managing a Difficult Stakeholder or Client", "behavioral", "collaboration",
+  "Handling a demanding, unresponsive, or misaligned stakeholder while protecting scope, timeline, or quality.",
+  [(R,0.50,AW),(E,0.60,WK),(D,0.60,WK),(S,0.58,WK),(P,0.88,DP),(F,0.72,WK)])
 
 e("beh-conflict","beh-star-method",0.7)
 e("beh-leadership","beh-star-method",0.7)
 e("beh-failure","beh-star-method",0.7)
+e("beh-story-selection","beh-star-method",0.7)
+e("beh-manager-disagreement","beh-star-method",0.7)
+e("beh-manager-disagreement","beh-conflict",0.4)
+e("beh-feedback-receiving","beh-star-method",0.7)
+e("beh-feedback-giving","beh-star-method",0.7)
+e("beh-influence-stakeholders","beh-leadership",0.7)
+e("beh-influence-stakeholders","beh-communication",0.4)
+e("beh-ambiguity","beh-star-method",0.7)
+e("beh-prioritization-pressure","beh-star-method",0.7)
+e("beh-missed-deadline","beh-failure",0.7)
+e("beh-missed-deadline","beh-prioritization-pressure",0.4)
+e("beh-teamwork","beh-star-method",0.7)
+e("beh-cross-functional","beh-communication",0.7)
+e("beh-cross-functional","beh-teamwork",0.4)
+e("beh-learning-new-tech","beh-star-method",0.7)
+e("beh-interviewer-questions","beh-why-company",0.4)
+e("beh-remote-collaboration","beh-teamwork",0.4)
+e("beh-mentoring","beh-feedback-giving",0.7)
+e("beh-ethical-dilemma","beh-star-method",0.7)
+e("beh-difficult-constraints","beh-ambiguity",0.4)
+e("beh-technical-tradeoff","beh-communication",0.7)
+e("beh-difficult-stakeholder","beh-cross-functional",0.7)
+e("beh-difficult-stakeholder","beh-conflict",0.4)
 
 # ===========================================================================
 # ML SECTIONS

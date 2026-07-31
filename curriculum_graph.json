@@ -503,6 +503,401 @@
       "tags": []
     },
     {
+      "node_id": "prob-joint-marginal",
+      "type": "assessable",
+      "name": "Joint & Marginal Distributions",
+      "section": "probability",
+      "competency": "random-variables",
+      "description": "Joint PMFs/PDFs over multiple random variables and recovering marginals by summing or integrating them out.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.78,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.82,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.88,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-transformations",
+      "type": "assessable",
+      "name": "Transformations of Random Variables",
+      "section": "probability",
+      "competency": "random-variables",
+      "description": "Deriving the distribution of a function of a random variable via the CDF technique or the change-of-variables Jacobian formula.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.85,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-order-statistics",
+      "type": "assessable",
+      "name": "Order Statistics",
+      "section": "probability",
+      "competency": "random-variables",
+      "description": "Distributions of the minimum, maximum, and general k-th order statistic of i.i.d. samples.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-poisson-process",
+      "type": "assessable",
+      "name": "Poisson Processes",
+      "section": "probability",
+      "competency": "stochastic",
+      "description": "Continuous-time counting processes with independent, stationary increments, and their link to exponential interarrival times.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.82,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-entropy-kl",
+      "type": "assessable",
+      "name": "Entropy & KL Divergence",
+      "section": "probability",
+      "competency": "information-theory",
+      "description": "Shannon entropy, cross-entropy, and KL divergence as a measure of the difference between two distributions.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-sampling-methods",
+      "type": "assessable",
+      "name": "Sampling Methods",
+      "section": "probability",
+      "competency": "computation",
+      "description": "Generating samples from a target distribution via inverse-CDF sampling, rejection sampling, and importance sampling.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.78,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-convergence-modes",
+      "type": "assessable",
+      "name": "Modes of Stochastic Convergence",
+      "section": "probability",
+      "competency": "limit-theorems",
+      "description": "Convergence in probability, in distribution, and almost surely, and how each relates to the LLN and CLT.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-multivariate-normal",
+      "type": "assessable",
+      "name": "Multivariate Normal Distribution",
+      "section": "probability",
+      "competency": "random-variables",
+      "description": "The multivariate Gaussian, its covariance-matrix parameterization, and conditional/marginal Gaussian identities.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.8,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-characteristic-functions",
+      "type": "assessable",
+      "name": "Characteristic Functions",
+      "section": "probability",
+      "competency": "moments",
+      "description": "Fourier-transform-like functions that uniquely determine a distribution and simplify analysis of sums of independent variables.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.7,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-concentration-inequalities",
+      "type": "assessable",
+      "name": "Concentration Inequalities & Tail Bounds",
+      "section": "probability",
+      "competency": "limit-theorems",
+      "description": "Chernoff bounds and Hoeffding's inequality for exponentially tight tail probability bounds beyond Chebyshev.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.8,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-random-walks",
+      "type": "assessable",
+      "name": "Random Walks",
+      "section": "probability",
+      "competency": "stochastic",
+      "description": "Simple random walks on the integers, expected displacement, and the gambler's ruin problem.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.78,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-variance-reduction",
+      "type": "assessable",
+      "name": "Variance Reduction Techniques",
+      "section": "probability",
+      "competency": "computation",
+      "description": "Antithetic variates, control variates, and stratified sampling for reducing Monte Carlo estimator variance.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-hypergeometric-negbinom",
+      "type": "assessable",
+      "name": "Hypergeometric & Negative Binomial Distributions",
+      "section": "probability",
+      "competency": "random-variables",
+      "description": "Sampling without replacement and counting trials until r successes, extending the binomial family.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-multinomial-dirichlet",
+      "type": "assessable",
+      "name": "Multinomial & Dirichlet Distributions",
+      "section": "probability",
+      "competency": "random-variables",
+      "description": "The multivariate generalizations of the binomial and beta distributions, used to model categorical outcomes and their conjugate priors.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "prob-total-variance",
+      "type": "assessable",
+      "name": "Law of Total Variance",
+      "section": "probability",
+      "competency": "moments",
+      "description": "Eve's law: decomposing variance into the expected conditional variance plus the variance of the conditional expectation.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.75,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
       "node_id": "stat-descriptive",
       "type": "assessable",
       "name": "Descriptive Statistics",
@@ -1182,6 +1577,383 @@
       "tags": []
     },
     {
+      "node_id": "linalg-linear-transformations",
+      "type": "assessable",
+      "name": "Linear Transformations & Change of Basis",
+      "section": "linear-algebra",
+      "competency": "foundations",
+      "description": "Linear maps represented as matrices, how they act geometrically, and representing them under different bases.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-determinants",
+      "type": "assessable",
+      "name": "Determinants",
+      "section": "linear-algebra",
+      "competency": "operations",
+      "description": "Determinants as signed volume scaling, their relation to invertibility, and computation via cofactor expansion or decomposition.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-null-column-space",
+      "type": "assessable",
+      "name": "Null Space & Column Space",
+      "section": "linear-algebra",
+      "competency": "operations",
+      "description": "The four fundamental subspaces, the rank-nullity theorem, and their geometric meaning for solvability.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-linear-systems",
+      "type": "assessable",
+      "name": "Solving Linear Systems",
+      "section": "linear-algebra",
+      "competency": "operations",
+      "description": "Solving Ax=b via Gaussian elimination; existence, uniqueness, and row-reduced echelon form.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.58,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-lu-decomposition",
+      "type": "assessable",
+      "name": "LU Decomposition",
+      "section": "linear-algebra",
+      "competency": "decompositions",
+      "description": "Factoring a matrix into lower and upper triangular factors for efficient solving of linear systems.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-qr-decomposition",
+      "type": "assessable",
+      "name": "QR Decomposition",
+      "section": "linear-algebra",
+      "competency": "decompositions",
+      "description": "Factoring a matrix into an orthogonal matrix and an upper-triangular matrix via Gram-Schmidt or Householder reflections.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-cholesky",
+      "type": "assessable",
+      "name": "Cholesky Decomposition",
+      "section": "linear-algebra",
+      "competency": "decompositions",
+      "description": "Factoring a positive-definite matrix into a lower-triangular matrix and its transpose.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-diagonalization",
+      "type": "assessable",
+      "name": "Diagonalization",
+      "section": "linear-algebra",
+      "competency": "decompositions",
+      "description": "Diagonalizing a matrix via its eigenvectors, computing matrix powers efficiently, and when diagonalization fails.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-pseudoinverse",
+      "type": "assessable",
+      "name": "Moore-Penrose Pseudoinverse",
+      "section": "linear-algebra",
+      "competency": "operations",
+      "description": "Generalizing matrix inversion to non-square or singular matrices via the pseudoinverse, and its use in least-squares.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.7,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-least-squares",
+      "type": "assessable",
+      "name": "Projections & Least Squares",
+      "section": "linear-algebra",
+      "competency": "geometry",
+      "description": "Orthogonal projection onto a subspace and deriving the least-squares solution via normal equations.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-quadratic-forms",
+      "type": "assessable",
+      "name": "Quadratic Forms",
+      "section": "linear-algebra",
+      "competency": "special-matrices",
+      "description": "Quadratic forms x^T A x, their relation to positive-definiteness, and geometric interpretation as ellipsoids/level sets.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.7,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-matrix-norms",
+      "type": "assessable",
+      "name": "Matrix Norms",
+      "section": "linear-algebra",
+      "competency": "geometry",
+      "description": "Operator/spectral norm and Frobenius norm, and their use in bounding transformations.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-trace",
+      "type": "assessable",
+      "name": "Trace & Trace Tricks",
+      "section": "linear-algebra",
+      "competency": "operations",
+      "description": "Trace's cyclic property, its relation to eigenvalues, and common trace-based simplifications used in derivations.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-condition-number",
+      "type": "assessable",
+      "name": "Condition Number & Numerical Stability",
+      "section": "linear-algebra",
+      "competency": "special-matrices",
+      "description": "How a matrix's condition number governs sensitivity to perturbation and numerical error in computation.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-low-rank-approx",
+      "type": "assessable",
+      "name": "Low-Rank Approximation",
+      "section": "linear-algebra",
+      "competency": "decompositions",
+      "description": "Approximating a matrix with a lower-rank one that minimizes reconstruction error (Eckart-Young theorem).",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-tensor-ops",
+      "type": "assessable",
+      "name": "Tensor Operations & Broadcasting",
+      "section": "linear-algebra",
+      "competency": "operations",
+      "description": "Multi-dimensional array operations, broadcasting rules, and reshaping as used throughout deep learning frameworks.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.82,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "linalg-kronecker",
+      "type": "assessable",
+      "name": "Kronecker Product",
+      "section": "linear-algebra",
+      "competency": "operations",
+      "description": "The Kronecker product of matrices and its use in structured transformations and efficient parameterization.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
       "node_id": "opt-derivatives",
       "type": "assessable",
       "name": "Derivatives & Chain Rule",
@@ -1415,6 +2187,464 @@
         {
           "role_id": "finance-quant",
           "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-taylor-expansion",
+      "type": "assessable",
+      "name": "Taylor Expansion & Local Approximation",
+      "section": "calculus-optimization",
+      "competency": "calculus",
+      "description": "Approximating functions locally via Taylor series; linear and quadratic approximations used throughout optimization theory.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-hessian-second-order",
+      "type": "assessable",
+      "name": "Hessians & Second-Order Optimality Conditions",
+      "section": "calculus-optimization",
+      "competency": "theory",
+      "description": "Using the Hessian's eigenvalues to classify critical points as minima, maxima, or saddle points.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-convexity-tests",
+      "type": "assessable",
+      "name": "Convexity Tests & Verification",
+      "section": "calculus-optimization",
+      "competency": "theory",
+      "description": "First- and second-order conditions (gradient inequality, PSD Hessian) for verifying convexity of a function.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.7,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-saddle-points",
+      "type": "assessable",
+      "name": "Saddle Points & Critical Point Classification",
+      "section": "calculus-optimization",
+      "competency": "theory",
+      "description": "Why saddle points dominate high-dimensional non-convex loss landscapes and how they slow first-order optimization.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-duality",
+      "type": "assessable",
+      "name": "Lagrangian Duality",
+      "section": "calculus-optimization",
+      "competency": "constrained",
+      "description": "Weak/strong duality, the duality gap, and complementary slackness in constrained optimization.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-quasi-newton",
+      "type": "assessable",
+      "name": "Quasi-Newton Methods & L-BFGS",
+      "section": "calculus-optimization",
+      "competency": "algorithms",
+      "description": "Approximating curvature without computing the full Hessian; BFGS and limited-memory L-BFGS updates.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-line-search",
+      "type": "assessable",
+      "name": "Line Search & Step Size Selection",
+      "section": "calculus-optimization",
+      "competency": "algorithms",
+      "description": "Choosing step sizes via exact/backtracking line search and the Wolfe conditions.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-convergence-rates",
+      "type": "assessable",
+      "name": "Convergence Rates of Optimization Algorithms",
+      "section": "calculus-optimization",
+      "competency": "theory",
+      "description": "Comparing linear, sublinear, and quadratic convergence rates across gradient descent, Newton, and quasi-Newton methods.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-coordinate-descent",
+      "type": "assessable",
+      "name": "Coordinate Descent",
+      "section": "calculus-optimization",
+      "competency": "algorithms",
+      "description": "Optimizing one coordinate (or block) at a time; used in Lasso, SVM SMO, and large-scale sparse problems.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-proximal-methods",
+      "type": "assessable",
+      "name": "Proximal Gradient Methods",
+      "section": "calculus-optimization",
+      "competency": "algorithms",
+      "description": "Handling non-smooth regularizers (e.g. L1) via proximal operators and soft-thresholding.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-subgradient-methods",
+      "type": "assessable",
+      "name": "Subgradient Methods for Non-Smooth Optimization",
+      "section": "calculus-optimization",
+      "competency": "algorithms",
+      "description": "Generalizing gradients to non-differentiable convex functions via subgradients, as in hinge loss and L1 penalties.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-automatic-differentiation",
+      "type": "assessable",
+      "name": "Automatic Differentiation",
+      "section": "calculus-optimization",
+      "competency": "algorithms",
+      "description": "Forward-mode vs reverse-mode automatic differentiation via computational graphs, the general technique underlying backpropagation.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-change-of-variables",
+      "type": "assessable",
+      "name": "Multivariate Integration & Change of Variables",
+      "section": "calculus-optimization",
+      "competency": "calculus",
+      "description": "Transforming integrals under a change of variables using the Jacobian determinant.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-lipschitz-smoothness",
+      "type": "assessable",
+      "name": "Lipschitz Continuity & Smoothness",
+      "section": "calculus-optimization",
+      "competency": "theory",
+      "description": "Lipschitz-continuous gradients and smoothness constants that bound step sizes and drive convergence proofs.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-minimax-optimization",
+      "type": "assessable",
+      "name": "Minimax & Saddle-Point Optimization",
+      "section": "calculus-optimization",
+      "competency": "theory",
+      "description": "Game-theoretic min-max formulations underlying adversarial training, GANs, and robust optimization.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-natural-gradient",
+      "type": "assessable",
+      "name": "Natural Gradient Descent",
+      "section": "calculus-optimization",
+      "competency": "algorithms",
+      "description": "Rescaling gradient steps by the Fisher information metric for parameterization-invariant updates.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.5,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-variance-reduction",
+      "type": "assessable",
+      "name": "Variance Reduction in Stochastic Optimization",
+      "section": "calculus-optimization",
+      "competency": "algorithms",
+      "description": "SVRG/SAGA-style techniques that reduce gradient-estimate variance to accelerate SGD convergence.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "opt-trust-region",
+      "type": "assessable",
+      "name": "Trust-Region Methods",
+      "section": "calculus-optimization",
+      "competency": "algorithms",
+      "description": "Constraining each optimization step to a region where a local model is trusted, as an alternative to line search.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
           "required_depth": "working"
         }
       ],
@@ -2975,6 +4205,826 @@
         {
           "role_id": "finance-quant",
           "importance": 0.7,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-story-selection",
+      "type": "assessable",
+      "name": "Story Selection & Portfolio Building",
+      "section": "behavioral",
+      "competency": "preparation",
+      "description": "Curating a portfolio of 6-8 stories that map to common behavioral themes and can be adapted across question types.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-manager-disagreement",
+      "type": "assessable",
+      "name": "Disagreeing with a Manager",
+      "section": "behavioral",
+      "competency": "collaboration",
+      "description": "Describing a professional disagreement with a manager or senior stakeholder and how it was resolved without damaging the relationship.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.75,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-feedback-receiving",
+      "type": "assessable",
+      "name": "Receiving and Acting on Feedback",
+      "section": "behavioral",
+      "competency": "growth",
+      "description": "Describing how critical feedback was received, internalized, and acted upon to improve performance.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.7,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-feedback-giving",
+      "type": "assessable",
+      "name": "Giving Constructive Feedback",
+      "section": "behavioral",
+      "competency": "growth",
+      "description": "Delivering critical feedback to a peer or report constructively while preserving trust.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-influence-stakeholders",
+      "type": "assessable",
+      "name": "Influencing Without Direct Authority",
+      "section": "behavioral",
+      "competency": "collaboration",
+      "description": "Persuading peers or cross-functional stakeholders to adopt an approach without formal reporting authority.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-ambiguity",
+      "type": "assessable",
+      "name": "Navigating Ambiguity",
+      "section": "behavioral",
+      "competency": "execution",
+      "description": "Making progress and decisions when requirements, goals, or ownership are unclear or incomplete.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-prioritization-pressure",
+      "type": "assessable",
+      "name": "Prioritizing Under Deadline Pressure",
+      "section": "behavioral",
+      "competency": "execution",
+      "description": "Choosing what to work on and what to defer when multiple deadlines or requests compete for limited time.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.7,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-missed-deadline",
+      "type": "assessable",
+      "name": "Handling a Missed Deadline",
+      "section": "behavioral",
+      "competency": "execution",
+      "description": "Explaining a deadline that was missed, the root cause, communication with stakeholders, and the recovery plan.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-teamwork",
+      "type": "assessable",
+      "name": "Teamwork & Collaboration",
+      "section": "behavioral",
+      "competency": "collaboration",
+      "description": "Contributing effectively as part of a team, sharing credit, and adapting to teammates' working styles.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-cross-functional",
+      "type": "assessable",
+      "name": "Cross-Functional Communication",
+      "section": "behavioral",
+      "competency": "communication",
+      "description": "Coordinating with people in different functions (e.g. design, sales, legal) who have different priorities and vocabularies.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.9,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-learning-new-tech",
+      "type": "assessable",
+      "name": "Learning a New Technology Quickly",
+      "section": "behavioral",
+      "competency": "growth",
+      "description": "Ramping up on an unfamiliar tool, language, or domain under time pressure and applying it productively.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.58,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-strengths-weaknesses",
+      "type": "assessable",
+      "name": "Strengths & Weaknesses",
+      "section": "behavioral",
+      "competency": "preparation",
+      "description": "Articulating genuine strengths and a real weakness with evidence of self-awareness and active improvement.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-interviewer-questions",
+      "type": "assessable",
+      "name": "Questions to Ask the Interviewer",
+      "section": "behavioral",
+      "competency": "preparation",
+      "description": "Preparing thoughtful, role-specific questions that signal genuine research and engagement.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-offer-negotiation",
+      "type": "assessable",
+      "name": "Offer & Compensation Conversations",
+      "section": "behavioral",
+      "competency": "negotiation",
+      "description": "Discussing compensation expectations and negotiating an offer professionally.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.48,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.48,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.48,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.52,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-remote-collaboration",
+      "type": "assessable",
+      "name": "Remote & Async Collaboration",
+      "section": "behavioral",
+      "competency": "collaboration",
+      "description": "Working effectively with distributed teammates across time zones using asynchronous communication norms.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-mentoring",
+      "type": "assessable",
+      "name": "Mentoring Others",
+      "section": "behavioral",
+      "competency": "growth",
+      "description": "Supporting a less experienced colleague's growth through guidance, work review, and encouragement.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.48,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-ethical-dilemma",
+      "type": "assessable",
+      "name": "Ethical Dilemmas & Pushing Back",
+      "section": "behavioral",
+      "competency": "judgment",
+      "description": "Recognizing an ethical, compliance, or integrity concern and pushing back or escalating appropriately.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.92,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-difficult-constraints",
+      "type": "assessable",
+      "name": "Working Within Difficult Constraints",
+      "section": "behavioral",
+      "competency": "execution",
+      "description": "Delivering results despite limited resources, unclear authority, legacy systems, or organizational friction.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-technical-tradeoff",
+      "type": "assessable",
+      "name": "Explaining a Technical Tradeoff Decision",
+      "section": "behavioral",
+      "competency": "communication",
+      "description": "Justifying an engineering or modeling decision by walking through the tradeoffs considered and why one was chosen.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "beh-difficult-stakeholder",
+      "type": "assessable",
+      "name": "Managing a Difficult Stakeholder or Client",
+      "section": "behavioral",
+      "competency": "collaboration",
+      "description": "Handling a demanding, unresponsive, or misaligned stakeholder while protecting scope, timeline, or quality.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.72,
           "required_depth": "working"
         }
       ],
@@ -6041,6 +8091,168 @@
       "weight": 0.4
     },
     {
+      "from_node_id": "prob-joint-marginal",
+      "to_node_id": "prob-random-variables",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-joint-marginal",
+      "to_node_id": "prob-independence",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "prob-transformations",
+      "to_node_id": "prob-random-variables",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-transformations",
+      "to_node_id": "prob-joint-marginal",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "prob-order-statistics",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-order-statistics",
+      "to_node_id": "prob-joint-marginal",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "prob-poisson-process",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-poisson-process",
+      "to_node_id": "prob-markov-chains",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "prob-entropy-kl",
+      "to_node_id": "prob-expectation",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-entropy-kl",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "prob-sampling-methods",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-sampling-methods",
+      "to_node_id": "prob-expectation",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "prob-convergence-modes",
+      "to_node_id": "prob-lln",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "prob-convergence-modes",
+      "to_node_id": "prob-clt",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "prob-multivariate-normal",
+      "to_node_id": "prob-covariance",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-multivariate-normal",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "prob-multivariate-normal",
+      "to_node_id": "linalg-pd-matrices",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "prob-characteristic-functions",
+      "to_node_id": "prob-mgf",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "prob-concentration-inequalities",
+      "to_node_id": "prob-inequalities",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-concentration-inequalities",
+      "to_node_id": "prob-mgf",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "prob-random-walks",
+      "to_node_id": "prob-markov-chains",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-variance-reduction",
+      "to_node_id": "prob-sampling-methods",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-variance-reduction",
+      "to_node_id": "prob-covariance",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "prob-hypergeometric-negbinom",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-hypergeometric-negbinom",
+      "to_node_id": "prob-counting",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "prob-multinomial-dirichlet",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "prob-total-variance",
+      "to_node_id": "prob-conditional-expectation",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
       "from_node_id": "stat-estimation",
       "to_node_id": "stat-descriptive",
       "type": "prerequisite",
@@ -6227,6 +8439,132 @@
       "weight": 0.7
     },
     {
+      "from_node_id": "linalg-linear-transformations",
+      "to_node_id": "linalg-vectors",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-linear-transformations",
+      "to_node_id": "linalg-matrix-multiplication",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "linalg-determinants",
+      "to_node_id": "linalg-matrix-multiplication",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "linalg-null-column-space",
+      "to_node_id": "linalg-matrix-inverse",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "linalg-linear-systems",
+      "to_node_id": "linalg-matrix-inverse",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "linalg-linear-systems",
+      "to_node_id": "linalg-determinants",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "linalg-lu-decomposition",
+      "to_node_id": "linalg-linear-systems",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-qr-decomposition",
+      "to_node_id": "linalg-orthogonality",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-cholesky",
+      "to_node_id": "linalg-pd-matrices",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-diagonalization",
+      "to_node_id": "linalg-eigen",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-pseudoinverse",
+      "to_node_id": "linalg-svd",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-pseudoinverse",
+      "to_node_id": "linalg-matrix-inverse",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "linalg-least-squares",
+      "to_node_id": "linalg-orthogonality",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-quadratic-forms",
+      "to_node_id": "linalg-pd-matrices",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-matrix-norms",
+      "to_node_id": "linalg-dot-product",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "linalg-matrix-norms",
+      "to_node_id": "linalg-eigen",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "linalg-trace",
+      "to_node_id": "linalg-eigen",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "linalg-condition-number",
+      "to_node_id": "linalg-eigen",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "linalg-low-rank-approx",
+      "to_node_id": "linalg-svd",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "linalg-tensor-ops",
+      "to_node_id": "linalg-matrix-multiplication",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "linalg-kronecker",
+      "to_node_id": "linalg-matrix-multiplication",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
       "from_node_id": "opt-gradients",
       "to_node_id": "opt-derivatives",
       "type": "prerequisite",
@@ -6303,6 +8641,222 @@
       "to_node_id": "linalg-pd-matrices",
       "type": "prerequisite",
       "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-taylor-expansion",
+      "to_node_id": "opt-derivatives",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-hessian-second-order",
+      "to_node_id": "opt-gradients",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-hessian-second-order",
+      "to_node_id": "opt-taylor-expansion",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-hessian-second-order",
+      "to_node_id": "linalg-pd-matrices",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-convexity-tests",
+      "to_node_id": "opt-convexity",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-convexity-tests",
+      "to_node_id": "opt-hessian-second-order",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-saddle-points",
+      "to_node_id": "opt-hessian-second-order",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-saddle-points",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "opt-duality",
+      "to_node_id": "opt-lagrange",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-duality",
+      "to_node_id": "opt-convex-optimization",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-quasi-newton",
+      "to_node_id": "opt-second-order",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-quasi-newton",
+      "to_node_id": "linalg-pd-matrices",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "opt-line-search",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-convergence-rates",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-convergence-rates",
+      "to_node_id": "opt-convexity",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-coordinate-descent",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-coordinate-descent",
+      "to_node_id": "opt-convexity",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "opt-subgradient-methods",
+      "to_node_id": "opt-convexity",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-subgradient-methods",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-proximal-methods",
+      "to_node_id": "opt-coordinate-descent",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "opt-proximal-methods",
+      "to_node_id": "opt-convexity",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-proximal-methods",
+      "to_node_id": "opt-subgradient-methods",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-automatic-differentiation",
+      "to_node_id": "opt-derivatives",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-automatic-differentiation",
+      "to_node_id": "opt-gradients",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-change-of-variables",
+      "to_node_id": "opt-derivatives",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-change-of-variables",
+      "to_node_id": "opt-gradients",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-lipschitz-smoothness",
+      "to_node_id": "opt-derivatives",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-lipschitz-smoothness",
+      "to_node_id": "opt-convexity",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "opt-minimax-optimization",
+      "to_node_id": "opt-convexity",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "opt-minimax-optimization",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-minimax-optimization",
+      "to_node_id": "opt-saddle-points",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-natural-gradient",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-natural-gradient",
+      "to_node_id": "linalg-pd-matrices",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "opt-variance-reduction",
+      "to_node_id": "opt-sgd",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "opt-trust-region",
+      "to_node_id": "opt-second-order",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "opt-trust-region",
+      "to_node_id": "opt-line-search",
+      "type": "prerequisite",
+      "weight": 0.4
     },
     {
       "from_node_id": "dsa-arrays-strings",
@@ -6669,6 +9223,144 @@
       "to_node_id": "beh-star-method",
       "type": "prerequisite",
       "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-story-selection",
+      "to_node_id": "beh-star-method",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-manager-disagreement",
+      "to_node_id": "beh-star-method",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-manager-disagreement",
+      "to_node_id": "beh-conflict",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "beh-feedback-receiving",
+      "to_node_id": "beh-star-method",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-feedback-giving",
+      "to_node_id": "beh-star-method",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-influence-stakeholders",
+      "to_node_id": "beh-leadership",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-influence-stakeholders",
+      "to_node_id": "beh-communication",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "beh-ambiguity",
+      "to_node_id": "beh-star-method",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-prioritization-pressure",
+      "to_node_id": "beh-star-method",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-missed-deadline",
+      "to_node_id": "beh-failure",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-missed-deadline",
+      "to_node_id": "beh-prioritization-pressure",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "beh-teamwork",
+      "to_node_id": "beh-star-method",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-cross-functional",
+      "to_node_id": "beh-communication",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-cross-functional",
+      "to_node_id": "beh-teamwork",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "beh-learning-new-tech",
+      "to_node_id": "beh-star-method",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-interviewer-questions",
+      "to_node_id": "beh-why-company",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "beh-remote-collaboration",
+      "to_node_id": "beh-teamwork",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "beh-mentoring",
+      "to_node_id": "beh-feedback-giving",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-ethical-dilemma",
+      "to_node_id": "beh-star-method",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-difficult-constraints",
+      "to_node_id": "beh-ambiguity",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "beh-technical-tradeoff",
+      "to_node_id": "beh-communication",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-difficult-stakeholder",
+      "to_node_id": "beh-cross-functional",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "beh-difficult-stakeholder",
+      "to_node_id": "beh-conflict",
+      "type": "prerequisite",
+      "weight": 0.4
     },
     {
       "from_node_id": "ml-train-test-split",
