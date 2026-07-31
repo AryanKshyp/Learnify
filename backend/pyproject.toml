@@ -67,6 +67,12 @@ layers = [
 name = "Engine is pure: no I/O, no clock, no randomness"
 type = "forbidden"
 source_modules = ["knowledgeos.engine"]
+# Only DIRECT imports are forbidden. The engine legitimately imports Layer 2 types (C.5
+# `Status` is derived by the engine), and those models reference `datetime`/`uuid` as field
+# types. That transitive edge is not a purity violation -- reading a clock requires importing
+# the clock HERE. Engine code still cannot call datetime.now() or random() without a direct
+# import, which this contract rejects.
+allow_indirect_imports = true
 forbidden_modules = [
     # storage / transport — the engine takes state as arguments, never fetches it
     "sqlalchemy",

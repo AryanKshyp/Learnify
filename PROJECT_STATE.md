@@ -10,17 +10,17 @@ belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARC
 
 ## Current position
 
-**Stage 2 — COMPLETE (in-memory); Postgres persistence DEFERRED.** Knowledge-state overlay
-(C.5) and append-only session history (C.6) built and tested behind repository protocols.
-**154 tests green. Stage 3 — the engine — is unblocked and needs no database at all.**
+**Stage 3 — COMPLETE. The engine is built.** All 14 pipeline stages implemented per
+`CALC_ENGINE_SPEC.md` §1, with the §15 golden case passing to the spec's exact numbers.
+**475 tests green.** Postgres persistence still deferred (known issue #8).
 
 | Layer | Status |
 |---|---|
 | L1 Curriculum content | **Complete** — 566 nodes deepened across all 16 sections, validated |
 | L1 Curriculum loader | **Complete** — models, loader, validators, queries; 93 tests |
 | L2 Knowledge State | **Complete in-memory** — models, overlay, append-only history. Postgres impl deferred (see #8) |
-| L3 Decision Engine | Not started — **next** (Stage 3). Pure; needs no DB |
-| L4 Assessment boundary | Not started (Stage 4) |
+| L3 Decision Engine | **Complete** — 14 stages, §15 golden case passing, purity machine-enforced |
+| L4 Assessment boundary | Not started — **next** (Stage 4) |
 | API / Frontend | Not started (Stages 5, 7) |
 | External assessment engine | Not designed — separate, non-blocking artifact |
 
@@ -99,6 +99,8 @@ representative of its density.
 | 2026-08-01 | **State and history are separate protocols**; history has no update or delete method. | Append-only is what makes state reconstructible by replay (C.6). Expressing it in the interface beats a comment nobody has to obey — a test asserts the methods simply do not exist. |
 | 2026-08-01 | **Cold defaults applied on READ, not pre-seeded as rows.** | Adding curriculum nodes then never requires a migration of user state: a new node is simply cold until assessed. `get()` returns `None` for "no record" so the overlay, not the store, owns the default. |
 | 2026-08-01 | **Postgres persistence deferred until the daemon runs** (see known issue #8). | Writing storage code that cannot be executed would mean reporting Stage 2 as done on the strength of untested code. Stage 3 is pure and needs no DB, so the critical path is unaffected. |
+| 2026-08-01 | **Engine takes `days_elapsed: float` and returns *days until review*, never a timestamp.** | The purity contract forbids `datetime` in `engine/`, which forced the cleaner design: time is an input, so every score is reproducible from stored evidence. The caller converts to a timestamp. |
+| 2026-08-01 | **Purity contract relaxed to `allow_indirect_imports`.** | The engine legitimately imports the Layer 2 `Status` type, whose module references `datetime`/`uuid` as *field types*. That transitive edge is not a clock read. Direct imports of `datetime`/`random`/`os` in engine code are still rejected — re-verified by injection after the change. |
 
 ---
 
@@ -153,6 +155,38 @@ falling back to `str` ordering.
 
 **Carry into Stage 3:** the same trap applies to any ordered enum added later.
 
+### 9. Spec ambiguities resolved while implementing the engine — **decided, documented**
+Two places where `CALC_ENGINE_SPEC.md` could not be followed literally. Both resolutions are
+pinned by tests so they cannot be silently reverted.
+
+**§13 status ordering — the spec's stated order is unreachable.** It lists
+`unassessed → learning → practiced → retained → mastered` and says "evaluate top-down; first
+match wins". But `retained` requires EM ≥ 0.70 and `mastered` requires EM ≥ 0.85, so a
+genuinely mastered node matches `retained` first and `mastered` can never be returned.
+Resolved by evaluating **most demanding first**: `unassessed → learning → mastered → retained
+→ practiced`. `learning` stays ahead of the strong tiers deliberately — its σ² clause means
+"the observations disagree", and self-contradictory evidence should not read as `retained`.
+
+**§4 EWMA ordering is ambiguous.** The spec updates μ, then computes σ²_raw from `(O − μ)`,
+without saying whether that μ is pre- or post-update. Implemented literally in written order
+(deviation from the *updated* mean). Either is defensible; determinism matters more than
+taste, so the choice is documented at the call site.
+
+### 10. §10 leverage terms are on mismatched scales — **implemented as specified, flagged**
+`Lev_raw = a·immediate_unlocks + b·indirect_unlocks + c·role_overlap + d·CPV`, normalised
+*after* combining. But `immediate_unlocks`/`indirect_unlocks` are unbounded counts while CPV
+and role_overlap are ≤ ~1, so on the 566-node graph the count terms dominate and CPV
+contributes almost nothing before normalisation. The spec is explicit that normalisation
+happens after combining, so that is what is implemented — changing it would alter the spec's
+math, not an implementation detail. Worth revisiting during tuning; normalising each term
+first is the obvious alternative.
+
+### 11. ERG does not re-propagate into dependents — **simplification, flagged**
+`expected_readiness_gain` raises the candidate's own EM to τ and re-runs readiness, but does
+not re-propagate the improvement into its dependents' PC. Full propagation costs a graph pass
+per candidate; since readiness already counts every dependent node directly, the resulting
+ranking is very close. First thing to revisit if recommendations look wrong on deep chains.
+
 ### 8. Docker/WSL blocked, so Postgres persistence is unwritten — **open, blocks nothing yet**
 Docker Desktop 4.84 is installed (to the per-user path
 `%LOCALAPPDATA%\Programs\DockerDesktop`, not Program Files), but the daemon will not start:
@@ -191,22 +225,23 @@ Fully redundant — it was a snapshot of the kit whose contents are now all at r
 
 ## Next actions
 
-1. **Stage 3 — the heart.** The deterministic engine, exactly per `CALC_ENGINE_SPEC.md` §1
-   pipeline. **Needs no database**, so the Docker blocker does not apply. Build the §15 golden
-   test first — the fixture contains its chain and `topological_order()` already yields the
-   order propagation needs. Simple stability model (§6), not FSRS. Weighted harmonic mean for
-   readiness (§11), not average. Every `[TUNABLE]` into `engine/config.py`; no numeric literal
-   inline. Keep `lint-imports` green — it is what stops a clock read entering a formula.
+1. **Stage 4** — the Layer 4 boundary. Schema A generator (C.7) selecting `role_context` as the
+   highest-priority role tagging the node and pulling prerequisite context from the graph;
+   strict Schema B validator (C.8) that hard-fails on mismatched `session_id`/`node_id`,
+   out-of-range observations, or unknown node references. Then the ingestion pipeline:
+   validate → `apply_session` → persist → append history → `recompute`. This is where the
+   engine's `days_since_last_session` gets computed from real timestamps.
 2. **Postgres persistence** (known issue #8) — once `wsl --install --no-distribution` has been
-   run from an elevated shell and the machine rebooted. SQLAlchemy models + Alembic migration
-   implementing the two existing protocols, plus verifying `docker compose up -d`. Can happen
-   before or after Stage 3; nothing depends on it until Stage 5.
-3. **Stages 4–8** — Schema A/B boundary → API → seed the real 566-node graph → frontend →
-   end-to-end.
+   run elevated and the machine rebooted. SQLAlchemy models + Alembic implementing the two
+   Stage 2 protocols, plus actually verifying `docker compose up -d`.
+3. **Stages 5–8** — API → seed the real 566-node graph → frontend → end-to-end.
 
 **Parallel, non-blocking:** design the external assessment engine (the prompt/skill that runs a
 session and emits valid Schema B) — still the largest unbuilt piece outside the app itself.
 
-**Optional curriculum polish** (Layer 1 content is complete; none of these block anything): give
-`cs-compilation-interpretation` a prerequisite so it is not an orphan; spot-check importance/depth
-calls by eye — the validator guarantees structure, not that the content judgments match yours.
+**Engine tuning, once there is real session data:** known issues #10 (leverage term scales) and
+#11 (ERG propagation depth) are both implemented as specified and flagged rather than silently
+"fixed". Revisit with evidence rather than intuition.
+
+**Optional curriculum polish:** give `cs-compilation-interpretation` a prerequisite so it is not
+an orphan; spot-check importance/depth calls by eye.
