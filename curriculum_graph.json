@@ -5326,6 +5326,665 @@
       "tags": []
     },
     {
+      "node_id": "sysd-caching-strategies",
+      "type": "assessable",
+      "name": "Caching Strategies",
+      "section": "system-design",
+      "competency": "components",
+      "description": "Cache-aside, write-through, and write-back/write-behind policies and their consistency tradeoffs.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-cache-eviction-invalidation",
+      "type": "assessable",
+      "name": "Cache Eviction & Invalidation",
+      "section": "system-design",
+      "competency": "components",
+      "description": "Eviction policies (LRU/LFU/TTL) and invalidation approaches (write-invalidate, TTL expiry, event-driven) for distributed caches.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-cdn",
+      "type": "assessable",
+      "name": "Content Delivery Networks",
+      "section": "system-design",
+      "competency": "components",
+      "description": "Edge PoPs, geo-routing, and accelerating static vs dynamic content delivery.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-sharding-partitioning",
+      "type": "assessable",
+      "name": "Database Sharding & Partitioning",
+      "section": "system-design",
+      "competency": "data",
+      "description": "Hash-based, range-based, and directory-based partitioning strategies; hot shards and rebalancing.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-replication-read-replicas",
+      "type": "assessable",
+      "name": "Replication & Read Replicas",
+      "section": "system-design",
+      "competency": "data",
+      "description": "Leader-follower replication, synchronous vs asynchronous replication, read replicas, replication lag, and failover.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.8,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-consistency-models",
+      "type": "assessable",
+      "name": "Consistency Models",
+      "section": "system-design",
+      "competency": "principles",
+      "description": "The spectrum of distributed consistency guarantees \u2014 linearizable, sequential, causal, and eventual \u2014 and choosing among them.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-eventual-consistency",
+      "type": "assessable",
+      "name": "Eventual Consistency",
+      "section": "system-design",
+      "competency": "principles",
+      "description": "Eventual consistency in practice: conflict resolution (last-write-wins, vector clocks), read-your-writes, and monotonic reads.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-event-driven-architecture",
+      "type": "assessable",
+      "name": "Event-Driven Architecture",
+      "section": "system-design",
+      "competency": "architecture",
+      "description": "Choreography vs orchestration, event sourcing basics, and decoupling producers from consumers via events.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-rate-limiting",
+      "type": "assessable",
+      "name": "Rate Limiting",
+      "section": "system-design",
+      "competency": "interfaces",
+      "description": "Token bucket, leaky bucket, and sliding-window algorithms for limiting request rates, including distributed enforcement.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.78,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-idempotency",
+      "type": "assessable",
+      "name": "Idempotency",
+      "section": "system-design",
+      "competency": "interfaces",
+      "description": "Designing idempotent APIs and operations so retries and duplicate requests are safe to replay.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-rest-graphql-grpc",
+      "type": "assessable",
+      "name": "REST vs GraphQL vs gRPC",
+      "section": "system-design",
+      "competency": "interfaces",
+      "description": "Tradeoffs among REST, GraphQL, and gRPC for API design: latency, schema strictness, over/under-fetching, and streaming.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-microservices-vs-monolith",
+      "type": "assessable",
+      "name": "Microservices vs Monolith",
+      "section": "system-design",
+      "competency": "architecture",
+      "description": "Tradeoffs between monolithic and microservice architectures: coupling, independent deployability, and operational overhead.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-service-discovery",
+      "type": "assessable",
+      "name": "Service Discovery",
+      "section": "system-design",
+      "competency": "architecture",
+      "description": "How services locate each other at runtime: client-side vs server-side discovery and service registries.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-distributed-transactions-sagas",
+      "type": "assessable",
+      "name": "Distributed Transactions & Sagas",
+      "section": "system-design",
+      "competency": "architecture",
+      "description": "Coordinating writes across services: two-phase commit, the saga pattern (choreography/orchestration), and compensating transactions.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-consensus-algorithms",
+      "type": "assessable",
+      "name": "Consensus Algorithms (Raft/Paxos)",
+      "section": "system-design",
+      "competency": "architecture",
+      "description": "Why distributed systems need agreement protocols, at an awareness level: leader-based replication and how Raft/Paxos reach consensus.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-blob-object-storage",
+      "type": "assessable",
+      "name": "Blob & Object Storage",
+      "section": "system-design",
+      "competency": "data",
+      "description": "Object storage systems (S3-like) for unstructured data: durability, storage tiers, and use cases vs block/file storage.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-search-indexing-architecture",
+      "type": "assessable",
+      "name": "Search Indexing Architecture",
+      "section": "system-design",
+      "competency": "data",
+      "description": "Architecture of large-scale search: inverted indices, index sharding, and serving queries at scale.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-capacity-estimation",
+      "type": "assessable",
+      "name": "Capacity Estimation",
+      "section": "system-design",
+      "competency": "estimation",
+      "description": "Back-of-the-envelope estimation of QPS, storage, and bandwidth for system design interviews.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.82,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-latency-slas",
+      "type": "assessable",
+      "name": "Latency Budgets & SLAs",
+      "section": "system-design",
+      "competency": "reliability",
+      "description": "Latency budgets, percentile latency (p50/p95/p99), and service-level agreements/objectives.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-availability-redundancy",
+      "type": "assessable",
+      "name": "Availability & Redundancy",
+      "section": "system-design",
+      "competency": "reliability",
+      "description": "Designing for availability: redundancy across zones/regions, failover, and reasoning about uptime ('nines').",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.78,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-failure-modes-graceful-degradation",
+      "type": "assessable",
+      "name": "Failure Modes & Graceful Degradation",
+      "section": "system-design",
+      "competency": "reliability",
+      "description": "Anticipating partial failures and designing graceful degradation instead of full outages.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-circuit-breakers-retries",
+      "type": "assessable",
+      "name": "Circuit Breakers & Retries",
+      "section": "system-design",
+      "competency": "reliability",
+      "description": "The circuit breaker pattern and retries with exponential backoff and jitter to prevent cascading failures.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-observability",
+      "type": "assessable",
+      "name": "Observability",
+      "section": "system-design",
+      "competency": "reliability",
+      "description": "Logging, metrics, and distributed tracing for understanding system behavior in production.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-deployment-strategies",
+      "type": "assessable",
+      "name": "Deployment Strategies",
+      "section": "system-design",
+      "competency": "deployment",
+      "description": "Blue-green and canary deployments, rolling updates, and feature flags for safe rollout.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-design-url-shortener",
+      "type": "assessable",
+      "name": "Design: URL Shortener",
+      "section": "system-design",
+      "competency": "design-exercises",
+      "description": "Classic design exercise: URL shortener \u2014 encoding schemes, storage, and the redirect path at scale.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-design-news-feed",
+      "type": "assessable",
+      "name": "Design: News Feed",
+      "section": "system-design",
+      "competency": "design-exercises",
+      "description": "Classic design exercise: news feed \u2014 fan-out on write vs read, ranking, and storing feed items at scale.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.7,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-design-chat-system",
+      "type": "assessable",
+      "name": "Design: Chat System",
+      "section": "system-design",
+      "competency": "design-exercises",
+      "description": "Classic design exercise: real-time chat/messaging \u2014 delivery guarantees, connection management, and message storage.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.7,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-design-notification-system",
+      "type": "assessable",
+      "name": "Design: Notification System",
+      "section": "system-design",
+      "competency": "design-exercises",
+      "description": "Classic design exercise: notification system \u2014 multi-channel delivery, fan-out, retries, and deduplication.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "sysd-recommendation-system-design",
+      "type": "assessable",
+      "name": "Recommendation System Architecture",
+      "section": "system-design",
+      "competency": "ml-systems",
+      "description": "Architecture of a recommendation system: candidate generation, ranking, retrieval, and serving at scale.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
       "node_id": "beh-star-method",
       "type": "assessable",
       "name": "STAR Storytelling",
@@ -6807,6 +7466,542 @@
           "role_id": "data-science",
           "importance": 0.8,
           "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-cross-validation",
+      "type": "assessable",
+      "name": "Cross-Validation Strategies",
+      "section": "classical-ml",
+      "competency": "methodology",
+      "description": "k-fold, stratified, leave-one-out, and time-series-aware cross-validation for reliable performance estimation.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-data-leakage",
+      "type": "assessable",
+      "name": "Data Leakage",
+      "section": "classical-ml",
+      "competency": "methodology",
+      "description": "Target leakage, temporal leakage, and preprocessing leakage that inflate offline performance estimates.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-gradient-boosting",
+      "type": "assessable",
+      "name": "Gradient Boosting Machines",
+      "section": "classical-ml",
+      "competency": "models",
+      "description": "Sequentially fitting weak learners to residual errors; XGBoost/LightGBM regularization and tree-growth strategies.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.9,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-ensemble-stacking",
+      "type": "assessable",
+      "name": "Stacking & Blending",
+      "section": "classical-ml",
+      "competency": "models",
+      "description": "Combining heterogeneous base models with a meta-learner trained on out-of-fold predictions.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-multiclass-strategies",
+      "type": "assessable",
+      "name": "Multi-Class Classification Strategies",
+      "section": "classical-ml",
+      "competency": "models",
+      "description": "One-vs-rest, one-vs-one, and softmax/multinomial extensions of binary classifiers.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-hierarchical-clustering",
+      "type": "assessable",
+      "name": "Hierarchical Clustering",
+      "section": "classical-ml",
+      "competency": "unsupervised",
+      "description": "Agglomerative and divisive clustering, linkage criteria, and dendrograms.",
+      "roles": [
+        {
+          "role_id": "data-science",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-dbscan",
+      "type": "assessable",
+      "name": "DBSCAN",
+      "section": "classical-ml",
+      "competency": "unsupervised",
+      "description": "Density-based clustering via core points, eps, and minPts; robustness to non-spherical clusters and noise.",
+      "roles": [
+        {
+          "role_id": "data-science",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-gmm-em",
+      "type": "assessable",
+      "name": "Gaussian Mixture Models & EM",
+      "section": "classical-ml",
+      "competency": "unsupervised",
+      "description": "Soft clustering as a mixture of Gaussians fit via the Expectation-Maximization algorithm.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-tsne-umap",
+      "type": "assessable",
+      "name": "t-SNE & UMAP",
+      "section": "classical-ml",
+      "competency": "unsupervised",
+      "description": "Nonlinear dimensionality reduction for visualization, and its tradeoffs versus linear methods like PCA.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-anomaly-detection",
+      "type": "assessable",
+      "name": "Anomaly Detection",
+      "section": "classical-ml",
+      "competency": "unsupervised",
+      "description": "Isolation forests, one-class SVM, and statistical outlier detection for identifying rare or abnormal instances.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-recommender-systems",
+      "type": "assessable",
+      "name": "Recommender Systems",
+      "section": "classical-ml",
+      "competency": "applications",
+      "description": "Collaborative filtering, content-based filtering, and matrix factorization for personalized recommendations.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-semi-supervised",
+      "type": "assessable",
+      "name": "Semi-Supervised & Self-Training",
+      "section": "classical-ml",
+      "competency": "methodology",
+      "description": "Leveraging unlabeled data via self-training, pseudo-labeling, and label propagation.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.58,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-feature-scaling",
+      "type": "assessable",
+      "name": "Feature Scaling & Normalization",
+      "section": "classical-ml",
+      "competency": "methodology",
+      "description": "Standardization, min-max scaling, and robust scaling, and why distance- and gradient-based models require them.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-categorical-encoding",
+      "type": "assessable",
+      "name": "Categorical Encoding",
+      "section": "classical-ml",
+      "competency": "methodology",
+      "description": "One-hot, ordinal, target, and frequency encoding, and handling high-cardinality categorical features.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.75,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-feature-selection",
+      "type": "assessable",
+      "name": "Feature Selection",
+      "section": "classical-ml",
+      "competency": "methodology",
+      "description": "Filter, wrapper, and embedded methods for selecting predictive features and reducing dimensionality.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-hyperparameter-search",
+      "type": "assessable",
+      "name": "Hyperparameter Search Strategies",
+      "section": "classical-ml",
+      "competency": "methodology",
+      "description": "Grid search, random search, and Bayesian optimization for tuning model hyperparameters.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.7,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-regression-metrics",
+      "type": "assessable",
+      "name": "Regression Evaluation Metrics",
+      "section": "classical-ml",
+      "competency": "evaluation",
+      "description": "RMSE, MAE, R-squared, and adjusted R-squared for evaluating regression models.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-calibration",
+      "type": "assessable",
+      "name": "Probability Calibration",
+      "section": "classical-ml",
+      "competency": "evaluation",
+      "description": "Platt scaling, isotonic regression, and calibration curves for aligning predicted probabilities with observed frequencies.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-learning-curves",
+      "type": "assessable",
+      "name": "Learning Curves",
+      "section": "classical-ml",
+      "competency": "evaluation",
+      "description": "Diagnosing underfitting vs. overfitting by plotting error against training set size or model complexity.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-ranking-metrics",
+      "type": "assessable",
+      "name": "Ranking Metrics",
+      "section": "classical-ml",
+      "competency": "evaluation",
+      "description": "NDCG, MAP, and MRR for evaluating ranked output quality.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "ml-interpretability",
+      "type": "assessable",
+      "name": "Model Interpretability",
+      "section": "classical-ml",
+      "competency": "evaluation",
+      "description": "SHAP values, LIME, and feature importance for explaining individual predictions and global model behavior.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.58,
+          "required_depth": "working"
         }
       ],
       "tags": []
@@ -11036,6 +12231,288 @@
       "weight": 0.4
     },
     {
+      "from_node_id": "sysd-caching-strategies",
+      "to_node_id": "sysd-caching-systems",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-caching-strategies",
+      "to_node_id": "cs-caching",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-cache-eviction-invalidation",
+      "to_node_id": "sysd-caching-systems",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-cache-eviction-invalidation",
+      "to_node_id": "dsa-lru-cache",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-cdn",
+      "to_node_id": "sysd-caching-systems",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-cdn",
+      "to_node_id": "cs-dns",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-sharding-partitioning",
+      "to_node_id": "sysd-db-scaling",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-sharding-partitioning",
+      "to_node_id": "cs-databases",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-replication-read-replicas",
+      "to_node_id": "sysd-db-scaling",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-replication-read-replicas",
+      "to_node_id": "cs-databases",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-consistency-models",
+      "to_node_id": "cs-isolation-levels-mvcc",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-eventual-consistency",
+      "to_node_id": "sysd-consistency-models",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "sysd-eventual-consistency",
+      "to_node_id": "sysd-cap-theorem",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-event-driven-architecture",
+      "to_node_id": "sysd-message-queues",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-rate-limiting",
+      "to_node_id": "sysd-api-design",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-idempotency",
+      "to_node_id": "sysd-api-design",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-rest-graphql-grpc",
+      "to_node_id": "sysd-api-design",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-rest-graphql-grpc",
+      "to_node_id": "cs-http-https",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-microservices-vs-monolith",
+      "to_node_id": "sysd-scalability",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-service-discovery",
+      "to_node_id": "sysd-microservices-vs-monolith",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-service-discovery",
+      "to_node_id": "cs-dns",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-distributed-transactions-sagas",
+      "to_node_id": "sysd-microservices-vs-monolith",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-distributed-transactions-sagas",
+      "to_node_id": "cs-isolation-levels-mvcc",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-consensus-algorithms",
+      "to_node_id": "sysd-replication-read-replicas",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-blob-object-storage",
+      "to_node_id": "sysd-scalability",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-search-indexing-architecture",
+      "to_node_id": "sysd-sharding-partitioning",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-search-indexing-architecture",
+      "to_node_id": "dsa-hashing",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-capacity-estimation",
+      "to_node_id": "sysd-scalability",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-latency-slas",
+      "to_node_id": "sysd-scalability",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-availability-redundancy",
+      "to_node_id": "sysd-replication-read-replicas",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-failure-modes-graceful-degradation",
+      "to_node_id": "sysd-availability-redundancy",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-circuit-breakers-retries",
+      "to_node_id": "sysd-failure-modes-graceful-degradation",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-observability",
+      "to_node_id": "sysd-scalability",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-deployment-strategies",
+      "to_node_id": "sysd-microservices-vs-monolith",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-design-url-shortener",
+      "to_node_id": "sysd-capacity-estimation",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-design-url-shortener",
+      "to_node_id": "sysd-db-scaling",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-design-url-shortener",
+      "to_node_id": "sysd-caching-systems",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-design-news-feed",
+      "to_node_id": "sysd-capacity-estimation",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-design-news-feed",
+      "to_node_id": "sysd-caching-systems",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-design-news-feed",
+      "to_node_id": "sysd-message-queues",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-design-chat-system",
+      "to_node_id": "cs-websockets",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-design-chat-system",
+      "to_node_id": "sysd-message-queues",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-design-chat-system",
+      "to_node_id": "sysd-capacity-estimation",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-design-notification-system",
+      "to_node_id": "sysd-message-queues",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-design-notification-system",
+      "to_node_id": "sysd-circuit-breakers-retries",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "sysd-recommendation-system-design",
+      "to_node_id": "sysd-ml-system-design",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "sysd-recommendation-system-design",
+      "to_node_id": "sysd-search-indexing-architecture",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
       "from_node_id": "beh-conflict",
       "to_node_id": "beh-star-method",
       "type": "prerequisite",
@@ -11322,6 +12799,198 @@
       "to_node_id": "ml-evaluation-metrics",
       "type": "prerequisite",
       "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-cross-validation",
+      "to_node_id": "ml-train-test-split",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-data-leakage",
+      "to_node_id": "ml-train-test-split",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-gradient-boosting",
+      "to_node_id": "ml-decision-trees",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "ml-gradient-boosting",
+      "to_node_id": "ml-ensembles",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-gradient-boosting",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-ensemble-stacking",
+      "to_node_id": "ml-ensembles",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-ensemble-stacking",
+      "to_node_id": "ml-cross-validation",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-multiclass-strategies",
+      "to_node_id": "ml-logistic-regression",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-hierarchical-clustering",
+      "to_node_id": "linalg-dot-product",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-dbscan",
+      "to_node_id": "ml-kmeans",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-gmm-em",
+      "to_node_id": "prob-multivariate-normal",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-gmm-em",
+      "to_node_id": "stat-mle",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-gmm-em",
+      "to_node_id": "ml-kmeans",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-tsne-umap",
+      "to_node_id": "ml-pca",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-tsne-umap",
+      "to_node_id": "prob-covariance",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-anomaly-detection",
+      "to_node_id": "ml-decision-trees",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-anomaly-detection",
+      "to_node_id": "ml-svm",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-recommender-systems",
+      "to_node_id": "linalg-svd",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-semi-supervised",
+      "to_node_id": "ml-supervised-unsupervised",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-feature-scaling",
+      "to_node_id": "ml-feature-engineering",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-feature-scaling",
+      "to_node_id": "ml-knn",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-categorical-encoding",
+      "to_node_id": "ml-feature-engineering",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-feature-selection",
+      "to_node_id": "ml-feature-engineering",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-feature-selection",
+      "to_node_id": "ml-overfitting",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-hyperparameter-search",
+      "to_node_id": "ml-cross-validation",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-regression-metrics",
+      "to_node_id": "ml-linear-regression",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-calibration",
+      "to_node_id": "ml-logistic-regression",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-calibration",
+      "to_node_id": "ml-evaluation-metrics",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-learning-curves",
+      "to_node_id": "ml-overfitting",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "ml-ranking-metrics",
+      "to_node_id": "ml-evaluation-metrics",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-interpretability",
+      "to_node_id": "ml-decision-trees",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "ml-interpretability",
+      "to_node_id": "ml-ensembles",
+      "type": "prerequisite",
+      "weight": 0.4
     },
     {
       "from_node_id": "dl-perceptron",

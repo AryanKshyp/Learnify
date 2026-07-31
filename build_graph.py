@@ -964,6 +964,93 @@ n("sysd-ml-system-design", "ML System Design", "system-design", "ml-systems",
 n("sysd-consistent-hashing", "Consistent Hashing", "system-design", "data",
   "Distributing keys across nodes with minimal reshuffling.",
   [(E,0.68,WK),(S,0.78,DP)])
+n("sysd-caching-strategies", "Caching Strategies", "system-design", "components",
+  "Cache-aside, write-through, and write-back/write-behind policies and their consistency tradeoffs.",
+  [(E,0.72,DP),(S,0.75,DP)])
+n("sysd-cache-eviction-invalidation", "Cache Eviction & Invalidation", "system-design", "components",
+  "Eviction policies (LRU/LFU/TTL) and invalidation approaches (write-invalidate, TTL expiry, event-driven) for distributed caches.",
+  [(E,0.68,WK),(S,0.72,WK)])
+n("sysd-cdn", "Content Delivery Networks", "system-design", "components",
+  "Edge PoPs, geo-routing, and accelerating static vs dynamic content delivery.",
+  [(E,0.62,WK),(S,0.65,WK),(P,0.50,AW)])
+n("sysd-sharding-partitioning", "Database Sharding & Partitioning", "system-design", "data",
+  "Hash-based, range-based, and directory-based partitioning strategies; hot shards and rebalancing.",
+  [(E,0.80,DP),(S,0.82,DP),(P,0.50,AW)])
+n("sysd-replication-read-replicas", "Replication & Read Replicas", "system-design", "data",
+  "Leader-follower replication, synchronous vs asynchronous replication, read replicas, replication lag, and failover.",
+  [(E,0.78,DP),(S,0.80,DP)])
+n("sysd-consistency-models", "Consistency Models", "system-design", "principles",
+  "The spectrum of distributed consistency guarantees — linearizable, sequential, causal, and eventual — and choosing among them.",
+  [(E,0.72,DP),(S,0.75,DP),(R,0.50,AW)])
+n("sysd-eventual-consistency", "Eventual Consistency", "system-design", "principles",
+  "Eventual consistency in practice: conflict resolution (last-write-wins, vector clocks), read-your-writes, and monotonic reads.",
+  [(E,0.68,WK),(S,0.72,WK),(R,0.45,AW)])
+n("sysd-event-driven-architecture", "Event-Driven Architecture", "system-design", "architecture",
+  "Choreography vs orchestration, event sourcing basics, and decoupling producers from consumers via events.",
+  [(E,0.72,DP),(S,0.75,DP)])
+n("sysd-rate-limiting", "Rate Limiting", "system-design", "interfaces",
+  "Token bucket, leaky bucket, and sliding-window algorithms for limiting request rates, including distributed enforcement.",
+  [(E,0.72,DP),(S,0.78,DP)])
+n("sysd-idempotency", "Idempotency", "system-design", "interfaces",
+  "Designing idempotent APIs and operations so retries and duplicate requests are safe to replay.",
+  [(E,0.70,WK),(S,0.75,WK)])
+n("sysd-rest-graphql-grpc", "REST vs GraphQL vs gRPC", "system-design", "interfaces",
+  "Tradeoffs among REST, GraphQL, and gRPC for API design: latency, schema strictness, over/under-fetching, and streaming.",
+  [(E,0.68,WK),(S,0.72,WK),(P,0.50,AW)])
+n("sysd-microservices-vs-monolith", "Microservices vs Monolith", "system-design", "architecture",
+  "Tradeoffs between monolithic and microservice architectures: coupling, independent deployability, and operational overhead.",
+  [(E,0.75,DP),(S,0.80,DP),(P,0.60,WK)])
+n("sysd-service-discovery", "Service Discovery", "system-design", "architecture",
+  "How services locate each other at runtime: client-side vs server-side discovery and service registries.",
+  [(E,0.62,WK),(S,0.68,WK)])
+n("sysd-distributed-transactions-sagas", "Distributed Transactions & Sagas", "system-design", "architecture",
+  "Coordinating writes across services: two-phase commit, the saga pattern (choreography/orchestration), and compensating transactions.",
+  [(E,0.72,DP),(S,0.75,DP)])
+n("sysd-consensus-algorithms", "Consensus Algorithms (Raft/Paxos)", "system-design", "architecture",
+  "Why distributed systems need agreement protocols, at an awareness level: leader-based replication and how Raft/Paxos reach consensus.",
+  [(E,0.55,AW),(S,0.55,AW),(R,0.45,AW)])
+n("sysd-blob-object-storage", "Blob & Object Storage", "system-design", "data",
+  "Object storage systems (S3-like) for unstructured data: durability, storage tiers, and use cases vs block/file storage.",
+  [(E,0.62,WK),(S,0.65,WK)])
+n("sysd-search-indexing-architecture", "Search Indexing Architecture", "system-design", "data",
+  "Architecture of large-scale search: inverted indices, index sharding, and serving queries at scale.",
+  [(E,0.65,WK),(R,0.50,AW)])
+n("sysd-capacity-estimation", "Capacity Estimation", "system-design", "estimation",
+  "Back-of-the-envelope estimation of QPS, storage, and bandwidth for system design interviews.",
+  [(E,0.80,DP),(S,0.82,DP)])
+n("sysd-latency-slas", "Latency Budgets & SLAs", "system-design", "reliability",
+  "Latency budgets, percentile latency (p50/p95/p99), and service-level agreements/objectives.",
+  [(E,0.72,DP),(S,0.75,DP),(P,0.55,WK)])
+n("sysd-availability-redundancy", "Availability & Redundancy", "system-design", "reliability",
+  "Designing for availability: redundancy across zones/regions, failover, and reasoning about uptime ('nines').",
+  [(E,0.72,DP),(S,0.78,DP)])
+n("sysd-failure-modes-graceful-degradation", "Failure Modes & Graceful Degradation", "system-design", "reliability",
+  "Anticipating partial failures and designing graceful degradation instead of full outages.",
+  [(E,0.70,WK),(S,0.75,WK)])
+n("sysd-circuit-breakers-retries", "Circuit Breakers & Retries", "system-design", "reliability",
+  "The circuit breaker pattern and retries with exponential backoff and jitter to prevent cascading failures.",
+  [(E,0.72,WK),(S,0.75,WK)])
+n("sysd-observability", "Observability", "system-design", "reliability",
+  "Logging, metrics, and distributed tracing for understanding system behavior in production.",
+  [(E,0.68,WK),(S,0.72,WK)])
+n("sysd-deployment-strategies", "Deployment Strategies", "system-design", "deployment",
+  "Blue-green and canary deployments, rolling updates, and feature flags for safe rollout.",
+  [(E,0.62,WK),(S,0.68,WK),(P,0.50,AW)])
+n("sysd-design-url-shortener", "Design: URL Shortener", "system-design", "design-exercises",
+  "Classic design exercise: URL shortener — encoding schemes, storage, and the redirect path at scale.",
+  [(E,0.75,DP),(S,0.75,DP)])
+n("sysd-design-news-feed", "Design: News Feed", "system-design", "design-exercises",
+  "Classic design exercise: news feed — fan-out on write vs read, ranking, and storing feed items at scale.",
+  [(E,0.72,DP),(S,0.70,DP),(P,0.55,WK)])
+n("sysd-design-chat-system", "Design: Chat System", "system-design", "design-exercises",
+  "Classic design exercise: real-time chat/messaging — delivery guarantees, connection management, and message storage.",
+  [(E,0.70,DP),(S,0.70,DP)])
+n("sysd-design-notification-system", "Design: Notification System", "system-design", "design-exercises",
+  "Classic design exercise: notification system — multi-channel delivery, fan-out, retries, and deduplication.",
+  [(E,0.65,WK),(S,0.65,WK)])
+n("sysd-recommendation-system-design", "Recommendation System Architecture", "system-design", "ml-systems",
+  "Architecture of a recommendation system: candidate generation, ranking, retrieval, and serving at scale.",
+  [(E,0.75,DP),(R,0.55,AW)])
 
 e("sysd-load-balancing","sysd-scalability",1.0)
 e("sysd-caching-systems","sysd-scalability",0.7)
@@ -977,6 +1064,54 @@ e("sysd-consistent-hashing","sysd-db-scaling",0.7)
 e("sysd-consistent-hashing","dsa-hashing",0.7)
 e("sysd-ml-system-design","sysd-scalability",0.7)
 e("sysd-ml-system-design","sysd-db-scaling",0.4)
+
+e("sysd-caching-strategies","sysd-caching-systems",0.7)
+e("sysd-caching-strategies","cs-caching",0.4)
+e("sysd-cache-eviction-invalidation","sysd-caching-systems",0.7)
+e("sysd-cache-eviction-invalidation","dsa-lru-cache",0.4)
+e("sysd-cdn","sysd-caching-systems",0.7)
+e("sysd-cdn","cs-dns",0.4)
+e("sysd-sharding-partitioning","sysd-db-scaling",0.7)
+e("sysd-sharding-partitioning","cs-databases",0.7)
+e("sysd-replication-read-replicas","sysd-db-scaling",0.7)
+e("sysd-replication-read-replicas","cs-databases",0.7)
+e("sysd-consistency-models","cs-isolation-levels-mvcc",0.4)
+e("sysd-eventual-consistency","sysd-consistency-models",1.0)
+e("sysd-eventual-consistency","sysd-cap-theorem",0.7)
+e("sysd-event-driven-architecture","sysd-message-queues",0.7)
+e("sysd-rate-limiting","sysd-api-design",0.4)
+e("sysd-idempotency","sysd-api-design",0.7)
+e("sysd-rest-graphql-grpc","sysd-api-design",0.7)
+e("sysd-rest-graphql-grpc","cs-http-https",0.4)
+e("sysd-microservices-vs-monolith","sysd-scalability",0.4)
+e("sysd-service-discovery","sysd-microservices-vs-monolith",0.7)
+e("sysd-service-discovery","cs-dns",0.4)
+e("sysd-distributed-transactions-sagas","sysd-microservices-vs-monolith",0.7)
+e("sysd-distributed-transactions-sagas","cs-isolation-levels-mvcc",0.4)
+e("sysd-consensus-algorithms","sysd-replication-read-replicas",0.4)
+e("sysd-blob-object-storage","sysd-scalability",0.4)
+e("sysd-search-indexing-architecture","sysd-sharding-partitioning",0.4)
+e("sysd-search-indexing-architecture","dsa-hashing",0.4)
+e("sysd-capacity-estimation","sysd-scalability",0.4)
+e("sysd-latency-slas","sysd-scalability",0.4)
+e("sysd-availability-redundancy","sysd-replication-read-replicas",0.4)
+e("sysd-failure-modes-graceful-degradation","sysd-availability-redundancy",0.7)
+e("sysd-circuit-breakers-retries","sysd-failure-modes-graceful-degradation",0.7)
+e("sysd-observability","sysd-scalability",0.4)
+e("sysd-deployment-strategies","sysd-microservices-vs-monolith",0.4)
+e("sysd-design-url-shortener","sysd-capacity-estimation",0.7)
+e("sysd-design-url-shortener","sysd-db-scaling",0.7)
+e("sysd-design-url-shortener","sysd-caching-systems",0.4)
+e("sysd-design-news-feed","sysd-capacity-estimation",0.7)
+e("sysd-design-news-feed","sysd-caching-systems",0.4)
+e("sysd-design-news-feed","sysd-message-queues",0.4)
+e("sysd-design-chat-system","cs-websockets",0.7)
+e("sysd-design-chat-system","sysd-message-queues",0.4)
+e("sysd-design-chat-system","sysd-capacity-estimation",0.4)
+e("sysd-design-notification-system","sysd-message-queues",0.7)
+e("sysd-design-notification-system","sysd-circuit-breakers-retries",0.4)
+e("sysd-recommendation-system-design","sysd-ml-system-design",0.7)
+e("sysd-recommendation-system-design","sysd-search-indexing-architecture",0.4)
 
 # ---- behavioral -----------------------------------------------------------
 n("beh-star-method", "STAR Storytelling", "behavioral", "communication",
@@ -1135,6 +1270,69 @@ n("ml-feature-engineering", "Feature Engineering", "classical-ml", "methodology"
 n("ml-imbalanced-data", "Imbalanced Data", "classical-ml", "methodology",
   "Resampling, class weights, and threshold tuning.",
   [(E,0.72,WK),(D,0.80,DP)])
+n("ml-cross-validation", "Cross-Validation Strategies", "classical-ml", "methodology",
+  "k-fold, stratified, leave-one-out, and time-series-aware cross-validation for reliable performance estimation.",
+  [(R,0.65,WK),(E,0.80,DP),(D,0.85,DP),(F,0.55,WK)])
+n("ml-data-leakage", "Data Leakage", "classical-ml", "methodology",
+  "Target leakage, temporal leakage, and preprocessing leakage that inflate offline performance estimates.",
+  [(E,0.82,DP),(D,0.85,DP),(R,0.60,WK)])
+n("ml-gradient-boosting", "Gradient Boosting Machines", "classical-ml", "models",
+  "Sequentially fitting weak learners to residual errors; XGBoost/LightGBM regularization and tree-growth strategies.",
+  [(R,0.72,DP),(E,0.85,DP),(D,0.90,DP),(F,0.62,WK)])
+n("ml-ensemble-stacking", "Stacking & Blending", "classical-ml", "models",
+  "Combining heterogeneous base models with a meta-learner trained on out-of-fold predictions.",
+  [(E,0.68,WK),(D,0.72,WK),(R,0.55,AW)])
+n("ml-multiclass-strategies", "Multi-Class Classification Strategies", "classical-ml", "models",
+  "One-vs-rest, one-vs-one, and softmax/multinomial extensions of binary classifiers.",
+  [(E,0.65,WK),(D,0.70,WK),(R,0.55,AW)])
+n("ml-hierarchical-clustering", "Hierarchical Clustering", "classical-ml", "unsupervised",
+  "Agglomerative and divisive clustering, linkage criteria, and dendrograms.",
+  [(D,0.72,WK),(E,0.62,WK),(R,0.55,AW)])
+n("ml-dbscan", "DBSCAN", "classical-ml", "unsupervised",
+  "Density-based clustering via core points, eps, and minPts; robustness to non-spherical clusters and noise.",
+  [(D,0.68,WK),(E,0.60,WK)])
+n("ml-gmm-em", "Gaussian Mixture Models & EM", "classical-ml", "unsupervised",
+  "Soft clustering as a mixture of Gaussians fit via the Expectation-Maximization algorithm.",
+  [(R,0.72,DP),(D,0.75,DP),(E,0.65,WK)])
+n("ml-tsne-umap", "t-SNE & UMAP", "classical-ml", "unsupervised",
+  "Nonlinear dimensionality reduction for visualization, and its tradeoffs versus linear methods like PCA.",
+  [(R,0.62,WK),(D,0.70,WK),(E,0.55,AW)])
+n("ml-anomaly-detection", "Anomaly Detection", "classical-ml", "unsupervised",
+  "Isolation forests, one-class SVM, and statistical outlier detection for identifying rare or abnormal instances.",
+  [(E,0.68,WK),(D,0.72,WK),(F,0.55,AW)])
+n("ml-recommender-systems", "Recommender Systems", "classical-ml", "applications",
+  "Collaborative filtering, content-based filtering, and matrix factorization for personalized recommendations.",
+  [(E,0.65,WK),(D,0.68,WK)])
+n("ml-semi-supervised", "Semi-Supervised & Self-Training", "classical-ml", "methodology",
+  "Leveraging unlabeled data via self-training, pseudo-labeling, and label propagation.",
+  [(R,0.58,WK),(E,0.58,AW),(D,0.55,AW)])
+n("ml-feature-scaling", "Feature Scaling & Normalization", "classical-ml", "methodology",
+  "Standardization, min-max scaling, and robust scaling, and why distance- and gradient-based models require them.",
+  [(E,0.72,WK),(D,0.75,WK),(R,0.50,AW)])
+n("ml-categorical-encoding", "Categorical Encoding", "classical-ml", "methodology",
+  "One-hot, ordinal, target, and frequency encoding, and handling high-cardinality categorical features.",
+  [(E,0.75,WK),(D,0.75,WK)])
+n("ml-feature-selection", "Feature Selection", "classical-ml", "methodology",
+  "Filter, wrapper, and embedded methods for selecting predictive features and reducing dimensionality.",
+  [(E,0.70,WK),(D,0.72,WK)])
+n("ml-hyperparameter-search", "Hyperparameter Search Strategies", "classical-ml", "methodology",
+  "Grid search, random search, and Bayesian optimization for tuning model hyperparameters.",
+  [(E,0.70,WK),(D,0.70,WK)])
+n("ml-regression-metrics", "Regression Evaluation Metrics", "classical-ml", "evaluation",
+  "RMSE, MAE, R-squared, and adjusted R-squared for evaluating regression models.",
+  [(E,0.75,WK),(D,0.82,DP),(R,0.55,AW),(F,0.62,WK)])
+n("ml-calibration", "Probability Calibration", "classical-ml", "evaluation",
+  "Platt scaling, isotonic regression, and calibration curves for aligning predicted probabilities with observed frequencies.",
+  [(E,0.68,WK),(D,0.70,WK),(R,0.55,AW)])
+n("ml-learning-curves", "Learning Curves", "classical-ml", "evaluation",
+  "Diagnosing underfitting vs. overfitting by plotting error against training set size or model complexity.",
+  [(E,0.68,WK),(D,0.72,WK),(R,0.55,AW)])
+n("ml-ranking-metrics", "Ranking Metrics", "classical-ml", "evaluation",
+  "NDCG, MAP, and MRR for evaluating ranked output quality.",
+  [(E,0.62,WK),(D,0.65,WK)])
+n("ml-interpretability", "Model Interpretability", "classical-ml", "evaluation",
+  "SHAP values, LIME, and feature importance for explaining individual predictions and global model behavior.",
+  [(E,0.72,WK),(D,0.75,WK),(R,0.55,AW),(F,0.58,WK)])
 
 e("ml-train-test-split","ml-supervised-unsupervised",0.7)
 e("ml-overfitting","ml-train-test-split",1.0)
@@ -1158,6 +1356,38 @@ e("ml-pca","prob-covariance",0.7)
 e("ml-evaluation-metrics","ml-logistic-regression",0.4)
 e("ml-feature-engineering","ml-train-test-split",0.4)
 e("ml-imbalanced-data","ml-evaluation-metrics",0.7)
+e("ml-cross-validation","ml-train-test-split",0.7)
+e("ml-data-leakage","ml-train-test-split",0.7)
+e("ml-gradient-boosting","ml-decision-trees",1.0)
+e("ml-gradient-boosting","ml-ensembles",0.7)
+e("ml-gradient-boosting","opt-gradient-descent",0.7)
+e("ml-ensemble-stacking","ml-ensembles",0.7)
+e("ml-ensemble-stacking","ml-cross-validation",0.7)
+e("ml-multiclass-strategies","ml-logistic-regression",0.7)
+e("ml-hierarchical-clustering","linalg-dot-product",0.4)
+e("ml-dbscan","ml-kmeans",0.4)
+e("ml-gmm-em","prob-multivariate-normal",0.7)
+e("ml-gmm-em","stat-mle",0.7)
+e("ml-gmm-em","ml-kmeans",0.4)
+e("ml-tsne-umap","ml-pca",0.4)
+e("ml-tsne-umap","prob-covariance",0.4)
+e("ml-anomaly-detection","ml-decision-trees",0.4)
+e("ml-anomaly-detection","ml-svm",0.4)
+e("ml-recommender-systems","linalg-svd",0.4)
+e("ml-semi-supervised","ml-supervised-unsupervised",0.4)
+e("ml-feature-scaling","ml-feature-engineering",0.4)
+e("ml-feature-scaling","ml-knn",0.4)
+e("ml-categorical-encoding","ml-feature-engineering",0.4)
+e("ml-feature-selection","ml-feature-engineering",0.4)
+e("ml-feature-selection","ml-overfitting",0.4)
+e("ml-hyperparameter-search","ml-cross-validation",0.7)
+e("ml-regression-metrics","ml-linear-regression",0.4)
+e("ml-calibration","ml-logistic-regression",0.4)
+e("ml-calibration","ml-evaluation-metrics",0.4)
+e("ml-learning-curves","ml-overfitting",0.7)
+e("ml-ranking-metrics","ml-evaluation-metrics",0.4)
+e("ml-interpretability","ml-decision-trees",0.4)
+e("ml-interpretability","ml-ensembles",0.4)
 
 # ---- deep-learning --------------------------------------------------------
 n("dl-perceptron", "Perceptron & MLP", "deep-learning", "foundations",
