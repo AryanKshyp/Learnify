@@ -1323,6 +1323,426 @@
       "tags": []
     },
     {
+      "node_id": "stat-method-of-moments",
+      "type": "assessable",
+      "name": "Method of Moments Estimation",
+      "section": "statistics",
+      "competency": "estimation",
+      "description": "Estimating parameters by equating sample moments to theoretical moments; simpler but generally less efficient than MLE.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.7,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-sufficient-statistics",
+      "type": "assessable",
+      "name": "Sufficient Statistics & Factorization Theorem",
+      "section": "statistics",
+      "competency": "estimation",
+      "description": "Statistics that capture all sample information about a parameter, and the Fisher-Neyman factorization theorem for identifying them.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.72,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-fisher-information",
+      "type": "assessable",
+      "name": "Fisher Information & Cram\u00e9r-Rao Bound",
+      "section": "statistics",
+      "competency": "estimation",
+      "description": "Quantifying the information a sample carries about a parameter, and the theoretical lower bound on unbiased estimator variance.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "derivation"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.78,
+          "required_depth": "derivation"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-power-analysis",
+      "type": "assessable",
+      "name": "Power Analysis & Sample Size Determination",
+      "section": "statistics",
+      "competency": "inference",
+      "description": "Computing statistical power, minimum detectable effect, and required sample size given significance level and effect size.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.7,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-chi-square-tests",
+      "type": "assessable",
+      "name": "Chi-Square Tests",
+      "section": "statistics",
+      "competency": "inference",
+      "description": "Goodness-of-fit and independence testing for categorical data using the chi-square statistic.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-nonparametric-tests",
+      "type": "assessable",
+      "name": "Non-Parametric Tests",
+      "section": "statistics",
+      "competency": "inference",
+      "description": "Distribution-free tests -- Mann-Whitney U, Wilcoxon signed-rank, and Kruskal-Wallis -- for when parametric assumptions fail.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-regression-diagnostics",
+      "type": "assessable",
+      "name": "Regression Diagnostics & Assumption Checking",
+      "section": "statistics",
+      "competency": "regression",
+      "description": "Checking linearity, homoscedasticity, and normality of residuals, and identifying influential points via leverage and Cook's distance.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-multicollinearity",
+      "type": "assessable",
+      "name": "Multicollinearity & Variance Inflation Factor",
+      "section": "statistics",
+      "competency": "regression",
+      "description": "Detecting and addressing correlated predictors using VIF, and its effect on coefficient stability and interpretation.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-sampling-design",
+      "type": "assessable",
+      "name": "Sampling Methods & Study Design",
+      "section": "statistics",
+      "competency": "foundations",
+      "description": "Simple random, stratified, and cluster sampling; observational vs. experimental design; and sources of sampling bias.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-correlation-causation",
+      "type": "assessable",
+      "name": "Correlation vs. Causation & Confounding",
+      "section": "statistics",
+      "competency": "foundations",
+      "description": "Why correlation does not imply causation, spurious correlation, and confounding variables.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-qq-plots",
+      "type": "assessable",
+      "name": "Q-Q Plots & Distributional Diagnostics",
+      "section": "statistics",
+      "competency": "model-quality",
+      "description": "Assessing whether data follows an assumed distribution using quantile-quantile plots, skewness, and kurtosis.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-model-selection-criteria",
+      "type": "assessable",
+      "name": "Model Selection Criteria (AIC/BIC)",
+      "section": "statistics",
+      "competency": "model-quality",
+      "description": "Comparing models via likelihood-based information criteria that penalize complexity, as an alternative to cross-validation.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-survival-analysis",
+      "type": "assessable",
+      "name": "Survival Analysis",
+      "section": "statistics",
+      "competency": "time-series",
+      "description": "Modeling time-to-event data with censoring, Kaplan-Meier estimates, and hazard functions.",
+      "roles": [
+        {
+          "role_id": "data-science",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-robust-statistics",
+      "type": "assessable",
+      "name": "Robust Statistics",
+      "section": "statistics",
+      "competency": "model-quality",
+      "description": "Estimators resistant to outliers -- median, MAD, trimmed means, and M-estimators -- and when to prefer them over OLS.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.58,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "stat-sequential-testing",
+      "type": "assessable",
+      "name": "Sequential Testing & Always-Valid Inference",
+      "section": "statistics",
+      "competency": "inference",
+      "description": "Sequential probability ratio tests and alpha-spending methods for valid inference under continuous monitoring.",
+      "roles": [
+        {
+          "role_id": "data-science",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
       "node_id": "linalg-vectors",
       "type": "assessable",
       "name": "Vectors & Vector Spaces",
@@ -3538,6 +3958,365 @@
       "tags": []
     },
     {
+      "node_id": "dsa-lru-cache",
+      "type": "assessable",
+      "name": "LRU Cache Design",
+      "section": "dsa",
+      "competency": "design",
+      "description": "Designing a Least-Recently-Used cache with O(1) get/put using a hash map plus a doubly linked list.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.85,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.88,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-floyd-warshall",
+      "type": "assessable",
+      "name": "Floyd-Warshall (All-Pairs Shortest Paths)",
+      "section": "dsa",
+      "competency": "graphs",
+      "description": "DP-based algorithm computing shortest paths between every pair of vertices, handling negative edges without negative cycles.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-a-star",
+      "type": "assessable",
+      "name": "A* Search",
+      "section": "dsa",
+      "competency": "graphs",
+      "description": "Heuristic-guided shortest-path search combining Dijkstra's algorithm with an admissible heuristic.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-scc",
+      "type": "assessable",
+      "name": "Strongly Connected Components",
+      "section": "dsa",
+      "competency": "graphs",
+      "description": "Tarjan's and Kosaraju's algorithms for finding maximal strongly connected subgraphs in a directed graph.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.52,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-cycle-detection",
+      "type": "assessable",
+      "name": "Cycle Detection in Graphs",
+      "section": "dsa",
+      "competency": "graphs",
+      "description": "Detecting cycles in directed graphs via DFS coloring and in undirected graphs via union-find.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-flow-matching",
+      "type": "assessable",
+      "name": "Network Flow & Bipartite Matching",
+      "section": "dsa",
+      "competency": "graphs",
+      "description": "Max-flow/min-cut via Ford-Fulkerson/Edmonds-Karp and bipartite matching via augmenting paths.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-binary-search-on-answer",
+      "type": "assessable",
+      "name": "Binary Search on the Answer",
+      "section": "dsa",
+      "competency": "patterns",
+      "description": "Binary searching over a monotonic answer space (e.g. minimize-the-maximum or capacity-feasibility problems) rather than a sorted array.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.78,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-np-completeness",
+      "type": "assessable",
+      "name": "NP-Completeness & Reductions",
+      "section": "dsa",
+      "competency": "complexity",
+      "description": "Recognizing NP-hard/NP-complete problems and constructing polynomial-time reductions to argue intractability.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-recurrence-relations",
+      "type": "assessable",
+      "name": "Recurrence Relations & Master Theorem",
+      "section": "dsa",
+      "competency": "complexity",
+      "description": "Solving divide-and-conquer recurrences with the Master theorem and recursion-tree/substitution methods.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-dp-trees",
+      "type": "assessable",
+      "name": "Dynamic Programming on Trees",
+      "section": "dsa",
+      "competency": "dynamic-programming",
+      "description": "DP over tree structures that combines child-subtree states at each node, e.g. tree diameter or maximum independent set.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.58,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-bitmask-dp",
+      "type": "assessable",
+      "name": "Bitmask Dynamic Programming",
+      "section": "dsa",
+      "competency": "dynamic-programming",
+      "description": "Encoding subsets as bitmasks to enable DP over combinatorial state spaces, e.g. TSP or assignment problems.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-interval-dp",
+      "type": "assessable",
+      "name": "Interval & Matrix-Chain DP",
+      "section": "dsa",
+      "competency": "dynamic-programming",
+      "description": "DP over contiguous subranges built up from smaller intervals, e.g. matrix-chain multiplication or burst balloons.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-quickselect",
+      "type": "assessable",
+      "name": "Quickselect & Order Statistics",
+      "section": "dsa",
+      "competency": "algorithms",
+      "description": "Selecting the k-th smallest/largest element in expected linear time via partition-based selection.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.7,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dsa-matrix-traversal",
+      "type": "assessable",
+      "name": "Matrix/Grid Traversal",
+      "section": "dsa",
+      "competency": "patterns",
+      "description": "Traversing 2D grids as implicit graphs for flood fill, connected-components, and shortest-path-on-grid problems.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.78,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "finance-quant",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
       "node_id": "cs-memory-model",
       "type": "assessable",
       "name": "Memory & Pointers",
@@ -3741,6 +4520,588 @@
           "role_id": "ai-engineer",
           "importance": 0.55,
           "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-cpu-scheduling",
+      "type": "assessable",
+      "name": "CPU Scheduling & Context Switching",
+      "section": "cs-fundamentals",
+      "competency": "os",
+      "description": "FCFS, SJF, round robin, and priority scheduling algorithms, plus what happens during a context switch.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.82,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-file-systems",
+      "type": "assessable",
+      "name": "File Systems",
+      "section": "cs-fundamentals",
+      "competency": "os",
+      "description": "Inodes, directories, blocks, and how a file system organizes data on disk.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-system-calls",
+      "type": "assessable",
+      "name": "System Calls & Kernel Mode",
+      "section": "cs-fundamentals",
+      "competency": "os",
+      "description": "User mode vs kernel mode, the syscall interface, and how a process requests OS services.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-interrupts",
+      "type": "assessable",
+      "name": "Interrupts & Interrupt Handling",
+      "section": "cs-fundamentals",
+      "competency": "os",
+      "description": "Hardware/software interrupts, interrupt handlers, and how the CPU responds to asynchronous events.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-deadlock",
+      "type": "assessable",
+      "name": "Deadlock Detection & Prevention",
+      "section": "cs-fundamentals",
+      "competency": "os",
+      "description": "The Coffman conditions, deadlock avoidance/prevention strategies, and detection algorithms.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.82,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-memory-allocation",
+      "type": "assessable",
+      "name": "Memory Allocation",
+      "section": "cs-fundamentals",
+      "competency": "systems",
+      "description": "Heap allocation strategies, malloc/free mechanics, and internal/external fragmentation.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.8,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-mutexes-semaphores",
+      "type": "assessable",
+      "name": "Mutexes & Semaphores",
+      "section": "cs-fundamentals",
+      "competency": "concurrency",
+      "description": "Mutual exclusion locks and counting/binary semaphores as synchronization primitives.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.85,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-atomic-operations",
+      "type": "assessable",
+      "name": "Atomic Operations & Memory Ordering",
+      "section": "cs-fundamentals",
+      "competency": "concurrency",
+      "description": "Compare-and-swap, atomic instructions, and memory ordering/visibility across threads.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-thread-pools",
+      "type": "assessable",
+      "name": "Thread Pools & Worker Models",
+      "section": "cs-fundamentals",
+      "competency": "concurrency",
+      "description": "Reusing a bounded set of worker threads to execute queued tasks instead of spawning per task.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.78,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-async-io-event-loop",
+      "type": "assessable",
+      "name": "Async I/O & Event Loops",
+      "section": "cs-fundamentals",
+      "competency": "concurrency",
+      "description": "Non-blocking I/O, event loops, and single-threaded concurrency via callbacks/coroutines.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-producer-consumer",
+      "type": "assessable",
+      "name": "Producer-Consumer Pattern",
+      "section": "cs-fundamentals",
+      "competency": "concurrency",
+      "description": "Coordinating producer and consumer threads through a bounded shared buffer/queue.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-osi-tcpip-layers",
+      "type": "assessable",
+      "name": "OSI & TCP/IP Layering Models",
+      "section": "cs-fundamentals",
+      "competency": "networks",
+      "description": "The layered models for network communication and what each layer is responsible for.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-tcp-udp",
+      "type": "assessable",
+      "name": "TCP vs UDP",
+      "section": "cs-fundamentals",
+      "competency": "networks",
+      "description": "Connection-oriented reliable delivery vs connectionless best-effort delivery, and when to use each.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.8,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-tcp-handshake-flow-control",
+      "type": "assessable",
+      "name": "TCP Handshake & Flow Control",
+      "section": "cs-fundamentals",
+      "competency": "networks",
+      "description": "The three-way handshake, sliding window flow control, and basic congestion control.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-http-https",
+      "type": "assessable",
+      "name": "HTTP & HTTPS",
+      "section": "cs-fundamentals",
+      "competency": "networks",
+      "description": "HTTP methods, status codes, statelessness/headers, and how HTTPS layers encryption over HTTP.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.42,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-tls",
+      "type": "assessable",
+      "name": "TLS & Encryption in Transit",
+      "section": "cs-fundamentals",
+      "competency": "networks",
+      "description": "The TLS handshake, certificates, and symmetric vs asymmetric encryption in securing a connection.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.48,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-dns",
+      "type": "assessable",
+      "name": "DNS Resolution",
+      "section": "cs-fundamentals",
+      "competency": "networks",
+      "description": "The domain name hierarchy, record types, and how a hostname resolves to an IP address.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-sockets",
+      "type": "assessable",
+      "name": "Sockets & Socket Programming",
+      "section": "cs-fundamentals",
+      "competency": "networks",
+      "description": "The socket API as the OS-level abstraction for establishing and using network connections.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.7,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-websockets",
+      "type": "assessable",
+      "name": "WebSockets",
+      "section": "cs-fundamentals",
+      "competency": "networks",
+      "description": "Upgrading an HTTP connection to a persistent, full-duplex channel for real-time communication.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-relational-modeling-normalization",
+      "type": "assessable",
+      "name": "Relational Modeling & Normalization",
+      "section": "cs-fundamentals",
+      "competency": "data",
+      "description": "Entity-relationship modeling and normal forms (1NF-3NF), plus denormalization tradeoffs.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.78,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.42,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-indexing-btrees",
+      "type": "assessable",
+      "name": "Indexing & B-Trees",
+      "section": "cs-fundamentals",
+      "competency": "data",
+      "description": "How database indexes speed up lookups, and the B-tree/B+-tree structures that back them.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.82,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-query-optimization",
+      "type": "assessable",
+      "name": "Query Planning & Optimization",
+      "section": "cs-fundamentals",
+      "competency": "data",
+      "description": "How a query planner chooses an execution plan, and cost-based optimization basics.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-isolation-levels-mvcc",
+      "type": "assessable",
+      "name": "Transaction Isolation Levels & MVCC",
+      "section": "cs-fundamentals",
+      "competency": "data",
+      "description": "Read uncommitted/committed, repeatable read, and serializable isolation, plus MVCC mechanics.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.78,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-database-locking",
+      "type": "assessable",
+      "name": "Database Locking Mechanisms",
+      "section": "cs-fundamentals",
+      "competency": "data",
+      "description": "Row vs table locks, two-phase locking, and lock granularity tradeoffs.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-nosql-data-models",
+      "type": "assessable",
+      "name": "NoSQL Data Models",
+      "section": "cs-fundamentals",
+      "competency": "data",
+      "description": "Key-value, document, and columnar stores, and how their tradeoffs differ from the relational model.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.7,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "product-management",
+          "importance": 0.4,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-compilation-interpretation",
+      "type": "assessable",
+      "name": "Compilation vs Interpretation",
+      "section": "cs-fundamentals",
+      "competency": "systems",
+      "description": "How compiled and interpreted languages execute code differently, and where JIT compilation fits.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "cs-garbage-collection",
+      "type": "assessable",
+      "name": "Memory Management & Garbage Collection",
+      "section": "cs-fundamentals",
+      "competency": "systems",
+      "description": "Manual memory management vs automatic garbage collection, and common GC strategies.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "software-engineering",
+          "importance": 0.7,
+          "required_depth": "working"
         }
       ],
       "tags": []
@@ -8379,6 +9740,162 @@
       "weight": 0.4
     },
     {
+      "from_node_id": "stat-method-of-moments",
+      "to_node_id": "stat-estimation",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "stat-method-of-moments",
+      "to_node_id": "prob-expectation",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "stat-sufficient-statistics",
+      "to_node_id": "stat-estimation",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "stat-sufficient-statistics",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-fisher-information",
+      "to_node_id": "stat-sufficient-statistics",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "stat-fisher-information",
+      "to_node_id": "stat-mle",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "stat-power-analysis",
+      "to_node_id": "stat-hypothesis-testing",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "stat-chi-square-tests",
+      "to_node_id": "stat-hypothesis-testing",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "stat-chi-square-tests",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-nonparametric-tests",
+      "to_node_id": "stat-hypothesis-testing",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "stat-nonparametric-tests",
+      "to_node_id": "stat-t-test",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-regression-diagnostics",
+      "to_node_id": "stat-linear-regression",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "stat-multicollinearity",
+      "to_node_id": "stat-regression-diagnostics",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "stat-multicollinearity",
+      "to_node_id": "prob-covariance",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-sampling-design",
+      "to_node_id": "stat-descriptive",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-correlation-causation",
+      "to_node_id": "prob-covariance",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "stat-qq-plots",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-qq-plots",
+      "to_node_id": "stat-descriptive",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-model-selection-criteria",
+      "to_node_id": "stat-mle",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "stat-model-selection-criteria",
+      "to_node_id": "stat-bias-variance",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-survival-analysis",
+      "to_node_id": "stat-time-series",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-survival-analysis",
+      "to_node_id": "prob-distributions",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-robust-statistics",
+      "to_node_id": "stat-regression-diagnostics",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-robust-statistics",
+      "to_node_id": "stat-descriptive",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "stat-sequential-testing",
+      "to_node_id": "stat-hypothesis-testing",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "stat-sequential-testing",
+      "to_node_id": "stat-power-analysis",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
       "from_node_id": "linalg-matrix-multiplication",
       "to_node_id": "linalg-vectors",
       "type": "prerequisite",
@@ -9099,6 +10616,138 @@
       "weight": 1.0
     },
     {
+      "from_node_id": "dsa-lru-cache",
+      "to_node_id": "dsa-hashing",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dsa-lru-cache",
+      "to_node_id": "dsa-linked-lists",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dsa-floyd-warshall",
+      "to_node_id": "dsa-shortest-paths",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dsa-floyd-warshall",
+      "to_node_id": "dsa-dynamic-programming",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dsa-a-star",
+      "to_node_id": "dsa-shortest-paths",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dsa-a-star",
+      "to_node_id": "dsa-heaps",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dsa-scc",
+      "to_node_id": "dsa-bfs-dfs",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dsa-cycle-detection",
+      "to_node_id": "dsa-bfs-dfs",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dsa-cycle-detection",
+      "to_node_id": "dsa-union-find",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dsa-flow-matching",
+      "to_node_id": "dsa-bfs-dfs",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dsa-flow-matching",
+      "to_node_id": "dsa-graphs",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dsa-binary-search-on-answer",
+      "to_node_id": "dsa-binary-search",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dsa-np-completeness",
+      "to_node_id": "dsa-big-o",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dsa-recurrence-relations",
+      "to_node_id": "dsa-big-o",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dsa-recurrence-relations",
+      "to_node_id": "dsa-recursion-backtracking",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dsa-dp-trees",
+      "to_node_id": "dsa-trees",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dsa-dp-trees",
+      "to_node_id": "dsa-dynamic-programming",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dsa-bitmask-dp",
+      "to_node_id": "dsa-dynamic-programming",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dsa-bitmask-dp",
+      "to_node_id": "dsa-bit-manipulation",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dsa-interval-dp",
+      "to_node_id": "dsa-dp-2d",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dsa-quickselect",
+      "to_node_id": "dsa-sorting",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dsa-matrix-traversal",
+      "to_node_id": "dsa-bfs-dfs",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
       "from_node_id": "cs-processes-threads",
       "to_node_id": "cs-memory-model",
       "type": "prerequisite",
@@ -9133,6 +10782,186 @@
       "to_node_id": "cs-processes-threads",
       "type": "prerequisite",
       "weight": 0.4
+    },
+    {
+      "from_node_id": "cs-cpu-scheduling",
+      "to_node_id": "cs-processes-threads",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-file-systems",
+      "to_node_id": "cs-memory-model",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "cs-system-calls",
+      "to_node_id": "cs-processes-threads",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-interrupts",
+      "to_node_id": "cs-system-calls",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-deadlock",
+      "to_node_id": "cs-concurrency",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "cs-deadlock",
+      "to_node_id": "cs-cpu-scheduling",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "cs-memory-allocation",
+      "to_node_id": "cs-memory-model",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-mutexes-semaphores",
+      "to_node_id": "cs-concurrency",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "cs-atomic-operations",
+      "to_node_id": "cs-mutexes-semaphores",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-thread-pools",
+      "to_node_id": "cs-processes-threads",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-thread-pools",
+      "to_node_id": "cs-mutexes-semaphores",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "cs-async-io-event-loop",
+      "to_node_id": "cs-processes-threads",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-producer-consumer",
+      "to_node_id": "cs-mutexes-semaphores",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "cs-networking",
+      "to_node_id": "cs-osi-tcpip-layers",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "cs-tcp-udp",
+      "to_node_id": "cs-networking",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-tcp-handshake-flow-control",
+      "to_node_id": "cs-tcp-udp",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "cs-http-https",
+      "to_node_id": "cs-tcp-udp",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-tls",
+      "to_node_id": "cs-http-https",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-dns",
+      "to_node_id": "cs-networking",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "cs-sockets",
+      "to_node_id": "cs-tcp-udp",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-websockets",
+      "to_node_id": "cs-http-https",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-relational-modeling-normalization",
+      "to_node_id": "cs-databases",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-indexing-btrees",
+      "to_node_id": "cs-databases",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "cs-query-optimization",
+      "to_node_id": "cs-indexing-btrees",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-query-optimization",
+      "to_node_id": "cs-sql",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "cs-isolation-levels-mvcc",
+      "to_node_id": "cs-databases",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "cs-database-locking",
+      "to_node_id": "cs-isolation-levels-mvcc",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-database-locking",
+      "to_node_id": "cs-concurrency",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "cs-nosql-data-models",
+      "to_node_id": "cs-databases",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "cs-garbage-collection",
+      "to_node_id": "cs-memory-allocation",
+      "type": "prerequisite",
+      "weight": 0.7
     },
     {
       "from_node_id": "sysd-load-balancing",

@@ -241,6 +241,51 @@ n("stat-multiple-testing", "Multiple Testing Correction", "statistics", "inferen
 n("stat-time-series", "Time Series Basics", "statistics", "time-series",
   "Stationarity, autocorrelation, ARIMA, and forecasting fundamentals.",
   [(D,0.68,WK),(F,0.85,DP)])
+n("stat-method-of-moments", "Method of Moments Estimation", "statistics", "estimation",
+  "Estimating parameters by equating sample moments to theoretical moments; simpler but generally less efficient than MLE.",
+  [(R,0.65,WK),(E,0.55,AW),(D,0.62,WK),(F,0.70,WK)])
+n("stat-sufficient-statistics", "Sufficient Statistics & Factorization Theorem", "statistics", "estimation",
+  "Statistics that capture all sample information about a parameter, and the Fisher-Neyman factorization theorem for identifying them.",
+  [(R,0.68,DP),(D,0.55,WK),(F,0.72,DP)])
+n("stat-fisher-information", "Fisher Information & Cramér-Rao Bound", "statistics", "estimation",
+  "Quantifying the information a sample carries about a parameter, and the theoretical lower bound on unbiased estimator variance.",
+  [(R,0.72,DV),(D,0.50,AW),(F,0.78,DV)])
+n("stat-power-analysis", "Power Analysis & Sample Size Determination", "statistics", "inference",
+  "Computing statistical power, minimum detectable effect, and required sample size given significance level and effect size.",
+  [(R,0.72,WK),(E,0.60,WK),(D,0.85,DP),(P,0.65,WK),(F,0.70,WK)])
+n("stat-chi-square-tests", "Chi-Square Tests", "statistics", "inference",
+  "Goodness-of-fit and independence testing for categorical data using the chi-square statistic.",
+  [(R,0.62,WK),(D,0.80,DP),(P,0.55,AW),(F,0.65,WK)])
+n("stat-nonparametric-tests", "Non-Parametric Tests", "statistics", "inference",
+  "Distribution-free tests -- Mann-Whitney U, Wilcoxon signed-rank, and Kruskal-Wallis -- for when parametric assumptions fail.",
+  [(R,0.58,WK),(D,0.75,DP),(F,0.60,WK)])
+n("stat-regression-diagnostics", "Regression Diagnostics & Assumption Checking", "statistics", "regression",
+  "Checking linearity, homoscedasticity, and normality of residuals, and identifying influential points via leverage and Cook's distance.",
+  [(R,0.75,DP),(E,0.65,WK),(D,0.88,DP),(F,0.75,DP)])
+n("stat-multicollinearity", "Multicollinearity & Variance Inflation Factor", "statistics", "regression",
+  "Detecting and addressing correlated predictors using VIF, and its effect on coefficient stability and interpretation.",
+  [(R,0.62,WK),(D,0.78,DP),(F,0.65,WK)])
+n("stat-sampling-design", "Sampling Methods & Study Design", "statistics", "foundations",
+  "Simple random, stratified, and cluster sampling; observational vs. experimental design; and sources of sampling bias.",
+  [(R,0.55,AW),(D,0.82,DP),(P,0.60,WK),(F,0.60,WK)])
+n("stat-correlation-causation", "Correlation vs. Causation & Confounding", "statistics", "foundations",
+  "Why correlation does not imply causation, spurious correlation, and confounding variables.",
+  [(R,0.70,WK),(E,0.55,AW),(D,0.85,DP),(P,0.65,WK),(F,0.62,WK)])
+n("stat-qq-plots", "Q-Q Plots & Distributional Diagnostics", "statistics", "model-quality",
+  "Assessing whether data follows an assumed distribution using quantile-quantile plots, skewness, and kurtosis.",
+  [(R,0.58,WK),(D,0.72,WK),(F,0.60,WK)])
+n("stat-model-selection-criteria", "Model Selection Criteria (AIC/BIC)", "statistics", "model-quality",
+  "Comparing models via likelihood-based information criteria that penalize complexity, as an alternative to cross-validation.",
+  [(R,0.65,WK),(D,0.68,WK),(F,0.62,WK)])
+n("stat-survival-analysis", "Survival Analysis", "statistics", "time-series",
+  "Modeling time-to-event data with censoring, Kaplan-Meier estimates, and hazard functions.",
+  [(D,0.60,WK),(F,0.55,AW)])
+n("stat-robust-statistics", "Robust Statistics", "statistics", "model-quality",
+  "Estimators resistant to outliers -- median, MAD, trimmed means, and M-estimators -- and when to prefer them over OLS.",
+  [(R,0.55,WK),(D,0.68,WK),(F,0.58,WK)])
+n("stat-sequential-testing", "Sequential Testing & Always-Valid Inference", "statistics", "inference",
+  "Sequential probability ratio tests and alpha-spending methods for valid inference under continuous monitoring.",
+  [(D,0.65,WK),(F,0.68,WK)])
 
 e("stat-estimation","stat-descriptive",0.7)
 e("stat-estimation","prob-expectation",1.0)
@@ -263,6 +308,32 @@ e("stat-bayesian-inference","stat-map",0.7)
 e("stat-bayesian-inference","prob-bayes",1.0)
 e("stat-multiple-testing","stat-hypothesis-testing",1.0)
 e("stat-time-series","stat-linear-regression",0.4)
+e("stat-method-of-moments","stat-estimation",1.0)
+e("stat-method-of-moments","prob-expectation",0.7)
+e("stat-sufficient-statistics","stat-estimation",1.0)
+e("stat-sufficient-statistics","prob-distributions",0.4)
+e("stat-fisher-information","stat-sufficient-statistics",0.7)
+e("stat-fisher-information","stat-mle",0.7)
+e("stat-power-analysis","stat-hypothesis-testing",1.0)
+e("stat-chi-square-tests","stat-hypothesis-testing",1.0)
+e("stat-chi-square-tests","prob-distributions",0.4)
+e("stat-nonparametric-tests","stat-hypothesis-testing",0.7)
+e("stat-nonparametric-tests","stat-t-test",0.4)
+e("stat-regression-diagnostics","stat-linear-regression",1.0)
+e("stat-multicollinearity","stat-regression-diagnostics",0.7)
+e("stat-multicollinearity","prob-covariance",0.4)
+e("stat-sampling-design","stat-descriptive",0.4)
+e("stat-correlation-causation","prob-covariance",0.7)
+e("stat-qq-plots","prob-distributions",0.4)
+e("stat-qq-plots","stat-descriptive",0.4)
+e("stat-model-selection-criteria","stat-mle",0.7)
+e("stat-model-selection-criteria","stat-bias-variance",0.4)
+e("stat-survival-analysis","stat-time-series",0.4)
+e("stat-survival-analysis","prob-distributions",0.4)
+e("stat-robust-statistics","stat-regression-diagnostics",0.4)
+e("stat-robust-statistics","stat-descriptive",0.4)
+e("stat-sequential-testing","stat-hypothesis-testing",0.7)
+e("stat-sequential-testing","stat-power-analysis",0.4)
 
 # ---- linear-algebra -------------------------------------------------------
 n("linalg-vectors", "Vectors & Vector Spaces", "linear-algebra", "foundations",
@@ -654,6 +725,73 @@ e("dsa-dp-2d","dsa-dp-1d",1.0)
 e("dsa-knapsack","dsa-dp-2d",1.0)
 e("dsa-lis-lcs","dsa-dp-2d",1.0)
 
+# ---- dsa (deepened further: gap-fill pass) ----
+n("dsa-lru-cache", "LRU Cache Design", "dsa", "design",
+  "Designing a Least-Recently-Used cache with O(1) get/put using a hash map plus a doubly linked list.",
+  [(E,0.85,DP),(S,0.88,DP),(F,0.65,WK)])
+n("dsa-floyd-warshall", "Floyd-Warshall (All-Pairs Shortest Paths)", "dsa", "graphs",
+  "DP-based algorithm computing shortest paths between every pair of vertices, handling negative edges without negative cycles.",
+  [(E,0.60,WK),(S,0.72,WK),(F,0.62,WK)])
+n("dsa-a-star", "A* Search", "dsa", "graphs",
+  "Heuristic-guided shortest-path search combining Dijkstra's algorithm with an admissible heuristic.",
+  [(R,0.55,WK),(E,0.60,WK)])
+n("dsa-scc", "Strongly Connected Components", "dsa", "graphs",
+  "Tarjan's and Kosaraju's algorithms for finding maximal strongly connected subgraphs in a directed graph.",
+  [(E,0.58,WK),(S,0.52,AW)])
+n("dsa-cycle-detection", "Cycle Detection in Graphs", "dsa", "graphs",
+  "Detecting cycles in directed graphs via DFS coloring and in undirected graphs via union-find.",
+  [(E,0.65,WK),(S,0.62,WK),(F,0.55,WK)])
+n("dsa-flow-matching", "Network Flow & Bipartite Matching", "dsa", "graphs",
+  "Max-flow/min-cut via Ford-Fulkerson/Edmonds-Karp and bipartite matching via augmenting paths.",
+  [(E,0.55,WK),(F,0.60,WK)])
+n("dsa-binary-search-on-answer", "Binary Search on the Answer", "dsa", "patterns",
+  "Binary searching over a monotonic answer space (e.g. minimize-the-maximum or capacity-feasibility problems) rather than a sorted array.",
+  [(E,0.78,WK),(S,0.75,WK),(F,0.68,WK)])
+n("dsa-np-completeness", "NP-Completeness & Reductions", "dsa", "complexity",
+  "Recognizing NP-hard/NP-complete problems and constructing polynomial-time reductions to argue intractability.",
+  [(R,0.55,WK),(E,0.62,WK),(S,0.58,WK),(F,0.55,WK)])
+n("dsa-recurrence-relations", "Recurrence Relations & Master Theorem", "dsa", "complexity",
+  "Solving divide-and-conquer recurrences with the Master theorem and recursion-tree/substitution methods.",
+  [(R,0.50,AW),(E,0.68,WK),(S,0.65,WK),(F,0.72,WK)])
+n("dsa-dp-trees", "Dynamic Programming on Trees", "dsa", "dynamic-programming",
+  "DP over tree structures that combines child-subtree states at each node, e.g. tree diameter or maximum independent set.",
+  [(E,0.70,WK),(S,0.62,WK),(F,0.58,WK)])
+n("dsa-bitmask-dp", "Bitmask Dynamic Programming", "dsa", "dynamic-programming",
+  "Encoding subsets as bitmasks to enable DP over combinatorial state spaces, e.g. TSP or assignment problems.",
+  [(E,0.62,WK),(S,0.55,AW),(F,0.68,WK)])
+n("dsa-interval-dp", "Interval & Matrix-Chain DP", "dsa", "dynamic-programming",
+  "DP over contiguous subranges built up from smaller intervals, e.g. matrix-chain multiplication or burst balloons.",
+  [(E,0.65,WK),(S,0.58,WK),(F,0.62,WK)])
+n("dsa-quickselect", "Quickselect & Order Statistics", "dsa", "algorithms",
+  "Selecting the k-th smallest/largest element in expected linear time via partition-based selection.",
+  [(E,0.75,WK),(S,0.72,WK),(F,0.70,WK)])
+n("dsa-matrix-traversal", "Matrix/Grid Traversal", "dsa", "patterns",
+  "Traversing 2D grids as implicit graphs for flood fill, connected-components, and shortest-path-on-grid problems.",
+  [(E,0.78,WK),(S,0.75,WK),(F,0.55,WK)])
+
+e("dsa-lru-cache","dsa-hashing",1.0)
+e("dsa-lru-cache","dsa-linked-lists",1.0)
+e("dsa-floyd-warshall","dsa-shortest-paths",0.7)
+e("dsa-floyd-warshall","dsa-dynamic-programming",0.4)
+e("dsa-a-star","dsa-shortest-paths",1.0)
+e("dsa-a-star","dsa-heaps",0.4)
+e("dsa-scc","dsa-bfs-dfs",1.0)
+e("dsa-cycle-detection","dsa-bfs-dfs",0.7)
+e("dsa-cycle-detection","dsa-union-find",0.7)
+e("dsa-flow-matching","dsa-bfs-dfs",1.0)
+e("dsa-flow-matching","dsa-graphs",0.4)
+e("dsa-binary-search-on-answer","dsa-binary-search",1.0)
+e("dsa-np-completeness","dsa-big-o",0.4)
+e("dsa-recurrence-relations","dsa-big-o",0.7)
+e("dsa-recurrence-relations","dsa-recursion-backtracking",0.4)
+e("dsa-dp-trees","dsa-trees",0.7)
+e("dsa-dp-trees","dsa-dynamic-programming",1.0)
+e("dsa-bitmask-dp","dsa-dynamic-programming",1.0)
+e("dsa-bitmask-dp","dsa-bit-manipulation",0.7)
+e("dsa-interval-dp","dsa-dp-2d",0.7)
+e("dsa-quickselect","dsa-sorting",0.7)
+e("dsa-matrix-traversal","dsa-bfs-dfs",1.0)
+
 # ---- cs-fundamentals ------------------------------------------------------
 n("cs-memory-model", "Memory & Pointers", "cs-fundamentals", "systems",
   "Stack vs heap, pointers/references, and memory layout.",
@@ -679,6 +817,87 @@ n("cs-caching", "Caching Concepts", "cs-fundamentals", "systems",
 n("cs-os-memory-mgmt", "Virtual Memory & Paging", "cs-fundamentals", "os",
   "Virtual memory, paging, and the role of the MMU.",
   [(S,0.75,DP),(E,0.55,AW)])
+n("cs-cpu-scheduling", "CPU Scheduling & Context Switching", "cs-fundamentals", "os",
+  "FCFS, SJF, round robin, and priority scheduling algorithms, plus what happens during a context switch.",
+  [(E,0.65,WK),(S,0.82,DP)])
+n("cs-file-systems", "File Systems", "cs-fundamentals", "os",
+  "Inodes, directories, blocks, and how a file system organizes data on disk.",
+  [(E,0.55,AW),(S,0.75,WK)])
+n("cs-system-calls", "System Calls & Kernel Mode", "cs-fundamentals", "os",
+  "User mode vs kernel mode, the syscall interface, and how a process requests OS services.",
+  [(E,0.55,AW),(S,0.72,WK)])
+n("cs-interrupts", "Interrupts & Interrupt Handling", "cs-fundamentals", "os",
+  "Hardware/software interrupts, interrupt handlers, and how the CPU responds to asynchronous events.",
+  [(E,0.45,AW),(S,0.65,WK)])
+n("cs-deadlock", "Deadlock Detection & Prevention", "cs-fundamentals", "os",
+  "The Coffman conditions, deadlock avoidance/prevention strategies, and detection algorithms.",
+  [(E,0.60,WK),(S,0.82,DP)])
+n("cs-memory-allocation", "Memory Allocation", "cs-fundamentals", "systems",
+  "Heap allocation strategies, malloc/free mechanics, and internal/external fragmentation.",
+  [(E,0.65,WK),(S,0.80,DP)])
+n("cs-mutexes-semaphores", "Mutexes & Semaphores", "cs-fundamentals", "concurrency",
+  "Mutual exclusion locks and counting/binary semaphores as synchronization primitives.",
+  [(E,0.70,WK),(S,0.85,DP)])
+n("cs-atomic-operations", "Atomic Operations & Memory Ordering", "cs-fundamentals", "concurrency",
+  "Compare-and-swap, atomic instructions, and memory ordering/visibility across threads.",
+  [(E,0.62,WK),(S,0.75,DP)])
+n("cs-thread-pools", "Thread Pools & Worker Models", "cs-fundamentals", "concurrency",
+  "Reusing a bounded set of worker threads to execute queued tasks instead of spawning per task.",
+  [(E,0.70,WK),(S,0.78,WK)])
+n("cs-async-io-event-loop", "Async I/O & Event Loops", "cs-fundamentals", "concurrency",
+  "Non-blocking I/O, event loops, and single-threaded concurrency via callbacks/coroutines.",
+  [(E,0.75,WK),(S,0.72,WK)])
+n("cs-producer-consumer", "Producer-Consumer Pattern", "cs-fundamentals", "concurrency",
+  "Coordinating producer and consumer threads through a bounded shared buffer/queue.",
+  [(E,0.60,WK),(S,0.75,WK)])
+n("cs-osi-tcpip-layers", "OSI & TCP/IP Layering Models", "cs-fundamentals", "networks",
+  "The layered models for network communication and what each layer is responsible for.",
+  [(E,0.50,AW),(S,0.68,WK)])
+n("cs-tcp-udp", "TCP vs UDP", "cs-fundamentals", "networks",
+  "Connection-oriented reliable delivery vs connectionless best-effort delivery, and when to use each.",
+  [(E,0.62,WK),(S,0.80,DP)])
+n("cs-tcp-handshake-flow-control", "TCP Handshake & Flow Control", "cs-fundamentals", "networks",
+  "The three-way handshake, sliding window flow control, and basic congestion control.",
+  [(E,0.50,AW),(S,0.72,WK)])
+n("cs-http-https", "HTTP & HTTPS", "cs-fundamentals", "networks",
+  "HTTP methods, status codes, statelessness/headers, and how HTTPS layers encryption over HTTP.",
+  [(E,0.68,WK),(S,0.82,DP),(P,0.42,AW)])
+n("cs-tls", "TLS & Encryption in Transit", "cs-fundamentals", "networks",
+  "The TLS handshake, certificates, and symmetric vs asymmetric encryption in securing a connection.",
+  [(E,0.48,AW),(S,0.65,WK)])
+n("cs-dns", "DNS Resolution", "cs-fundamentals", "networks",
+  "The domain name hierarchy, record types, and how a hostname resolves to an IP address.",
+  [(E,0.45,AW),(S,0.62,WK)])
+n("cs-sockets", "Sockets & Socket Programming", "cs-fundamentals", "networks",
+  "The socket API as the OS-level abstraction for establishing and using network connections.",
+  [(E,0.50,AW),(S,0.70,WK)])
+n("cs-websockets", "WebSockets", "cs-fundamentals", "networks",
+  "Upgrading an HTTP connection to a persistent, full-duplex channel for real-time communication.",
+  [(E,0.55,AW),(S,0.65,WK)])
+n("cs-relational-modeling-normalization", "Relational Modeling & Normalization", "cs-fundamentals", "data",
+  "Entity-relationship modeling and normal forms (1NF-3NF), plus denormalization tradeoffs.",
+  [(E,0.65,WK),(S,0.78,WK),(P,0.42,AW)])
+n("cs-indexing-btrees", "Indexing & B-Trees", "cs-fundamentals", "data",
+  "How database indexes speed up lookups, and the B-tree/B+-tree structures that back them.",
+  [(E,0.72,WK),(S,0.82,DP)])
+n("cs-query-optimization", "Query Planning & Optimization", "cs-fundamentals", "data",
+  "How a query planner chooses an execution plan, and cost-based optimization basics.",
+  [(E,0.60,WK),(S,0.72,WK)])
+n("cs-isolation-levels-mvcc", "Transaction Isolation Levels & MVCC", "cs-fundamentals", "data",
+  "Read uncommitted/committed, repeatable read, and serializable isolation, plus MVCC mechanics.",
+  [(E,0.65,WK),(S,0.78,DP)])
+n("cs-database-locking", "Database Locking Mechanisms", "cs-fundamentals", "data",
+  "Row vs table locks, two-phase locking, and lock granularity tradeoffs.",
+  [(E,0.58,WK),(S,0.75,DP)])
+n("cs-nosql-data-models", "NoSQL Data Models", "cs-fundamentals", "data",
+  "Key-value, document, and columnar stores, and how their tradeoffs differ from the relational model.",
+  [(E,0.70,WK),(S,0.68,WK),(P,0.40,AW)])
+n("cs-compilation-interpretation", "Compilation vs Interpretation", "cs-fundamentals", "systems",
+  "How compiled and interpreted languages execute code differently, and where JIT compilation fits.",
+  [(E,0.55,AW),(S,0.68,WK)])
+n("cs-garbage-collection", "Memory Management & Garbage Collection", "cs-fundamentals", "systems",
+  "Manual memory management vs automatic garbage collection, and common GC strategies.",
+  [(E,0.62,WK),(S,0.70,WK)])
 
 e("cs-processes-threads","cs-memory-model",0.7)
 e("cs-concurrency","cs-processes-threads",1.0)
@@ -686,6 +905,36 @@ e("cs-caching","cs-memory-model",0.7)
 e("cs-os-memory-mgmt","cs-memory-model",1.0)
 e("cs-sql","cs-databases",1.0)
 e("cs-networking","cs-processes-threads",0.4)
+e("cs-cpu-scheduling","cs-processes-threads",0.7)
+e("cs-file-systems","cs-memory-model",0.4)
+e("cs-system-calls","cs-processes-threads",0.7)
+e("cs-interrupts","cs-system-calls",0.7)
+e("cs-deadlock","cs-concurrency",1.0)
+e("cs-deadlock","cs-cpu-scheduling",0.4)
+e("cs-memory-allocation","cs-memory-model",0.7)
+e("cs-mutexes-semaphores","cs-concurrency",1.0)
+e("cs-atomic-operations","cs-mutexes-semaphores",0.7)
+e("cs-thread-pools","cs-processes-threads",0.7)
+e("cs-thread-pools","cs-mutexes-semaphores",0.4)
+e("cs-async-io-event-loop","cs-processes-threads",0.7)
+e("cs-producer-consumer","cs-mutexes-semaphores",1.0)
+e("cs-networking","cs-osi-tcpip-layers",0.4)
+e("cs-tcp-udp","cs-networking",0.7)
+e("cs-tcp-handshake-flow-control","cs-tcp-udp",1.0)
+e("cs-http-https","cs-tcp-udp",0.7)
+e("cs-tls","cs-http-https",0.7)
+e("cs-dns","cs-networking",0.4)
+e("cs-sockets","cs-tcp-udp",0.7)
+e("cs-websockets","cs-http-https",0.7)
+e("cs-relational-modeling-normalization","cs-databases",0.7)
+e("cs-indexing-btrees","cs-databases",1.0)
+e("cs-query-optimization","cs-indexing-btrees",0.7)
+e("cs-query-optimization","cs-sql",0.4)
+e("cs-isolation-levels-mvcc","cs-databases",1.0)
+e("cs-database-locking","cs-isolation-levels-mvcc",0.7)
+e("cs-database-locking","cs-concurrency",0.4)
+e("cs-nosql-data-models","cs-databases",0.7)
+e("cs-garbage-collection","cs-memory-allocation",0.7)
 
 # ---- system-design --------------------------------------------------------
 n("sysd-scalability", "Scalability Basics", "system-design", "principles",
