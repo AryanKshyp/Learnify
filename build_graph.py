@@ -1403,7 +1403,7 @@ n("dl-loss-functions", "Loss Functions", "deep-learning", "training",
   "Cross-entropy, MSE, and matching losses to tasks.",
   [(R,0.82,DP),(E,0.85,DP),(D,0.65,WK)])
 n("dl-regularization-dl", "DL Regularization", "deep-learning", "training",
-  "Dropout, weight decay, and data augmentation.",
+  "Dropout and weight decay as parameter-level regularization for neural networks.",
   [(R,0.80,DP),(E,0.85,DP),(D,0.55,AW)])
 n("dl-batchnorm", "Normalization Layers", "deep-learning", "training",
   "BatchNorm, LayerNorm, and why normalization helps training.",
@@ -1542,6 +1542,76 @@ e("dl-knowledge-distillation","dl-softmax",0.7)
 e("dl-knowledge-distillation","dl-loss-functions",0.7)
 e("dl-moe","dl-perceptron",1.0)
 
+# ---- deep-learning (gap-fill) ----
+n("dl-conv-arithmetic", "Convolution Arithmetic & Receptive Field", "deep-learning", "architectures",
+  "Computing output dimensions from kernel size, stride, padding, and dilation, and how receptive field grows with network depth.",
+  [(R,0.62,WK),(E,0.72,DP),(D,0.45,AW)])
+n("dl-cnn-architectures", "Classic CNN Architectures", "deep-learning", "architectures",
+  "Landmark vision backbones (VGG, ResNet, Inception/GoogLeNet) and the design choices — depth, skip connections, multi-scale filters — that shaped them.",
+  [(R,0.68,DP),(E,0.72,DP)])
+n("dl-cross-attention", "Cross-Attention", "deep-learning", "transformers",
+  "Attention where queries come from one sequence and keys/values from another, as used in encoder-decoder transformers and conditioning mechanisms.",
+  [(R,0.80,DP),(E,0.75,DP)])
+n("dl-vision-transformers", "Vision Transformers", "deep-learning", "transformers",
+  "Applying the transformer architecture to images via patch embeddings, trading convolutional inductive bias for attention.",
+  [(R,0.75,DP),(E,0.68,WK)])
+n("dl-curriculum-learning", "Curriculum Learning", "deep-learning", "methodology",
+  "Ordering training examples from easy to hard to improve convergence speed and final generalization.",
+  [(R,0.62,WK),(E,0.55,AW)])
+n("dl-gradient-accumulation", "Gradient Accumulation", "deep-learning", "training",
+  "Simulating a larger effective batch size by summing gradients over several micro-batches before an optimizer step, when memory limits batch size.",
+  [(R,0.55,AW),(E,0.78,DP)])
+n("dl-pruning", "Neural Network Pruning", "deep-learning", "compression",
+  "Removing redundant weights, neurons, or channels from a trained network to shrink it and speed up inference with minimal accuracy loss.",
+  [(R,0.60,WK),(E,0.75,DP)])
+n("dl-data-augmentation", "Data Augmentation", "deep-learning", "training",
+  "Synthesizing label-preserving training variations (crops, flips, mixup/cutmix, noise injection) to improve generalization without collecting new data.",
+  [(R,0.60,WK),(E,0.78,DP),(D,0.50,AW)])
+n("dl-interpretability", "Neural Network Interpretability", "deep-learning", "evaluation",
+  "Saliency maps, Grad-CAM, feature visualization, and probing classifiers for inspecting what a trained network has learned.",
+  [(R,0.70,DP),(E,0.55,WK)])
+n("dl-loss-landscape", "Loss Landscape & Generalization", "deep-learning", "training",
+  "Geometry of non-convex neural network loss surfaces — local minima, saddle points, sharp vs. flat minima — and its link to generalization.",
+  [(R,0.72,DV),(E,0.48,AW)])
+n("dl-double-descent", "Double Descent", "deep-learning", "training",
+  "The non-monotonic test-error curve in which increasing model capacity past the interpolation threshold can improve generalization again.",
+  [(R,0.68,DP),(E,0.45,AW)])
+n("dl-label-smoothing", "Label Smoothing", "deep-learning", "training",
+  "Softening one-hot training targets to reduce overconfidence and improve calibration.",
+  [(R,0.55,WK),(E,0.60,WK)])
+n("dl-nas", "Neural Architecture Search", "deep-learning", "methodology",
+  "Automating network architecture design via reinforcement learning, evolutionary search, or differentiable relaxations (e.g. DARTS).",
+  [(R,0.58,WK),(E,0.62,WK)])
+n("dl-adversarial-robustness", "Adversarial Examples & Robustness", "deep-learning", "evaluation",
+  "Small, often imperceptible input perturbations (e.g. FGSM, PGD) that fool trained networks, and adversarial training as a defense.",
+  [(R,0.68,DP),(E,0.55,WK)])
+
+e("dl-conv-arithmetic","dl-cnn",1.0)
+e("dl-cnn-architectures","dl-cnn",1.0)
+e("dl-cnn-architectures","dl-residual-connections",0.7)
+e("dl-cross-attention","dl-multihead-attention",1.0)
+e("dl-cross-attention","dl-seq2seq",0.4)
+e("dl-vision-transformers","dl-transformer-architecture",1.0)
+e("dl-vision-transformers","dl-cnn",0.4)
+e("dl-curriculum-learning","dl-backprop",0.4)
+e("dl-gradient-accumulation","dl-backprop",0.7)
+e("dl-gradient-accumulation","dl-mixed-precision",0.4)
+e("dl-pruning","dl-perceptron",1.0)
+e("dl-pruning","dl-knowledge-distillation",0.4)
+e("dl-data-augmentation","dl-regularization-dl",0.4)
+e("dl-interpretability","dl-cnn",0.4)
+e("dl-interpretability","dl-backprop",0.7)
+e("dl-loss-landscape","opt-saddle-points",0.7)
+e("dl-loss-landscape","dl-backprop",0.4)
+e("dl-double-descent","stat-bias-variance",0.7)
+e("dl-double-descent","ml-overfitting",0.4)
+e("dl-label-smoothing","dl-loss-functions",0.7)
+e("dl-label-smoothing","dl-softmax",0.4)
+e("dl-nas","dl-cnn-architectures",0.4)
+e("dl-nas","opt-gradient-descent",0.4)
+e("dl-adversarial-robustness","dl-backprop",0.7)
+e("dl-adversarial-robustness","dl-loss-functions",0.4)
+
 # ---- nlp-llms -------------------------------------------------------------
 n("llm-tokenization", "Tokenization", "nlp-llms", "foundations",
   "Subword tokenization schemes like BPE and WordPiece.",
@@ -1653,6 +1723,76 @@ n("llm-multimodal", "Multimodal Models", "nlp-llms", "modalities",
 n("llm-perplexity", "Perplexity & LM Metrics", "nlp-llms", "evaluation",
   "Perplexity, bits-per-token, and their interpretation.",
   [(R,0.78,DP),(E,0.65,WK)])
+
+# ---- nlp-llms (gap-fill wave) ----
+n("llm-static-embeddings", "Static Word Embeddings (word2vec/GloVe)", "nlp-llms", "embeddings",
+  "Learning fixed word vectors via skip-gram/CBOW (word2vec) and co-occurrence factorization (GloVe), and their limits versus contextual representations.",
+  [(R,0.65,WK),(E,0.55,AW)])
+n("llm-contextual-embeddings", "Contextual Embeddings", "nlp-llms", "embeddings",
+  "Representations that vary with surrounding context (ELMo, BERT/GPT hidden states) versus static embeddings, and why context-sensitivity improves downstream tasks.",
+  [(R,0.78,DP),(E,0.72,WK)])
+n("llm-sentence-embeddings", "Sentence Embeddings & Semantic Similarity", "nlp-llms", "embeddings",
+  "Pooling or fine-tuning models (e.g. Sentence-BERT) into fixed-size sentence/document vectors and measuring similarity via cosine distance for retrieval and clustering.",
+  [(R,0.68,WK),(E,0.82,DP)])
+n("llm-masked-language-modeling", "Masked Language Modeling (BERT-style Pretraining)", "nlp-llms", "pretraining",
+  "Predicting masked tokens from bidirectional context plus auxiliary objectives like next-sentence prediction, contrasted with causal next-token prediction.",
+  [(R,0.80,DP),(E,0.68,WK)])
+n("llm-architecture-variants", "Encoder-only vs Decoder-only vs Encoder-Decoder LMs", "nlp-llms", "pretraining",
+  "How attention masking (bidirectional vs causal) and architecture choice shape model families (BERT, GPT, T5) and which suits which task class.",
+  [(R,0.82,DP),(E,0.75,WK)])
+n("llm-emergent-abilities", "Emergent Abilities of LLMs", "nlp-llms", "pretraining",
+  "Capabilities that appear discontinuously with scale, and the debate over whether they are truly emergent or a metric artifact.",
+  [(R,0.75,DP),(E,0.55,AW)])
+n("llm-vocabulary-oov", "Vocabulary Construction & Out-of-Vocabulary Handling", "nlp-llms", "foundations",
+  "Vocabulary size tradeoffs, special tokens, and subword/byte-level fallback strategies for handling rare and unseen tokens.",
+  [(R,0.55,WK),(E,0.62,WK)])
+n("llm-qlora", "QLoRA (Quantized LoRA Fine-tuning)", "nlp-llms", "adaptation",
+  "Combining 4-bit quantized frozen weights with LoRA adapters to fine-tune large models under tight memory budgets.",
+  [(R,0.68,WK),(E,0.85,DP)])
+n("llm-catastrophic-forgetting", "Catastrophic Forgetting in Fine-tuning", "nlp-llms", "adaptation",
+  "Loss of previously learned capabilities when fine-tuning on a narrow task distribution, and mitigations like replay, regularization, and PEFT.",
+  [(R,0.72,DP),(E,0.68,WK)])
+n("llm-model-merging", "Model Merging & Weight Averaging", "nlp-llms", "adaptation",
+  "Combining multiple fine-tuned checkpoints via weight averaging, task arithmetic, or SLERP to blend capabilities without additional training.",
+  [(R,0.62,WK),(E,0.65,WK)])
+n("llm-chunking-strategies", "Chunking Strategies for Retrieval", "nlp-llms", "systems",
+  "Splitting documents into retrieval units (fixed-size, semantic, recursive) and the tradeoffs between chunk size, context loss, and retrieval precision.",
+  [(R,0.55,WK),(E,0.82,DP)])
+n("llm-hybrid-search", "Hybrid Search (Sparse + Dense Retrieval)", "nlp-llms", "retrieval",
+  "Combining lexical retrieval (BM25) with dense embedding search and fusing rankings for improved recall and precision.",
+  [(R,0.58,WK),(E,0.80,DP)])
+n("llm-llm-as-judge", "LLM-as-Judge Evaluation", "nlp-llms", "evaluation",
+  "Using a strong LLM to score or compare model outputs against a rubric, and the biases (position, verbosity, self-preference) that affect its reliability.",
+  [(R,0.75,DP),(E,0.78,DP)])
+n("llm-prompt-injection", "Prompt Injection & Jailbreaking", "nlp-llms", "reliability",
+  "Attacks that manipulate a model via crafted input (direct or indirect prompt injection, jailbreak templates) and defenses beyond basic guardrails.",
+  [(R,0.60,WK),(E,0.78,DP)])
+
+e("llm-static-embeddings","dl-embedding-layers",0.7)
+e("llm-static-embeddings","linalg-vectors",0.4)
+e("llm-contextual-embeddings","llm-static-embeddings",0.7)
+e("llm-contextual-embeddings","dl-transformer-architecture",0.7)
+e("llm-sentence-embeddings","llm-contextual-embeddings",0.7)
+e("llm-sentence-embeddings","linalg-dot-product",0.4)
+e("llm-masked-language-modeling","llm-language-modeling",0.7)
+e("llm-masked-language-modeling","dl-transformer-architecture",0.7)
+e("llm-architecture-variants","dl-transformer-architecture",1.0)
+e("llm-architecture-variants","llm-masked-language-modeling",0.7)
+e("llm-architecture-variants","llm-language-modeling",0.7)
+e("llm-emergent-abilities","llm-scaling-laws",0.7)
+e("llm-vocabulary-oov","llm-tokenization",1.0)
+e("llm-qlora","llm-peft-lora",1.0)
+e("llm-qlora","llm-quantization",1.0)
+e("llm-catastrophic-forgetting","llm-finetuning",0.7)
+e("llm-model-merging","llm-finetuning",0.4)
+e("llm-model-merging","llm-peft-lora",0.4)
+e("llm-chunking-strategies","llm-rag",0.7)
+e("llm-hybrid-search","llm-vector-search",0.7)
+e("llm-hybrid-search","llm-reranking",0.4)
+e("llm-llm-as-judge","llm-evaluation",0.7)
+e("llm-llm-as-judge","llm-hallucination",0.4)
+e("llm-prompt-injection","llm-guardrails",0.7)
+e("llm-prompt-injection","llm-agents",0.4)
 
 e("llm-long-context","dl-attention",0.7)
 e("llm-long-context","llm-attention-variants",0.7)
@@ -1848,6 +1988,78 @@ n("mlops-distributed-training", "Distributed Training", "ml-systems-mlops", "tra
 n("mlops-ab-testing-ml", "Online Evaluation & A/B Testing", "ml-systems-mlops", "operations",
   "Shadow deployments, canaries, and measuring model impact live.",
   [(E,0.78,DP),(D,0.75,WK)])
+n("mlops-data-versioning", "Data Versioning", "ml-systems-mlops", "data",
+  "Tracking versions of datasets used for training so runs and results can be reproduced.",
+  [(E,0.72,WK),(D,0.58,WK)])
+n("mlops-training-serving-skew", "Training/Serving Skew", "ml-systems-mlops", "data",
+  "Diagnosing and preventing mismatches between features computed at training time vs. inference time.",
+  [(E,0.82,DP),(D,0.55,WK)])
+n("mlops-data-lineage", "Data & Model Lineage", "ml-systems-mlops", "data",
+  "Tracking provenance of data and model artifacts through the pipeline for auditability and debugging.",
+  [(E,0.68,WK),(D,0.50,AW)])
+n("mlops-labeling-pipelines", "Labeling Pipelines & Annotation Quality", "ml-systems-mlops", "data",
+  "Designing annotation workflows and measuring label quality via inter-annotator agreement.",
+  [(E,0.60,WK),(D,0.62,WK)])
+n("mlops-data-validation", "Data Validation", "ml-systems-mlops", "data",
+  "Automated schema and statistical checks on input data to catch bad data before training or serving.",
+  [(E,0.72,WK),(D,0.60,WK)])
+n("mlops-model-registry", "Model Registry & Versioning", "ml-systems-mlops", "lifecycle",
+  "Centralized versioning, staging, and promotion of trained model artifacts across environments.",
+  [(E,0.75,WK),(R,0.45,AW)])
+n("mlops-reproducibility", "Reproducibility & Seeding", "ml-systems-mlops", "lifecycle",
+  "Seeding, environment pinning, and deterministic pipelines that make training runs reproducible.",
+  [(R,0.68,WK),(E,0.75,WK),(D,0.62,WK)])
+n("mlops-ci-cd-ml", "CI/CD for ML", "ml-systems-mlops", "lifecycle",
+  "Continuous integration/delivery adapted for ML: automated tests, retraining triggers, staged rollout.",
+  [(E,0.78,DP)])
+n("mlops-orchestration-dags", "Pipeline Orchestration (DAG Scheduling)", "ml-systems-mlops", "lifecycle",
+  "DAG-based workflow orchestration for scheduling and chaining data and training pipeline steps.",
+  [(E,0.72,WK)])
+n("mlops-data-parallel-training", "Data-Parallel Training", "ml-systems-mlops", "training",
+  "Replicating a model across devices, splitting batches, and synchronizing gradients each step.",
+  [(R,0.72,WK),(E,0.85,DP)])
+n("mlops-model-parallel-training", "Model-Parallel Training", "ml-systems-mlops", "training",
+  "Splitting a single model's layers or parameters across multiple devices when it doesn't fit on one.",
+  [(R,0.75,WK),(E,0.82,DP)])
+n("mlops-tensor-pipeline-parallelism", "Tensor & Pipeline Parallelism", "ml-systems-mlops", "training",
+  "Splitting individual layers/matmuls across devices (tensor parallelism) and layer stages with micro-batching (pipeline parallelism).",
+  [(R,0.72,DP),(E,0.80,DP)])
+n("mlops-gradient-synchronization", "Gradient Synchronization Strategies", "ml-systems-mlops", "training",
+  "All-reduce vs. parameter-server synchronization, and synchronous vs. asynchronous SGD tradeoffs.",
+  [(R,0.65,WK),(E,0.78,DP)])
+n("mlops-checkpointing-fault-tolerance", "Checkpointing & Fault Tolerance", "ml-systems-mlops", "training",
+  "Periodically checkpointing model/optimizer state and resuming distributed jobs after preemption or failure.",
+  [(R,0.62,WK),(E,0.75,WK)])
+n("mlops-gpu-scheduling", "GPU Utilization & Scheduling", "ml-systems-mlops", "training",
+  "Cluster-level GPU resource allocation, scheduling, and utilization monitoring for training and inference workloads.",
+  [(E,0.72,WK)])
+n("mlops-hyperparameter-tuning-at-scale", "Hyperparameter Tuning at Scale", "ml-systems-mlops", "training",
+  "Running many hyperparameter trials in parallel across a cluster with early-stopping schedulers such as ASHA or Hyperband.",
+  [(R,0.55,WK),(E,0.68,WK),(D,0.50,AW)])
+n("mlops-distributed-memory-optimization", "Distributed Training Memory Optimization", "ml-systems-mlops", "training",
+  "Reducing per-device memory footprint at scale via optimizer state sharding (ZeRO), activation checkpointing, and CPU/NVMe offloading.",
+  [(R,0.68,DP),(E,0.75,DP)])
+n("mlops-containerization-ml", "Containerization for ML", "ml-systems-mlops", "deployment",
+  "Packaging models and their dependencies into containers for consistent, portable deployment.",
+  [(E,0.68,WK)])
+n("mlops-inference-latency-optimization", "Inference Latency Optimization", "ml-systems-mlops", "deployment",
+  "Reducing production inference latency and increasing throughput via batching, caching, and hardware acceleration.",
+  [(E,0.80,DP),(R,0.50,AW)])
+n("mlops-cost-optimization-ml", "Cost Optimization for ML Workloads", "ml-systems-mlops", "deployment",
+  "Managing compute cost for training and serving: spot/preemptible instances, autoscaling, and right-sizing hardware.",
+  [(E,0.62,WK)])
+n("mlops-performance-degradation-alerting", "Performance Degradation Alerting", "ml-systems-mlops", "operations",
+  "Defining SLOs and alerting thresholds for model quality and system health so degradation is caught early.",
+  [(E,0.68,WK),(D,0.55,WK)])
+n("mlops-retraining-strategies", "Retraining Strategies & Triggers", "ml-systems-mlops", "operations",
+  "Deciding when and how to retrain models: scheduled, drift-triggered, or performance-triggered policies.",
+  [(E,0.72,WK),(D,0.58,WK)])
+n("mlops-feedback-loops", "Feedback Loops", "ml-systems-mlops", "operations",
+  "Capturing production predictions and outcome labels to close the loop for retraining, and the risk of feedback-induced distribution shift.",
+  [(E,0.65,WK),(D,0.55,WK),(R,0.45,AW)])
+n("mlops-model-testing", "ML Model & Pipeline Testing", "ml-systems-mlops", "testing",
+  "Unit and behavioral testing of models and pipelines: invariance tests, minimum functionality tests, and regression checks beyond aggregate metrics.",
+  [(E,0.68,WK),(D,0.50,AW)])
 
 e("mlops-feature-stores","mlops-data-pipelines",1.0)
 e("mlops-model-serving","sysd-scalability",0.7)
@@ -1856,6 +2068,43 @@ e("mlops-distributed-training","dl-backprop",0.7)
 e("mlops-distributed-training","opt-sgd",0.7)
 e("mlops-ab-testing-ml","mlops-model-serving",0.7)
 e("mlops-experiment-tracking","ml-train-test-split",0.4)
+e("mlops-data-versioning","mlops-data-pipelines",0.7)
+e("mlops-training-serving-skew","mlops-data-pipelines",0.7)
+e("mlops-training-serving-skew","mlops-feature-stores",0.7)
+e("mlops-data-lineage","mlops-data-pipelines",0.7)
+e("mlops-data-lineage","mlops-data-versioning",0.4)
+e("mlops-labeling-pipelines","mlops-data-pipelines",0.4)
+e("mlops-data-validation","mlops-data-pipelines",0.7)
+e("mlops-model-registry","mlops-experiment-tracking",0.7)
+e("mlops-reproducibility","mlops-experiment-tracking",0.4)
+e("mlops-ci-cd-ml","mlops-model-registry",0.7)
+e("mlops-ci-cd-ml","mlops-experiment-tracking",0.4)
+e("mlops-orchestration-dags","mlops-data-pipelines",0.7)
+e("mlops-data-parallel-training","mlops-distributed-training",1.0)
+e("mlops-model-parallel-training","mlops-distributed-training",1.0)
+e("mlops-tensor-pipeline-parallelism","mlops-model-parallel-training",0.7)
+e("mlops-tensor-pipeline-parallelism","mlops-distributed-training",0.7)
+e("mlops-gradient-synchronization","mlops-data-parallel-training",1.0)
+e("mlops-gradient-synchronization","cs-concurrency",0.4)
+e("mlops-checkpointing-fault-tolerance","mlops-distributed-training",0.7)
+e("mlops-gpu-scheduling","mlops-distributed-training",0.4)
+e("mlops-hyperparameter-tuning-at-scale","ml-hyperparameter-search",0.7)
+e("mlops-hyperparameter-tuning-at-scale","mlops-gpu-scheduling",0.4)
+e("mlops-distributed-memory-optimization","mlops-model-parallel-training",0.7)
+e("mlops-distributed-memory-optimization","dl-mixed-precision",0.4)
+e("mlops-containerization-ml","mlops-model-serving",0.4)
+e("mlops-inference-latency-optimization","mlops-model-serving",0.7)
+e("mlops-inference-latency-optimization","llm-quantization",0.4)
+e("mlops-cost-optimization-ml","mlops-gpu-scheduling",0.4)
+e("mlops-cost-optimization-ml","mlops-model-serving",0.4)
+e("mlops-performance-degradation-alerting","mlops-monitoring",0.7)
+e("mlops-performance-degradation-alerting","sysd-observability",0.7)
+e("mlops-retraining-strategies","mlops-monitoring",0.7)
+e("mlops-retraining-strategies","mlops-training-serving-skew",0.4)
+e("mlops-feedback-loops","mlops-monitoring",0.4)
+e("mlops-feedback-loops","mlops-retraining-strategies",0.4)
+e("mlops-model-testing","mlops-data-validation",0.4)
+e("mlops-model-testing","ml-evaluation-metrics",0.4)
 
 # ===========================================================================
 # ROLE-SPECIFIC SECTIONS

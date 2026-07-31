@@ -8116,7 +8116,7 @@
       "name": "DL Regularization",
       "section": "deep-learning",
       "competency": "training",
-      "description": "Dropout, weight decay, and data augmentation.",
+      "description": "Dropout and weight decay as parameter-level regularization for neural networks.",
       "roles": [
         {
           "role_id": "ai-research",
@@ -8717,6 +8717,310 @@
         {
           "role_id": "ai-engineer",
           "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-conv-arithmetic",
+      "type": "assessable",
+      "name": "Convolution Arithmetic & Receptive Field",
+      "section": "deep-learning",
+      "competency": "architectures",
+      "description": "Computing output dimensions from kernel size, stride, padding, and dilation, and how receptive field grows with network depth.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-cnn-architectures",
+      "type": "assessable",
+      "name": "Classic CNN Architectures",
+      "section": "deep-learning",
+      "competency": "architectures",
+      "description": "Landmark vision backbones (VGG, ResNet, Inception/GoogLeNet) and the design choices \u2014 depth, skip connections, multi-scale filters \u2014 that shaped them.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-cross-attention",
+      "type": "assessable",
+      "name": "Cross-Attention",
+      "section": "deep-learning",
+      "competency": "transformers",
+      "description": "Attention where queries come from one sequence and keys/values from another, as used in encoder-decoder transformers and conditioning mechanisms.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-vision-transformers",
+      "type": "assessable",
+      "name": "Vision Transformers",
+      "section": "deep-learning",
+      "competency": "transformers",
+      "description": "Applying the transformer architecture to images via patch embeddings, trading convolutional inductive bias for attention.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-curriculum-learning",
+      "type": "assessable",
+      "name": "Curriculum Learning",
+      "section": "deep-learning",
+      "competency": "methodology",
+      "description": "Ordering training examples from easy to hard to improve convergence speed and final generalization.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-gradient-accumulation",
+      "type": "assessable",
+      "name": "Gradient Accumulation",
+      "section": "deep-learning",
+      "competency": "training",
+      "description": "Simulating a larger effective batch size by summing gradients over several micro-batches before an optimizer step, when memory limits batch size.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.78,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-pruning",
+      "type": "assessable",
+      "name": "Neural Network Pruning",
+      "section": "deep-learning",
+      "competency": "compression",
+      "description": "Removing redundant weights, neurons, or channels from a trained network to shrink it and speed up inference with minimal accuracy loss.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-data-augmentation",
+      "type": "assessable",
+      "name": "Data Augmentation",
+      "section": "deep-learning",
+      "competency": "training",
+      "description": "Synthesizing label-preserving training variations (crops, flips, mixup/cutmix, noise injection) to improve generalization without collecting new data.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-interpretability",
+      "type": "assessable",
+      "name": "Neural Network Interpretability",
+      "section": "deep-learning",
+      "competency": "evaluation",
+      "description": "Saliency maps, Grad-CAM, feature visualization, and probing classifiers for inspecting what a trained network has learned.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.7,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-loss-landscape",
+      "type": "assessable",
+      "name": "Loss Landscape & Generalization",
+      "section": "deep-learning",
+      "competency": "training",
+      "description": "Geometry of non-convex neural network loss surfaces \u2014 local minima, saddle points, sharp vs. flat minima \u2014 and its link to generalization.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "derivation"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.48,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-double-descent",
+      "type": "assessable",
+      "name": "Double Descent",
+      "section": "deep-learning",
+      "competency": "training",
+      "description": "The non-monotonic test-error curve in which increasing model capacity past the interpolation threshold can improve generalization again.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-label-smoothing",
+      "type": "assessable",
+      "name": "Label Smoothing",
+      "section": "deep-learning",
+      "competency": "training",
+      "description": "Softening one-hot training targets to reduce overconfidence and improve calibration.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-nas",
+      "type": "assessable",
+      "name": "Neural Architecture Search",
+      "section": "deep-learning",
+      "competency": "methodology",
+      "description": "Automating network architecture design via reinforcement learning, evolutionary search, or differentiable relaxations (e.g. DARTS).",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "dl-adversarial-robustness",
+      "type": "assessable",
+      "name": "Adversarial Examples & Robustness",
+      "section": "deep-learning",
+      "competency": "evaluation",
+      "description": "Small, often imperceptible input perturbations (e.g. FGSM, PGD) that fool trained networks, and adversarial training as a defense.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
           "required_depth": "working"
         }
       ],
@@ -9327,6 +9631,300 @@
           "role_id": "ai-engineer",
           "importance": 0.65,
           "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-static-embeddings",
+      "type": "assessable",
+      "name": "Static Word Embeddings (word2vec/GloVe)",
+      "section": "nlp-llms",
+      "competency": "embeddings",
+      "description": "Learning fixed word vectors via skip-gram/CBOW (word2vec) and co-occurrence factorization (GloVe), and their limits versus contextual representations.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-contextual-embeddings",
+      "type": "assessable",
+      "name": "Contextual Embeddings",
+      "section": "nlp-llms",
+      "competency": "embeddings",
+      "description": "Representations that vary with surrounding context (ELMo, BERT/GPT hidden states) versus static embeddings, and why context-sensitivity improves downstream tasks.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.78,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-sentence-embeddings",
+      "type": "assessable",
+      "name": "Sentence Embeddings & Semantic Similarity",
+      "section": "nlp-llms",
+      "competency": "embeddings",
+      "description": "Pooling or fine-tuning models (e.g. Sentence-BERT) into fixed-size sentence/document vectors and measuring similarity via cosine distance for retrieval and clustering.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.82,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-masked-language-modeling",
+      "type": "assessable",
+      "name": "Masked Language Modeling (BERT-style Pretraining)",
+      "section": "nlp-llms",
+      "competency": "pretraining",
+      "description": "Predicting masked tokens from bidirectional context plus auxiliary objectives like next-sentence prediction, contrasted with causal next-token prediction.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-architecture-variants",
+      "type": "assessable",
+      "name": "Encoder-only vs Decoder-only vs Encoder-Decoder LMs",
+      "section": "nlp-llms",
+      "competency": "pretraining",
+      "description": "How attention masking (bidirectional vs causal) and architecture choice shape model families (BERT, GPT, T5) and which suits which task class.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-emergent-abilities",
+      "type": "assessable",
+      "name": "Emergent Abilities of LLMs",
+      "section": "nlp-llms",
+      "competency": "pretraining",
+      "description": "Capabilities that appear discontinuously with scale, and the debate over whether they are truly emergent or a metric artifact.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.55,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-vocabulary-oov",
+      "type": "assessable",
+      "name": "Vocabulary Construction & Out-of-Vocabulary Handling",
+      "section": "nlp-llms",
+      "competency": "foundations",
+      "description": "Vocabulary size tradeoffs, special tokens, and subword/byte-level fallback strategies for handling rare and unseen tokens.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-qlora",
+      "type": "assessable",
+      "name": "QLoRA (Quantized LoRA Fine-tuning)",
+      "section": "nlp-llms",
+      "competency": "adaptation",
+      "description": "Combining 4-bit quantized frozen weights with LoRA adapters to fine-tune large models under tight memory budgets.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.85,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-catastrophic-forgetting",
+      "type": "assessable",
+      "name": "Catastrophic Forgetting in Fine-tuning",
+      "section": "nlp-llms",
+      "competency": "adaptation",
+      "description": "Loss of previously learned capabilities when fine-tuning on a narrow task distribution, and mitigations like replay, regularization, and PEFT.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-model-merging",
+      "type": "assessable",
+      "name": "Model Merging & Weight Averaging",
+      "section": "nlp-llms",
+      "competency": "adaptation",
+      "description": "Combining multiple fine-tuned checkpoints via weight averaging, task arithmetic, or SLERP to blend capabilities without additional training.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-chunking-strategies",
+      "type": "assessable",
+      "name": "Chunking Strategies for Retrieval",
+      "section": "nlp-llms",
+      "competency": "systems",
+      "description": "Splitting documents into retrieval units (fixed-size, semantic, recursive) and the tradeoffs between chunk size, context loss, and retrieval precision.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.82,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-hybrid-search",
+      "type": "assessable",
+      "name": "Hybrid Search (Sparse + Dense Retrieval)",
+      "section": "nlp-llms",
+      "competency": "retrieval",
+      "description": "Combining lexical retrieval (BM25) with dense embedding search and fusing rankings for improved recall and precision.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.58,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.8,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-llm-as-judge",
+      "type": "assessable",
+      "name": "LLM-as-Judge Evaluation",
+      "section": "nlp-llms",
+      "competency": "evaluation",
+      "description": "Using a strong LLM to score or compare model outputs against a rubric, and the biases (position, verbosity, self-preference) that affect its reliability.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.78,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "llm-prompt-injection",
+      "type": "assessable",
+      "name": "Prompt Injection & Jailbreaking",
+      "section": "nlp-llms",
+      "competency": "reliability",
+      "description": "Attacks that manipulate a model via crafted input (direct or indirect prompt injection, jailbreak templates) and defenses beyond basic guardrails.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.78,
+          "required_depth": "deep"
         }
       ],
       "tags": []
@@ -9964,6 +10562,500 @@
           "role_id": "data-science",
           "importance": 0.75,
           "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-data-versioning",
+      "type": "assessable",
+      "name": "Data Versioning",
+      "section": "ml-systems-mlops",
+      "competency": "data",
+      "description": "Tracking versions of datasets used for training so runs and results can be reproduced.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.58,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-training-serving-skew",
+      "type": "assessable",
+      "name": "Training/Serving Skew",
+      "section": "ml-systems-mlops",
+      "competency": "data",
+      "description": "Diagnosing and preventing mismatches between features computed at training time vs. inference time.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.82,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-data-lineage",
+      "type": "assessable",
+      "name": "Data & Model Lineage",
+      "section": "ml-systems-mlops",
+      "competency": "data",
+      "description": "Tracking provenance of data and model artifacts through the pipeline for auditability and debugging.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-labeling-pipelines",
+      "type": "assessable",
+      "name": "Labeling Pipelines & Annotation Quality",
+      "section": "ml-systems-mlops",
+      "competency": "data",
+      "description": "Designing annotation workflows and measuring label quality via inter-annotator agreement.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.6,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-data-validation",
+      "type": "assessable",
+      "name": "Data Validation",
+      "section": "ml-systems-mlops",
+      "competency": "data",
+      "description": "Automated schema and statistical checks on input data to catch bad data before training or serving.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.6,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-model-registry",
+      "type": "assessable",
+      "name": "Model Registry & Versioning",
+      "section": "ml-systems-mlops",
+      "competency": "lifecycle",
+      "description": "Centralized versioning, staging, and promotion of trained model artifacts across environments.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-reproducibility",
+      "type": "assessable",
+      "name": "Reproducibility & Seeding",
+      "section": "ml-systems-mlops",
+      "competency": "lifecycle",
+      "description": "Seeding, environment pinning, and deterministic pipelines that make training runs reproducible.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-ci-cd-ml",
+      "type": "assessable",
+      "name": "CI/CD for ML",
+      "section": "ml-systems-mlops",
+      "competency": "lifecycle",
+      "description": "Continuous integration/delivery adapted for ML: automated tests, retraining triggers, staged rollout.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.78,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-orchestration-dags",
+      "type": "assessable",
+      "name": "Pipeline Orchestration (DAG Scheduling)",
+      "section": "ml-systems-mlops",
+      "competency": "lifecycle",
+      "description": "DAG-based workflow orchestration for scheduling and chaining data and training pipeline steps.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-data-parallel-training",
+      "type": "assessable",
+      "name": "Data-Parallel Training",
+      "section": "ml-systems-mlops",
+      "competency": "training",
+      "description": "Replicating a model across devices, splitting batches, and synchronizing gradients each step.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.85,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-model-parallel-training",
+      "type": "assessable",
+      "name": "Model-Parallel Training",
+      "section": "ml-systems-mlops",
+      "competency": "training",
+      "description": "Splitting a single model's layers or parameters across multiple devices when it doesn't fit on one.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.75,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.82,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-tensor-pipeline-parallelism",
+      "type": "assessable",
+      "name": "Tensor & Pipeline Parallelism",
+      "section": "ml-systems-mlops",
+      "competency": "training",
+      "description": "Splitting individual layers/matmuls across devices (tensor parallelism) and layer stages with micro-batching (pipeline parallelism).",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.72,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.8,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-gradient-synchronization",
+      "type": "assessable",
+      "name": "Gradient Synchronization Strategies",
+      "section": "ml-systems-mlops",
+      "competency": "training",
+      "description": "All-reduce vs. parameter-server synchronization, and synchronous vs. asynchronous SGD tradeoffs.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.78,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-checkpointing-fault-tolerance",
+      "type": "assessable",
+      "name": "Checkpointing & Fault Tolerance",
+      "section": "ml-systems-mlops",
+      "competency": "training",
+      "description": "Periodically checkpointing model/optimizer state and resuming distributed jobs after preemption or failure.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.62,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-gpu-scheduling",
+      "type": "assessable",
+      "name": "GPU Utilization & Scheduling",
+      "section": "ml-systems-mlops",
+      "competency": "training",
+      "description": "Cluster-level GPU resource allocation, scheduling, and utilization monitoring for training and inference workloads.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-hyperparameter-tuning-at-scale",
+      "type": "assessable",
+      "name": "Hyperparameter Tuning at Scale",
+      "section": "ml-systems-mlops",
+      "competency": "training",
+      "description": "Running many hyperparameter trials in parallel across a cluster with early-stopping schedulers such as ASHA or Hyperband.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-distributed-memory-optimization",
+      "type": "assessable",
+      "name": "Distributed Training Memory Optimization",
+      "section": "ml-systems-mlops",
+      "competency": "training",
+      "description": "Reducing per-device memory footprint at scale via optimizer state sharding (ZeRO), activation checkpointing, and CPU/NVMe offloading.",
+      "roles": [
+        {
+          "role_id": "ai-research",
+          "importance": 0.68,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.75,
+          "required_depth": "deep"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-containerization-ml",
+      "type": "assessable",
+      "name": "Containerization for ML",
+      "section": "ml-systems-mlops",
+      "competency": "deployment",
+      "description": "Packaging models and their dependencies into containers for consistent, portable deployment.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-inference-latency-optimization",
+      "type": "assessable",
+      "name": "Inference Latency Optimization",
+      "section": "ml-systems-mlops",
+      "competency": "deployment",
+      "description": "Reducing production inference latency and increasing throughput via batching, caching, and hardware acceleration.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.8,
+          "required_depth": "deep"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.5,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-cost-optimization-ml",
+      "type": "assessable",
+      "name": "Cost Optimization for ML Workloads",
+      "section": "ml-systems-mlops",
+      "competency": "deployment",
+      "description": "Managing compute cost for training and serving: spot/preemptible instances, autoscaling, and right-sizing hardware.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.62,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-performance-degradation-alerting",
+      "type": "assessable",
+      "name": "Performance Degradation Alerting",
+      "section": "ml-systems-mlops",
+      "competency": "operations",
+      "description": "Defining SLOs and alerting thresholds for model quality and system health so degradation is caught early.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-retraining-strategies",
+      "type": "assessable",
+      "name": "Retraining Strategies & Triggers",
+      "section": "ml-systems-mlops",
+      "competency": "operations",
+      "description": "Deciding when and how to retrain models: scheduled, drift-triggered, or performance-triggered policies.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.72,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.58,
+          "required_depth": "working"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-feedback-loops",
+      "type": "assessable",
+      "name": "Feedback Loops",
+      "section": "ml-systems-mlops",
+      "competency": "operations",
+      "description": "Capturing production predictions and outcome labels to close the loop for retraining, and the risk of feedback-induced distribution shift.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.65,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.55,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "ai-research",
+          "importance": 0.45,
+          "required_depth": "awareness"
+        }
+      ],
+      "tags": []
+    },
+    {
+      "node_id": "mlops-model-testing",
+      "type": "assessable",
+      "name": "ML Model & Pipeline Testing",
+      "section": "ml-systems-mlops",
+      "competency": "testing",
+      "description": "Unit and behavioral testing of models and pipelines: invariance tests, minimum functionality tests, and regression checks beyond aggregate metrics.",
+      "roles": [
+        {
+          "role_id": "ai-engineer",
+          "importance": 0.68,
+          "required_depth": "working"
+        },
+        {
+          "role_id": "data-science",
+          "importance": 0.5,
+          "required_depth": "awareness"
         }
       ],
       "tags": []
@@ -13317,6 +14409,156 @@
       "weight": 1.0
     },
     {
+      "from_node_id": "dl-conv-arithmetic",
+      "to_node_id": "dl-cnn",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dl-cnn-architectures",
+      "to_node_id": "dl-cnn",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dl-cnn-architectures",
+      "to_node_id": "dl-residual-connections",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dl-cross-attention",
+      "to_node_id": "dl-multihead-attention",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dl-cross-attention",
+      "to_node_id": "dl-seq2seq",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-vision-transformers",
+      "to_node_id": "dl-transformer-architecture",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dl-vision-transformers",
+      "to_node_id": "dl-cnn",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-curriculum-learning",
+      "to_node_id": "dl-backprop",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-gradient-accumulation",
+      "to_node_id": "dl-backprop",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dl-gradient-accumulation",
+      "to_node_id": "dl-mixed-precision",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-pruning",
+      "to_node_id": "dl-perceptron",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "dl-pruning",
+      "to_node_id": "dl-knowledge-distillation",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-data-augmentation",
+      "to_node_id": "dl-regularization-dl",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-interpretability",
+      "to_node_id": "dl-cnn",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-interpretability",
+      "to_node_id": "dl-backprop",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dl-loss-landscape",
+      "to_node_id": "opt-saddle-points",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dl-loss-landscape",
+      "to_node_id": "dl-backprop",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-double-descent",
+      "to_node_id": "stat-bias-variance",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dl-double-descent",
+      "to_node_id": "ml-overfitting",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-label-smoothing",
+      "to_node_id": "dl-loss-functions",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dl-label-smoothing",
+      "to_node_id": "dl-softmax",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-nas",
+      "to_node_id": "dl-cnn-architectures",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-nas",
+      "to_node_id": "opt-gradient-descent",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "dl-adversarial-robustness",
+      "to_node_id": "dl-backprop",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "dl-adversarial-robustness",
+      "to_node_id": "dl-loss-functions",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
       "from_node_id": "llm-embeddings",
       "to_node_id": "llm-tokenization",
       "type": "prerequisite",
@@ -13435,6 +14677,156 @@
       "to_node_id": "llm-language-modeling",
       "type": "prerequisite",
       "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-static-embeddings",
+      "to_node_id": "dl-embedding-layers",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-static-embeddings",
+      "to_node_id": "linalg-vectors",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "llm-contextual-embeddings",
+      "to_node_id": "llm-static-embeddings",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-contextual-embeddings",
+      "to_node_id": "dl-transformer-architecture",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-sentence-embeddings",
+      "to_node_id": "llm-contextual-embeddings",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-sentence-embeddings",
+      "to_node_id": "linalg-dot-product",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "llm-masked-language-modeling",
+      "to_node_id": "llm-language-modeling",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-masked-language-modeling",
+      "to_node_id": "dl-transformer-architecture",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-architecture-variants",
+      "to_node_id": "dl-transformer-architecture",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "llm-architecture-variants",
+      "to_node_id": "llm-masked-language-modeling",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-architecture-variants",
+      "to_node_id": "llm-language-modeling",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-emergent-abilities",
+      "to_node_id": "llm-scaling-laws",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-vocabulary-oov",
+      "to_node_id": "llm-tokenization",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "llm-qlora",
+      "to_node_id": "llm-peft-lora",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "llm-qlora",
+      "to_node_id": "llm-quantization",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "llm-catastrophic-forgetting",
+      "to_node_id": "llm-finetuning",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-model-merging",
+      "to_node_id": "llm-finetuning",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "llm-model-merging",
+      "to_node_id": "llm-peft-lora",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "llm-chunking-strategies",
+      "to_node_id": "llm-rag",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-hybrid-search",
+      "to_node_id": "llm-vector-search",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-hybrid-search",
+      "to_node_id": "llm-reranking",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "llm-llm-as-judge",
+      "to_node_id": "llm-evaluation",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-llm-as-judge",
+      "to_node_id": "llm-hallucination",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "llm-prompt-injection",
+      "to_node_id": "llm-guardrails",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "llm-prompt-injection",
+      "to_node_id": "llm-agents",
+      "type": "prerequisite",
+      "weight": 0.4
     },
     {
       "from_node_id": "llm-long-context",
@@ -13925,6 +15317,228 @@
     {
       "from_node_id": "mlops-experiment-tracking",
       "to_node_id": "ml-train-test-split",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-data-versioning",
+      "to_node_id": "mlops-data-pipelines",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-training-serving-skew",
+      "to_node_id": "mlops-data-pipelines",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-training-serving-skew",
+      "to_node_id": "mlops-feature-stores",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-data-lineage",
+      "to_node_id": "mlops-data-pipelines",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-data-lineage",
+      "to_node_id": "mlops-data-versioning",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-labeling-pipelines",
+      "to_node_id": "mlops-data-pipelines",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-data-validation",
+      "to_node_id": "mlops-data-pipelines",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-model-registry",
+      "to_node_id": "mlops-experiment-tracking",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-reproducibility",
+      "to_node_id": "mlops-experiment-tracking",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-ci-cd-ml",
+      "to_node_id": "mlops-model-registry",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-ci-cd-ml",
+      "to_node_id": "mlops-experiment-tracking",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-orchestration-dags",
+      "to_node_id": "mlops-data-pipelines",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-data-parallel-training",
+      "to_node_id": "mlops-distributed-training",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "mlops-model-parallel-training",
+      "to_node_id": "mlops-distributed-training",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "mlops-tensor-pipeline-parallelism",
+      "to_node_id": "mlops-model-parallel-training",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-tensor-pipeline-parallelism",
+      "to_node_id": "mlops-distributed-training",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-gradient-synchronization",
+      "to_node_id": "mlops-data-parallel-training",
+      "type": "prerequisite",
+      "weight": 1.0
+    },
+    {
+      "from_node_id": "mlops-gradient-synchronization",
+      "to_node_id": "cs-concurrency",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-checkpointing-fault-tolerance",
+      "to_node_id": "mlops-distributed-training",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-gpu-scheduling",
+      "to_node_id": "mlops-distributed-training",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-hyperparameter-tuning-at-scale",
+      "to_node_id": "ml-hyperparameter-search",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-hyperparameter-tuning-at-scale",
+      "to_node_id": "mlops-gpu-scheduling",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-distributed-memory-optimization",
+      "to_node_id": "mlops-model-parallel-training",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-distributed-memory-optimization",
+      "to_node_id": "dl-mixed-precision",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-containerization-ml",
+      "to_node_id": "mlops-model-serving",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-inference-latency-optimization",
+      "to_node_id": "mlops-model-serving",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-inference-latency-optimization",
+      "to_node_id": "llm-quantization",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-cost-optimization-ml",
+      "to_node_id": "mlops-gpu-scheduling",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-cost-optimization-ml",
+      "to_node_id": "mlops-model-serving",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-performance-degradation-alerting",
+      "to_node_id": "mlops-monitoring",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-performance-degradation-alerting",
+      "to_node_id": "sysd-observability",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-retraining-strategies",
+      "to_node_id": "mlops-monitoring",
+      "type": "prerequisite",
+      "weight": 0.7
+    },
+    {
+      "from_node_id": "mlops-retraining-strategies",
+      "to_node_id": "mlops-training-serving-skew",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-feedback-loops",
+      "to_node_id": "mlops-monitoring",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-feedback-loops",
+      "to_node_id": "mlops-retraining-strategies",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-model-testing",
+      "to_node_id": "mlops-data-validation",
+      "type": "prerequisite",
+      "weight": 0.4
+    },
+    {
+      "from_node_id": "mlops-model-testing",
+      "to_node_id": "ml-evaluation-metrics",
       "type": "prerequisite",
       "weight": 0.4
     },
