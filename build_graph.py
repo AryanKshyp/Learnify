@@ -12,7 +12,7 @@ Validation performed:
   - role_ids and section_ids valid
 """
 
-import json, sys
+import json, os, sys
 from collections import defaultdict, deque
 
 # ---- fixed registries ------------------------------------------------------
@@ -1283,6 +1283,12 @@ def stats():
     return per_section, per_role
 
 if __name__ == "__main__":
+    # Windows consoles default to cp1252, which cannot encode the glyphs below or any
+    # non-ASCII character appearing in a node name/description echoed by an error message.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except AttributeError:  # pragma: no cover - Python < 3.7
+        pass
     errs, warns = validate()
     per_section, per_role = stats()
     print(f"NODES: {len(NODES)}   EDGES: {len(EDGES)}")
@@ -1302,6 +1308,8 @@ if __name__ == "__main__":
         sys.exit(1)
 
     out = {"roles": ROLES, "nodes": NODES, "edges": EDGES}
-    with open("/home/claude/curriculum_graph.json", "w") as f:
+    outpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "curriculum_graph.json")
+    # newline="\n" keeps output byte-identical across platforms (Windows text mode would emit CRLF)
+    with open(outpath, "w", encoding="utf-8", newline="\n") as f:
         json.dump(out, f, indent=2)
-    print("\n✓ wrote curriculum_graph.json")
+    print(f"\nwrote {outpath}")
