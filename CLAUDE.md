@@ -129,6 +129,11 @@ lint-imports              # enforce the ARCHITECTURE.md layer boundaries
 Run all four before considering a stage done. `lint-imports` is the machine check on Layer 3's
 purity — it fails the build if the engine imports storage, transport, a clock, or randomness.
 
+**Edge direction matters.** The JSON stores edges as *dependent → prerequisite*; the networkx DAG
+is built inverted (*prerequisite → dependent*) so `ancestors` = prerequisites, `descendants` =
+dependents, and `topological_order()` yields prerequisites first, as `CALC_ENGINE_SPEC.md` §7
+propagation requires. Read `knowledgeos/curriculum/graph.py` before writing traversal.
+
 Setup steps are in [backend/README.md](backend/README.md). Frontend does not exist until Stage 7.
 
 ---
