@@ -10,16 +10,16 @@ belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARC
 
 ## Current position
 
-**Stage 1 — COMPLETE.** Curriculum loader (Layer 1) built and tested against the fixture:
-Pydantic models for C.1–C.3, networkx DAG, validators that reject cycles and dangling edges,
-and the full query surface. **93 tests green. Stage 2 is unblocked.**
+**Stage 2 — COMPLETE (in-memory); Postgres persistence DEFERRED.** Knowledge-state overlay
+(C.5) and append-only session history (C.6) built and tested behind repository protocols.
+**154 tests green. Stage 3 — the engine — is unblocked and needs no database at all.**
 
 | Layer | Status |
 |---|---|
 | L1 Curriculum content | **Complete** — 566 nodes deepened across all 16 sections, validated |
 | L1 Curriculum loader | **Complete** — models, loader, validators, queries; 93 tests |
-| L2 Knowledge State | Not started — **next** (Stage 2) |
-| L3 Decision Engine | Not started (Stage 3) |
+| L2 Knowledge State | **Complete in-memory** — models, overlay, append-only history. Postgres impl deferred (see #8) |
+| L3 Decision Engine | Not started — **next** (Stage 3). Pure; needs no DB |
 | L4 Assessment boundary | Not started (Stage 4) |
 | API / Frontend | Not started (Stages 5, 7) |
 | External assessment engine | Not designed — separate, non-blocking artifact |
@@ -96,6 +96,9 @@ representative of its density.
 | 2026-07-31 | **`curriculum_fixture.json` is generated, not hand-maintained** (`make_fixture.py`). | The fixture must be an exact, edge-closed subset of the real graph or Stage 1–3 tests silently diverge from Stage 6 behaviour. Hand-editing cannot guarantee that; derivation can. |
 | 2026-08-01 | **Curriculum served from JSON in memory behind `CurriculumRepository`**, not from Postgres. | Layer 1 is static and user-independent, so it may never need a database. Keeps Stages 1–3 — including the hard engine work — runnable with zero infrastructure. A DB-backed implementation can replace it without touching callers. |
 | 2026-08-01 | **networkx DAG is built INVERTED relative to the JSON** (prerequisite → dependent). | Makes `nx.ancestors` return prerequisites, `nx.descendants` return dependents, and `topological_sort` yield prerequisites first — which is exactly what `CALC_ENGINE_SPEC.md` §7 propagation requires. Reversing it would produce a valid-looking DAG and silently backwards propagation, so it is asserted in tests. |
+| 2026-08-01 | **State and history are separate protocols**; history has no update or delete method. | Append-only is what makes state reconstructible by replay (C.6). Expressing it in the interface beats a comment nobody has to obey — a test asserts the methods simply do not exist. |
+| 2026-08-01 | **Cold defaults applied on READ, not pre-seeded as rows.** | Adding curriculum nodes then never requires a migration of user state: a new node is simply cold until assessed. `get()` returns `None` for "no record" so the overlay, not the store, owns the default. |
+| 2026-08-01 | **Postgres persistence deferred until the daemon runs** (see known issue #8). | Writing storage code that cannot be executed would mean reporting Stage 2 as done on the strength of untested code. Stage 3 is pure and needs no DB, so the critical path is unaffected. |
 
 ---
 
@@ -150,6 +153,29 @@ falling back to `str` ordering.
 
 **Carry into Stage 3:** the same trap applies to any ordered enum added later.
 
+### 8. Docker/WSL blocked, so Postgres persistence is unwritten — **open, blocks nothing yet**
+Docker Desktop 4.84 is installed (to the per-user path
+`%LOCALAPPDATA%\Programs\DockerDesktop`, not Program Files), but the daemon will not start:
+**this machine has the old inbox WSL, not modern WSL 2, and no WSL distributions are
+installed.** `wsl --version` is rejected as an invalid option, which is the tell. `wsl --update`
+hangs because it needs elevation and hits a UAC prompt a non-interactive shell cannot show.
+
+**Fix — one command in an Administrator PowerShell, then reboot:**
+```powershell
+wsl --install --no-distribution
+```
+`--no-distribution` is correct: Docker Desktop ships its own `docker-desktop` distro, so no
+Ubuntu install is needed. If the flag is rejected, use plain `wsl --install`.
+
+Consequence: Stage 2 ships with a fully-tested **in-memory** implementation behind
+`KnowledgeStateRepository` / `SessionHistoryRepository`. The SQLAlchemy + Alembic
+implementation is **deliberately unwritten** rather than written-but-unverified — persistence
+code that has never touched a database is a liability, not progress. Once the daemon runs it is
+a drop-in: the protocols exist and no caller changes.
+
+`docker-compose.yml` is still **unverified** for the same reason; it parses as valid YAML and
+its structure was asserted in Python, but `docker compose up -d` has never been run.
+
 ### 5. `core.autocrlf=true`, no `.gitattributes` — **cosmetic only**
 The repo has `core.autocrlf=true`, so a fresh clone checks `curriculum_graph.json` out with CRLF
 while `build_graph.py` now writes LF. Git normalizes both to LF when comparing, so **`git status`
@@ -165,15 +191,16 @@ Fully redundant — it was a snapshot of the kit whose contents are now all at r
 
 ## Next actions
 
-1. **Stage 2** — knowledge-state overlay (C.5) + append-only session history (C.6). Storage and
-   retrieval only, **no calculation**. First stage that needs Postgres running
-   (`docker compose up -d`) and Alembic. Cold defaults: `intrinsic_mastery 0.0`,
-   `status "unassessed"`. State must never mutate the curriculum; history must replay.
-2. **Stage 3 — the heart.** The deterministic engine, exactly per `CALC_ENGINE_SPEC.md` §1
-   pipeline. Build the §15 golden test first — the fixture contains its chain, and
-   `graph.topological_order()` already yields the order propagation needs. Simple stability
-   model, not FSRS. Harmonic-mean readiness, not average. Keep `lint-imports` green: it is what
-   stops a clock read or storage call from entering a formula.
+1. **Stage 3 — the heart.** The deterministic engine, exactly per `CALC_ENGINE_SPEC.md` §1
+   pipeline. **Needs no database**, so the Docker blocker does not apply. Build the §15 golden
+   test first — the fixture contains its chain and `topological_order()` already yields the
+   order propagation needs. Simple stability model (§6), not FSRS. Weighted harmonic mean for
+   readiness (§11), not average. Every `[TUNABLE]` into `engine/config.py`; no numeric literal
+   inline. Keep `lint-imports` green — it is what stops a clock read entering a formula.
+2. **Postgres persistence** (known issue #8) — once `wsl --install --no-distribution` has been
+   run from an elevated shell and the machine rebooted. SQLAlchemy models + Alembic migration
+   implementing the two existing protocols, plus verifying `docker compose up -d`. Can happen
+   before or after Stage 3; nothing depends on it until Stage 5.
 3. **Stages 4–8** — Schema A/B boundary → API → seed the real 566-node graph → frontend →
    end-to-end.
 
