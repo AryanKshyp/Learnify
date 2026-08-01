@@ -1,0 +1,6 @@
+node_modules/
+dist/
+*.tsbuildinfo
+# headless smoke-check output
+shot-*.png
+tsconfig.tsbuildinfo/

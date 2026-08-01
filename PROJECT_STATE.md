@@ -10,9 +10,10 @@ belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARC
 
 ## Current position
 
-**Stages 0–6 COMPLETE. The entire backend is done.** 16 HTTP endpoints over Layers 1–4,
-serving the real 566-node curriculum from Postgres. **593 tests green.**
-Remaining: frontend (Stage 7) and the end-to-end integration test + README (Stage 8).
+**Stages 0–7 COMPLETE. The application runs end to end.** Backend (16 endpoints, Postgres) plus
+a React frontend verified in a real browser: graph home, recommendations, readiness, and the
+copy/paste session loop. **593 backend tests green, 0 console errors.**
+Remaining: Stage 8 — end-to-end integration test, seed script, root README.
 
 | Layer | Status |
 |---|---|
@@ -23,7 +24,7 @@ Remaining: frontend (Stage 7) and the end-to-end integration test + README (Stag
 | L4 Assessment boundary | **Complete** — Schema A/B, strict validation, ingestion pipeline |
 | API (Stage 5) | **Complete** — 16 endpoints, one error contract, OpenAPI, injected clock |
 | Curriculum seeding (Stage 6) | **Complete** — the app defaults to the real graph; content shape verified |
-| Frontend (Stage 7) | Not started — **next** |
+| Frontend (Stage 7) | **Complete** — Cytoscape focus view, 3 tabs, session loop; screenshot-verified |
 | External assessment engine | Not designed — separate, non-blocking artifact |
 
 All four backend layers are implemented and tested. Verified at each stage close, not assumed:
