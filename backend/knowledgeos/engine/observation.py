@@ -98,12 +98,28 @@ def evidence_quality(
     `(O − μ)`. That is read literally here — the deviation uses the freshly-updated mean. The
     alternative (deviating from the prior mean) is defensible too, but the spec's written order
     is what the golden values were produced against, and determinism matters more than taste.
+
+    **First-session initialisation.** On session one there is no prior mean, and running the
+    EWMA against the μ = 0 placeholder manufactures variance out of nothing: the deviation
+    `(O − 0.5·O)` is large purely because μ was never initialised, which reports a perfectly
+    ordinary first session as wildly inconsistent — enough to trip the σ² > 0.5 clause and
+    label it `learning` regardless of how well it went. Worse, a genuinely contradictory second
+    session then *lowers* variance, inverting the signal.
+
+    A single observation cannot disagree with itself, so μ seeds to O and σ² starts at 0.
+    Variance then measures what it is supposed to: disagreement BETWEEN sessions. The spec does
+    not state this, but every alternative reading makes σ² mean something other than
+    consistency.
     """
     kappa = config.kappa
 
-    mean = previous_mean + kappa * (ability.value - previous_mean)
-    deviation = ability.value - mean
-    variance_raw = (1.0 - kappa) * (previous_variance_raw + kappa * deviation**2)
+    if session_count == 0:
+        mean = ability.value
+        variance_raw = 0.0
+    else:
+        mean = previous_mean + kappa * (ability.value - previous_mean)
+        deviation = ability.value - mean
+        variance_raw = (1.0 - kappa) * (previous_variance_raw + kappa * deviation**2)
     variance = clamp(variance_raw / config.variance_normalizer)
 
     saturation = 1.0 - exp(-session_count / config.evidence_half_count)

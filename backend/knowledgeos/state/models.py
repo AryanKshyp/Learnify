@@ -73,6 +73,16 @@ class KnowledgeState(BaseModel):
     engine_confidence: Score = 0.0
     session_count: int = Field(default=0, ge=0)
 
+    #: μ — running mean of observed session ability.
+    #:
+    #: DOCUMENTED EXTENSION TO C.5. CALC_ENGINE_SPEC.md §4 maintains μ as EWMA state alongside
+    #: σ², but the §16 field-addition list names only `assessment_variance`. Without persisting
+    #: μ the variance calculation silently restarts every session, so every assessment would
+    #: look perfectly consistent with itself and σ² would never reflect real disagreement
+    #: between sessions. Stored rather than replayed because replay would mean re-running the
+    #: whole history on every ingest.
+    observation_mean: Score = 0.0
+
     last_assessed_at: datetime | None = None
     next_review_at: datetime | None = None
 

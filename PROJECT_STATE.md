@@ -10,9 +10,9 @@ belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARC
 
 ## Current position
 
-**Stage 3 — COMPLETE. The engine is built.** All 14 pipeline stages implemented per
-`CALC_ENGINE_SPEC.md` §1, with the §15 golden case passing to the spec's exact numbers.
-**475 tests green.** Postgres persistence still deferred (known issue #8).
+**Stage 4 — COMPLETE. The Core User Flow works end to end.** Schema A generation, strict
+Schema B validation, and the full ingestion pipeline (validate → engine → persist → append
+history → recompute). **517 tests green.** Postgres persistence still deferred (issue #8).
 
 | Layer | Status |
 |---|---|
@@ -20,8 +20,8 @@ belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARC
 | L1 Curriculum loader | **Complete** — models, loader, validators, queries; 93 tests |
 | L2 Knowledge State | **Complete in-memory** — models, overlay, append-only history. Postgres impl deferred (see #8) |
 | L3 Decision Engine | **Complete** — 14 stages, §15 golden case passing, purity machine-enforced |
-| L4 Assessment boundary | Not started — **next** (Stage 4) |
-| API / Frontend | Not started (Stages 5, 7) |
+| L4 Assessment boundary | **Complete** — Schema A/B, strict validation, ingestion pipeline |
+| API / Frontend | Not started — API is **next** (Stage 5). Needs Postgres |
 | External assessment engine | Not designed — separate, non-blocking artifact |
 
 **Scaffold only — no feature code.** Every layer package exists with a docstring stating its
@@ -155,6 +155,22 @@ falling back to `str` ordering.
 
 **Carry into Stage 3:** the same trap applies to any ordered enum added later.
 
+### 12. Two contract gaps found while building Stage 4 — **fixed, documented**
+
+**C.5 has no field for the running mean μ.** `CALC_ENGINE_SPEC.md` §4 maintains μ as EWMA
+state alongside σ², but the §16 field-addition list names only `assessment_variance`. Without
+persisting μ the variance calculation restarts every session, so σ² could never measure
+disagreement *between* sessions. Added `observation_mean` to `KnowledgeState` as a documented
+extension to C.5.
+
+**σ² was manufactured on the first session.** With μ starting at 0.0, session one's deviation
+`(O − 0.5·O)` is large purely because μ was never initialised — reporting an ordinary first
+session as wildly inconsistent, enough to trip the `σ² > 0.5` clause and label it `learning`
+regardless of how well it went. Worse, a genuinely contradictory *second* session then
+**lowered** variance, inverting the signal entirely. Caught by a Stage 4 round-trip test.
+Fixed by seeding μ = O and σ² = 0 on the first session: one observation cannot disagree with
+itself. Verified: two consistent strong sessions → σ² = 0.000; a contradictory third → 0.400.
+
 ### 9. Spec ambiguities resolved while implementing the engine — **decided, documented**
 Two places where `CALC_ENGINE_SPEC.md` could not be followed literally. Both resolutions are
 pinned by tests so they cannot be silently reverted.
@@ -225,23 +241,26 @@ Fully redundant — it was a snapshot of the kit whose contents are now all at r
 
 ## Next actions
 
-1. **Stage 4** — the Layer 4 boundary. Schema A generator (C.7) selecting `role_context` as the
-   highest-priority role tagging the node and pulling prerequisite context from the graph;
-   strict Schema B validator (C.8) that hard-fails on mismatched `session_id`/`node_id`,
-   out-of-range observations, or unknown node references. Then the ingestion pipeline:
-   validate → `apply_session` → persist → append history → `recompute`. This is where the
-   engine's `days_since_last_session` gets computed from real timestamps.
-2. **Postgres persistence** (known issue #8) — once `wsl --install --no-distribution` has been
-   run elevated and the machine rebooted. SQLAlchemy models + Alembic implementing the two
+1. **Postgres persistence** (known issue #8) — now on the critical path. Stage 5's API cannot
+   be meaningfully finished without it. Needs `wsl --install --no-distribution` run from an
+   **elevated** PowerShell and a reboot; then SQLAlchemy models + Alembic implementing the
    Stage 2 protocols, plus actually verifying `docker compose up -d`.
-3. **Stages 5–8** — API → seed the real 566-node graph → frontend → end-to-end.
+2. **Stage 5 — backend API.** FastAPI over Layers 1–4: browse graph (by role / competency /
+   whole), node detail with state, recommendations (overall / per-role / per-competency),
+   generate Schema A, submit Schema B. Typed request/response models, consistent error
+   contract, OpenAPI. The `AssessmentService` already exposes exactly these operations.
+3. **Stage 6** — seed the real 566-node graph.
+4. **Stages 7–8** — frontend (graph-first home, Advanced panel, the copy/paste session loop) →
+   end-to-end integration test → README.
 
-**Parallel, non-blocking:** design the external assessment engine (the prompt/skill that runs a
-session and emits valid Schema B) — still the largest unbuilt piece outside the app itself.
+**Parallel, non-blocking:** design the external assessment engine — the prompt/skill that
+conducts a session and emits a valid Schema B. Now the single largest unbuilt piece: every
+contract it must honour is implemented and strictly validated, so it can be developed against
+a real, unforgiving target.
 
 **Engine tuning, once there is real session data:** known issues #10 (leverage term scales) and
-#11 (ERG propagation depth) are both implemented as specified and flagged rather than silently
-"fixed". Revisit with evidence rather than intuition.
+#11 (ERG propagation depth), both implemented as specified and flagged rather than quietly
+"fixed".
 
-**Optional curriculum polish:** give `cs-compilation-interpretation` a prerequisite so it is not
-an orphan; spot-check importance/depth calls by eye.
+**Optional curriculum polish:** give `cs-compilation-interpretation` a prerequisite; spot-check
+importance/depth calls by eye.
