@@ -131,6 +131,22 @@ class AssessmentService:
         self._pending = pending or InMemoryPendingSessionStore()
         self._config = config
 
+    @property
+    def curriculum(self) -> CurriculumGraph:
+        return self._curriculum
+
+    @property
+    def overlay(self) -> StateOverlay:
+        return self._overlay
+
+    @property
+    def history(self) -> SessionHistoryRepository:
+        return self._history
+
+    @property
+    def pending(self) -> PendingSessionStore:
+        return self._pending
+
     # ------------------------------------------------------------- Schema A
 
     def select_role_context(self, node_id: str) -> RoleContext:

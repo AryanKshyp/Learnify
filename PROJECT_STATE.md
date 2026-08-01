@@ -10,9 +10,9 @@ belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARC
 
 ## Current position
 
-**Stages 0–4 COMPLETE, and now genuinely persisted.** The Core User Flow runs end to end and
-survives a restart: Postgres is live, migrated by Alembic, and the whole loop was verified
-against the real database. **540 tests green.** Stage 5 (API) is unblocked with no caveats.
+**Stages 0–5 COMPLETE. The backend is done.** 16 HTTP endpoints over Layers 1–4, verified
+against the real 566-node curriculum with Postgres persistence. **575 tests green.**
+Remaining: seed the real graph as the default (Stage 6), frontend (7), end-to-end (8).
 
 | Layer | Status |
 |---|---|
@@ -21,7 +21,8 @@ against the real database. **540 tests green.** Stage 5 (API) is unblocked with 
 | L2 Knowledge State | **Complete** — in-memory *and* Postgres repositories, Alembic-migrated |
 | L3 Decision Engine | **Complete** — 14 stages, §15 golden case passing, purity machine-enforced |
 | L4 Assessment boundary | **Complete** — Schema A/B, strict validation, ingestion pipeline |
-| API / Frontend | Not started — API is **next** (Stage 5) |
+| API (Stage 5) | **Complete** — 16 endpoints, one error contract, OpenAPI, injected clock |
+| Frontend | Not started — **next** after Stage 6 seeding |
 | External assessment engine | Not designed — separate, non-blocking artifact |
 
 All four backend layers are implemented and tested. Verified at each stage close, not assumed:
@@ -79,6 +80,23 @@ representative of its density.
 - 3 orphan nodes with no edges at all: `cs-compilation-interpretation`, `beh-strengths-weaknesses`,
   `beh-offer-negotiation`. Not an error — standalone behavioral topics legitimately have no
   prerequisites — but `cs-compilation-interpretation` could reasonably gain one.
+
+### Shareable graph visualization — added 2026-08-01
+`python build_viz.py` renders `curriculum_graph.json` into **`curriculum_graph.html`**, a
+self-contained 398 KB page (no server, no network) for external review of Layer 1 content. Four
+views: **Map** (16 section plates in six domain bands, shaded by depth / role importance /
+downstream leverage), **Chains** (a concept's prerequisite cone and dependents, n hops each way),
+**Nodes** (sortable, filterable, CSV export), **Audit** (10 structural checks, coverage and depth
+distributions, cross-section dependency matrix, longest chain, highest-leverage concepts).
+
+The graph JSON is embedded verbatim and every figure is recomputed in the browser from it, so a
+reviewer's numbers are derived from the committed bytes rather than from a snapshot taken at build
+time. Spot-checked against Python: max depth 19, longest chain 20, 24 roots, 286 leaves, 1399 role
+assignments, top-leverage 218/205/198/190 — all agree. The Audit tab's one non-PASS is the
+documented 3 isolated nodes, reported as REVIEW rather than FAIL.
+
+`build_viz.py` reads `viz_template.html`; `build/viz_body.html` is a body-only fragment for hosting
+and is gitignored.
 
 ---
 
@@ -154,6 +172,24 @@ ladder position, and raising `TypeError` on comparison with a bare string rather
 falling back to `str` ordering.
 
 **Carry into Stage 3:** the same trap applies to any ordered enum added later.
+
+### 13. N+1 query in `StateOverlay` — **fixed 2026-08-01**
+`all()`, `for_role()` and `for_section()` looped over `get()`, issuing one query per node — 566
+round-trips to answer a single request. Completely invisible against the in-memory repository
+(dict lookups) and only surfaced when the API was measured against Postgres with the real
+curriculum. Fixed with a single bulk read joined in memory: **635ms → 8ms**.
+
+End-to-end effect on the 566-node graph with Postgres:
+
+| Endpoint | Before | After |
+|---|--:|--:|
+| `GET /overview` | 1401ms | **121ms** |
+| `GET /recommendations` | 978ms | **228ms** |
+| `GET /graph?role=…` | 2258ms | **67ms** |
+| `POST /sessions/ingest` | 3435ms | **296ms** |
+
+The lesson generalises: the in-memory repository makes the test suite fast, but it cannot
+reveal a query-count problem. Any new bulk read must go through `StateOverlay._stored()`.
 
 ### 12. Two contract gaps found while building Stage 4 — **fixed, documented**
 
@@ -238,19 +274,19 @@ Fully redundant — it was a snapshot of the kit whose contents are now all at r
 
 ## Next actions
 
-1. **Stage 5 — backend API.** FastAPI over Layers 1–4: browse graph (by role / competency /
-   whole), node detail with state, recommendations (overall / per-role / per-competency),
-   generate Schema A, submit Schema B. Typed request/response models, a consistent error
-   contract, OpenAPI. `AssessmentService` already exposes exactly these operations, so this is
-   mostly transport and error mapping.
-2. **Stage 6** — seed the real 566-node graph (currently only the 26-node fixture is loaded).
-3. **Stages 7–8** — frontend (graph-first home, Advanced panel, the copy/paste session loop) →
-   end-to-end integration test → README.
+1. **Stage 6 — curriculum seeding.** `create_app()` already defaults to the real 566-node
+   `curriculum_graph.json`; what remains is confirming role/competency traversal on real data
+   and deciding whether the API should serve the full graph or paginate. `/graph` returns 566
+   nodes + 847 edges in one response (~67ms), which the frontend may or may not want whole.
+2. **Stage 7 — frontend.** React + Vite + TS. Graph-first home (never analytics-first), the
+   Overall/Role/Competency recommendations page, node detail showing **Mastery + Importance**
+   with everything else behind Advanced, and the copy-Schema-A → paste-Schema-B loop. Every
+   endpoint it needs exists; `/overview` is deliberately one call for the home view.
+3. **Stage 8** — end-to-end integration test of the full Core User Flow, seed script, README.
 
-**Parallel, non-blocking:** design the external assessment engine — the prompt/skill that
-conducts a session and emits a valid Schema B. The single largest unbuilt piece. Every contract
-it must honour is now implemented and strictly validated, so it can be developed against a
-real, unforgiving target rather than against a document.
+**Parallel, non-blocking:** the external assessment engine — the prompt/skill that conducts a
+session and emits a valid Schema B. Now the single largest unbuilt piece, and it can be
+developed against a live, strictly-validating API rather than against a document.
 
 **Engine tuning, once there is real session data:** known issues #10 (leverage term scales) and
 #11 (ERG propagation depth), both implemented as specified and flagged rather than quietly
