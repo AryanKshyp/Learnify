@@ -10,9 +10,9 @@ belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARC
 
 ## Current position
 
-**Stages 0–5 COMPLETE. The backend is done.** 16 HTTP endpoints over Layers 1–4, verified
-against the real 566-node curriculum with Postgres persistence. **575 tests green.**
-Remaining: seed the real graph as the default (Stage 6), frontend (7), end-to-end (8).
+**Stages 0–6 COMPLETE. The entire backend is done.** 16 HTTP endpoints over Layers 1–4,
+serving the real 566-node curriculum from Postgres. **593 tests green.**
+Remaining: frontend (Stage 7) and the end-to-end integration test + README (Stage 8).
 
 | Layer | Status |
 |---|---|
@@ -22,7 +22,8 @@ Remaining: seed the real graph as the default (Stage 6), frontend (7), end-to-en
 | L3 Decision Engine | **Complete** — 14 stages, §15 golden case passing, purity machine-enforced |
 | L4 Assessment boundary | **Complete** — Schema A/B, strict validation, ingestion pipeline |
 | API (Stage 5) | **Complete** — 16 endpoints, one error contract, OpenAPI, injected clock |
-| Frontend | Not started — **next** after Stage 6 seeding |
+| Curriculum seeding (Stage 6) | **Complete** — the app defaults to the real graph; content shape verified |
+| Frontend (Stage 7) | Not started — **next** |
 | External assessment engine | Not designed — separate, non-blocking artifact |
 
 All four backend layers are implemented and tested. Verified at each stage close, not assumed:
@@ -83,11 +84,32 @@ representative of its density.
 
 ### Shareable graph visualization — added 2026-08-01
 `python build_viz.py` renders `curriculum_graph.json` into **`curriculum_graph.html`**, a
-self-contained 398 KB page (no server, no network) for external review of Layer 1 content. Four
-views: **Map** (16 section plates in six domain bands, shaded by depth / role importance /
-downstream leverage), **Chains** (a concept's prerequisite cone and dependents, n hops each way),
-**Nodes** (sortable, filterable, CSV export), **Audit** (10 structural checks, coverage and depth
-distributions, cross-section dependency matrix, longest chain, highest-leverage concepts).
+self-contained 427 KB page (no server, no network) for external review of Layer 1 content. Five
+views: **Start here** (see below), **Map** (16 section plates in six domain bands, shaded by depth /
+role importance / downstream leverage), **Chains** (a concept's prerequisite cone and dependents, n
+hops each way), **Nodes** (sortable, filterable, CSV export), **Audit** (10 structural checks,
+coverage and depth distributions, cross-section dependency matrix, longest chain, highest-leverage
+concepts).
+
+**Start here** is the default view and the one to send to someone who has never seen the project.
+It applies overview-first / detail-on-demand rather than showing 566 nodes at once:
+
+- **Level 1** — the 16 sections as bubbles in six left-to-right domain columns, sized by concept
+  count. Only the 23 topic links carrying ≥3 edges are drawn by default (stated in the legend, not
+  hidden); clicking a topic reveals all of its links and colours what it needs orange and what
+  builds on it green.
+- **Level 2** — one topic opened, its concepts laid out as labelled chips in numbered learning
+  steps (intra-section longest-path layers, 5 per row). Clicking a concept lights its direct
+  prerequisites and dependents; a prerequisite in another topic navigates there rather than
+  leaving a dead selection.
+- A **"Preparing for"** role filter restyles both levels — off-role topics shrink and go dashed —
+  and stays in sync with the expert `Role` select on the other tabs.
+
+Colour is load-bearing and was validated with the dataviz skill's checker rather than eyeballed:
+16- and 6-way categorical palettes both FAIL the all-pairs colourblind gate (worst normal-vision
+ΔE 12.9 against a floor of 15), so section identity is carried by **position**, magnitude by a
+single-hue blue ramp, and selection state by the blue/orange/aqua trio that does pass all-pairs in
+both light and dark.
 
 The graph JSON is embedded verbatim and every figure is recomputed in the browser from it, so a
 reviewer's numbers are derived from the committed bytes rather than from a snapshot taken at build
