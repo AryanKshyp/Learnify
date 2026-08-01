@@ -4,37 +4,37 @@
 the end of any session that changes status, makes a decision, or finds an issue. Durable principles
 belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARCHITECTURE.md).
 
-**Last updated:** 2026-07-31
+**Last updated:** 2026-08-01
 
 ---
 
 ## Current position
 
-**Stage 4 — COMPLETE. The Core User Flow works end to end.** Schema A generation, strict
-Schema B validation, and the full ingestion pipeline (validate → engine → persist → append
-history → recompute). **517 tests green.** Postgres persistence still deferred (issue #8).
+**Stages 0–4 COMPLETE, and now genuinely persisted.** The Core User Flow runs end to end and
+survives a restart: Postgres is live, migrated by Alembic, and the whole loop was verified
+against the real database. **540 tests green.** Stage 5 (API) is unblocked with no caveats.
 
 | Layer | Status |
 |---|---|
 | L1 Curriculum content | **Complete** — 566 nodes deepened across all 16 sections, validated |
 | L1 Curriculum loader | **Complete** — models, loader, validators, queries; 93 tests |
-| L2 Knowledge State | **Complete in-memory** — models, overlay, append-only history. Postgres impl deferred (see #8) |
+| L2 Knowledge State | **Complete** — in-memory *and* Postgres repositories, Alembic-migrated |
 | L3 Decision Engine | **Complete** — 14 stages, §15 golden case passing, purity machine-enforced |
 | L4 Assessment boundary | **Complete** — Schema A/B, strict validation, ingestion pipeline |
-| API / Frontend | Not started — API is **next** (Stage 5). Needs Postgres |
+| API / Frontend | Not started — API is **next** (Stage 5) |
 | External assessment engine | Not designed — separate, non-blocking artifact |
 
-**Scaffold only — no feature code.** Every layer package exists with a docstring stating its
-boundary and which stage populates it. Stage 0 forbids calculation, endpoint, schema-generation
-and UI code, and none was written.
+All four backend layers are implemented and tested. Verified at each stage close, not assumed:
 
-Verified at Stage 0 close:
-- `pytest` → 0 tests, exit 0 (an empty suite is deliberately treated as success; see
-  `backend/tests/conftest.py`, which stops mattering once Stage 1 adds real tests).
-- `ruff check .` → all checks passed.
-- `lint-imports` → 3 contracts kept. **Proven to bite**: injecting `sqlalchemy`, `datetime` and
-  `random` imports into `knowledgeos/engine` made all three fail with line numbers, exit 1.
+- `pytest` → **540 passed**. `ruff check .` → clean. `lint-imports` → 3 contracts kept.
+- The purity contract is **proven to bite**: injecting `sqlalchemy`/`datetime`/`random` imports
+  into `knowledgeos/engine` fails all three with line numbers, exit 1.
 - `python build_graph.py` → `ERRORS: 0, WARNINGS: 0`; `python make_fixture.py` → `ERRORS: 0`.
+- `CALC_ENGINE_SPEC.md` §15 golden case reproduces the spec's exact numbers.
+- `docker compose up -d` + `alembic upgrade head` → Core User Flow verified against real Postgres.
+
+**Not yet built:** the HTTP API (Stage 5), the real-curriculum seed (Stage 6, only the 26-node
+fixture is loaded), the frontend (Stage 7), and the external assessment engine.
 
 ---
 
@@ -203,28 +203,25 @@ not re-propagate the improvement into its dependents' PC. Full propagation costs
 per candidate; since readiness already counts every dependent node directly, the resulting
 ranking is very close. First thing to revisit if recommendations look wrong on deep chains.
 
-### 8. Docker/WSL blocked, so Postgres persistence is unwritten — **open, blocks nothing yet**
-Docker Desktop 4.84 is installed (to the per-user path
-`%LOCALAPPDATA%\Programs\DockerDesktop`, not Program Files), but the daemon will not start:
-**this machine has the old inbox WSL, not modern WSL 2, and no WSL distributions are
-installed.** `wsl --version` is rejected as an invalid option, which is the tell. `wsl --update`
-hangs because it needs elevation and hits a UAC prompt a non-interactive shell cannot show.
+### 8. Postgres persistence — **resolved 2026-08-01**
+WSL had no kernel installed, so Docker Desktop's WSL2 backend could not start. Resolved by
+`wsl --update` (now 2.7.11.0, kernel 6.18.33.2-2). Docker Desktop 4.84.0 lives in a per-user
+path (`%LOCALAPPDATA%\Programs\DockerDesktop`), not Program Files, which is why the standard
+PATH lookups missed it.
 
-**Fix — one command in an Administrator PowerShell, then reboot:**
-```powershell
-wsl --install --no-distribution
-```
-`--no-distribution` is correct: Docker Desktop ships its own `docker-desktop` distro, so no
-Ubuntu install is needed. If the flag is rejected, use plain `wsl --install`.
-
-Consequence: Stage 2 ships with a fully-tested **in-memory** implementation behind
-`KnowledgeStateRepository` / `SessionHistoryRepository`. The SQLAlchemy + Alembic
-implementation is **deliberately unwritten** rather than written-but-unverified — persistence
-code that has never touched a database is a liability, not progress. Once the daemon runs it is
-a drop-in: the protocols exist and no caller changes.
-
-`docker-compose.yml` is still **unverified** for the same reason; it parses as valid YAML and
-its structure was asserted in Python, but `docker compose up -d` has never been run.
+Now working end to end and verified, not assumed:
+- `docker compose up -d` → `postgres:16` healthy in ~5s. The compose file written blind at
+  Stage 0 turned out to be correct.
+- `alembic upgrade head` creates both tables; `downgrade base` → `upgrade head` round-trips
+  cleanly; `alembic check` reports no drift between models and live schema.
+- 23 Postgres tests pass against the real database, including full-field round-trips, NULL
+  handling (`stability`/`difficulty` are NULL until first assessment, not 0.0), `jsonb` payload
+  fidelity, timezone preservation, and DB-level CHECK constraints rejecting out-of-range scores
+  written behind the models' back.
+- A **parity test** asserts the Postgres and in-memory repositories return identical results
+  for identical operations — which is what makes testing everything above Layer 2 against the
+  fast in-memory implementation trustworthy.
+- `tests/state/test_postgres.py` **skips** rather than fails when no database is reachable.
 
 ### 5. `core.autocrlf=true`, no `.gitattributes` — **cosmetic only**
 The repo has `core.autocrlf=true`, so a fresh clone checks `curriculum_graph.json` out with CRLF
@@ -241,22 +238,19 @@ Fully redundant — it was a snapshot of the kit whose contents are now all at r
 
 ## Next actions
 
-1. **Postgres persistence** (known issue #8) — now on the critical path. Stage 5's API cannot
-   be meaningfully finished without it. Needs `wsl --install --no-distribution` run from an
-   **elevated** PowerShell and a reboot; then SQLAlchemy models + Alembic implementing the
-   Stage 2 protocols, plus actually verifying `docker compose up -d`.
-2. **Stage 5 — backend API.** FastAPI over Layers 1–4: browse graph (by role / competency /
+1. **Stage 5 — backend API.** FastAPI over Layers 1–4: browse graph (by role / competency /
    whole), node detail with state, recommendations (overall / per-role / per-competency),
-   generate Schema A, submit Schema B. Typed request/response models, consistent error
-   contract, OpenAPI. The `AssessmentService` already exposes exactly these operations.
-3. **Stage 6** — seed the real 566-node graph.
-4. **Stages 7–8** — frontend (graph-first home, Advanced panel, the copy/paste session loop) →
+   generate Schema A, submit Schema B. Typed request/response models, a consistent error
+   contract, OpenAPI. `AssessmentService` already exposes exactly these operations, so this is
+   mostly transport and error mapping.
+2. **Stage 6** — seed the real 566-node graph (currently only the 26-node fixture is loaded).
+3. **Stages 7–8** — frontend (graph-first home, Advanced panel, the copy/paste session loop) →
    end-to-end integration test → README.
 
 **Parallel, non-blocking:** design the external assessment engine — the prompt/skill that
-conducts a session and emits a valid Schema B. Now the single largest unbuilt piece: every
-contract it must honour is implemented and strictly validated, so it can be developed against
-a real, unforgiving target.
+conducts a session and emits a valid Schema B. The single largest unbuilt piece. Every contract
+it must honour is now implemented and strictly validated, so it can be developed against a
+real, unforgiving target rather than against a document.
 
 **Engine tuning, once there is real session data:** known issues #10 (leverage term scales) and
 #11 (ERG propagation depth), both implemented as specified and flagged rather than quietly

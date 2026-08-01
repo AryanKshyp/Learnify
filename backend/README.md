@@ -46,16 +46,26 @@ These have been verified to actually fail on violation, not merely to pass on an
 
 ## Database
 
-Postgres is **not needed for Stages 1–3**: Layer 3 is pure and touches no database, so the
-engine — the hardest part to get right — is tested entirely without storage. Storage arrives at
-Stage 2.
-
-```bash
-docker compose up -d      # from the repo root; starts postgres:16 on :5432
-```
-
 Postgres rather than SQLite because the deployment target is Supabase, which *is* Postgres —
 making that migration a deployment change rather than a port. See `ARCHITECTURE.md` §10.
+
+```bash
+docker compose up -d      # from the repo ROOT; starts postgres:16 on :5432
+cd backend && alembic upgrade head
+```
+
+`alembic check` reports whether the models and the live schema have drifted. The database URL
+comes from `knowledgeos.config.settings` (and therefore `.env`), **not** from `alembic.ini`, so
+migrations can never run against a different database than the app.
+
+Most of the suite does not need any of this. Layer 3 is pure and Layers 1–2 are exercised
+through in-memory repositories, so the engine — the hardest part to get right — is tested with
+zero infrastructure. `tests/state/test_postgres.py` is the part that needs a live database and
+it **skips** rather than fails when one is not reachable.
+
+Both repository implementations satisfy the same protocol, and a parity test asserts they
+return identical results for identical operations. That is what makes testing everything above
+Layer 2 against the fast in-memory implementation trustworthy.
 
 ## Layout
 

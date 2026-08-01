@@ -22,6 +22,10 @@ from .errors import (
 )
 from .models import KnowledgeState, SessionRecord, Status
 from .overlay import NodeState, StateOverlay
+from .postgres import (
+    PostgresKnowledgeStateRepository,
+    PostgresSessionHistoryRepository,
+)
 from .repository import (
     InMemoryKnowledgeStateRepository,
     InMemorySessionHistoryRepository,
@@ -31,6 +35,8 @@ from .repository import (
 
 __all__ = [
     "DuplicateSessionError",
+    "PostgresKnowledgeStateRepository",
+    "PostgresSessionHistoryRepository",
     "InMemoryKnowledgeStateRepository",
     "InMemorySessionHistoryRepository",
     "KnowledgeState",
