@@ -10,10 +10,12 @@ belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARC
 
 ## Current position
 
-**Stages 0–7 COMPLETE. The application runs end to end.** Backend (16 endpoints, Postgres) plus
-a React frontend verified in a real browser: graph home, recommendations, readiness, and the
-copy/paste session loop. **593 backend tests green, 0 console errors.**
-Remaining: Stage 8 — end-to-end integration test, seed script, root README.
+**ALL NINE STAGES COMPLETE (0–8).** The build plan in `BUILD_SPEC.md` Part H is finished.
+**601 tests green**, ruff and layer contracts clean, frontend verified in a real browser with
+0 console errors, and the README's steps reproduce a running system.
+
+**The one thing still unbuilt is the external assessment engine** — deliberately, since it is
+specified as external and replaceable. Until it exists the loop needs a hand-written Schema B.
 
 | Layer | Status |
 |---|---|
@@ -25,19 +27,21 @@ Remaining: Stage 8 — end-to-end integration test, seed script, root README.
 | API (Stage 5) | **Complete** — 16 endpoints, one error contract, OpenAPI, injected clock |
 | Curriculum seeding (Stage 6) | **Complete** — the app defaults to the real graph; content shape verified |
 | Frontend (Stage 7) | **Complete** — Cytoscape focus view, 3 tabs, session loop; screenshot-verified |
-| External assessment engine | Not designed — separate, non-blocking artifact |
+| Integration (Stage 8) | **Complete** — end-to-end test, `seed.py`, root README verified |
+| External assessment engine | **Not built** — the only remaining work. External by design. |
 
-All four backend layers are implemented and tested. Verified at each stage close, not assumed:
+Verified at each stage close, not assumed:
 
-- `pytest` → **540 passed**. `ruff check .` → clean. `lint-imports` → 3 contracts kept.
+- `pytest` → **601 passed**. `ruff check .` → clean. `lint-imports` → 3 contracts kept.
 - The purity contract is **proven to bite**: injecting `sqlalchemy`/`datetime`/`random` imports
   into `knowledgeos/engine` fails all three with line numbers, exit 1.
 - `python build_graph.py` → `ERRORS: 0, WARNINGS: 0`; `python make_fixture.py` → `ERRORS: 0`.
 - `CALC_ENGINE_SPEC.md` §15 golden case reproduces the spec's exact numbers.
 - `docker compose up -d` + `alembic upgrade head` → Core User Flow verified against real Postgres.
-
-**Not yet built:** the HTTP API (Stage 5), the real-curriculum seed (Stage 6, only the 26-node
-fixture is loaded), the frontend (Stage 7), and the external assessment engine.
+- The frontend renders in a real browser (headless Chrome, `frontend/drive.mjs`) across all
+  four views with **0 console errors**.
+- The README's own steps were followed end to end: `alembic upgrade head` → `seed.py --demo` →
+  `uvicorn` → `/overview` and `/recommendations` return the seeded state.
 
 ---
 
@@ -297,23 +301,21 @@ Fully redundant — it was a snapshot of the kit whose contents are now all at r
 
 ## Next actions
 
-1. **Stage 6 — curriculum seeding.** `create_app()` already defaults to the real 566-node
-   `curriculum_graph.json`; what remains is confirming role/competency traversal on real data
-   and deciding whether the API should serve the full graph or paginate. `/graph` returns 566
-   nodes + 847 edges in one response (~67ms), which the frontend may or may not want whole.
-2. **Stage 7 — frontend.** React + Vite + TS. Graph-first home (never analytics-first), the
-   Overall/Role/Competency recommendations page, node detail showing **Mastery + Importance**
-   with everything else behind Advanced, and the copy-Schema-A → paste-Schema-B loop. Every
-   endpoint it needs exists; `/overview` is deliberately one call for the home view.
-3. **Stage 8** — end-to-end integration test of the full Core User Flow, seed script, README.
+The staged build plan is done. What remains is one artifact and some judgement calls that need
+real usage data rather than more code.
 
-**Parallel, non-blocking:** the external assessment engine — the prompt/skill that conducts a
-session and emits a valid Schema B. Now the single largest unbuilt piece, and it can be
-developed against a live, strictly-validating API rather than against a document.
+1. **Build the external assessment engine.** The prompt or Claude skill that conducts a session
+   and emits a valid Schema B. Every contract it must honour is implemented and strictly
+   validated, so it can be developed against a live, unforgiving API rather than a document.
+   Until it exists, the loop works but needs a hand-written Schema B.
+2. **Use it, then tune.** Known issues #10 (leverage terms combine unbounded counts with bounded
+   scores before normalising) and #11 (ERG does not re-propagate into dependents) are both
+   implemented exactly as specified and flagged rather than quietly "fixed". Both are better
+   judged against real sessions than against intuition.
+3. **Optional polish:** give `cs-compilation-interpretation` a prerequisite so it is not an
+   orphan; spot-check importance/depth calls by eye — the validator guarantees structure, not
+   that the content judgements match yours.
 
-**Engine tuning, once there is real session data:** known issues #10 (leverage term scales) and
-#11 (ERG propagation depth), both implemented as specified and flagged rather than quietly
-"fixed".
-
-**Optional curriculum polish:** give `cs-compilation-interpretation` a prerequisite; spot-check
-importance/depth calls by eye.
+### If it is ever made multi-user (Supabase)
+The contracts carry no `user_id`; scoping would be added at the storage layer only. The engine
+is pure and the curriculum is shared and static, so neither would change.
