@@ -4,7 +4,7 @@
 the end of any session that changes status, makes a decision, or finds an issue. Durable principles
 belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARCHITECTURE.md).
 
-**Last updated:** 2026-08-01
+**Last updated:** 2026-08-07
 
 ---
 
@@ -14,8 +14,10 @@ belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARC
 **601 tests green**, ruff and layer contracts clean, frontend verified in a real browser with
 0 console errors, and the README's steps reproduce a running system.
 
-**The one thing still unbuilt is the external assessment engine** — deliberately, since it is
-specified as external and replaceable. Until it exists the loop needs a hand-written Schema B.
+**The assessment engine is now prompt-driven and complete.** The application generates the
+prompts; an LLM in any chat window executes them. No API key, no per-token cost — and the
+boundary stays honest, because the app owns what to teach, how deep, what to observe and how to
+score it. See "Assessment prompts" below.
 
 | Layer | Status |
 |---|---|
@@ -24,15 +26,15 @@ specified as external and replaceable. Until it exists the loop needs a hand-wri
 | L2 Knowledge State | **Complete** — in-memory *and* Postgres repositories, Alembic-migrated |
 | L3 Decision Engine | **Complete** — 14 stages, §15 golden case passing, purity machine-enforced |
 | L4 Assessment boundary | **Complete** — Schema A/B, strict validation, ingestion pipeline |
-| API (Stage 5) | **Complete** — 16 endpoints, one error contract, OpenAPI, injected clock |
+| API (Stage 5) | **Complete** — 17 endpoints, one error contract, OpenAPI, injected clock |
 | Curriculum seeding (Stage 6) | **Complete** — the app defaults to the real graph; content shape verified |
 | Frontend (Stage 7) | **Complete** — Cytoscape focus view, 3 tabs, session loop; screenshot-verified |
 | Integration (Stage 8) | **Complete** — end-to-end test, `seed.py`, root README verified |
-| External assessment engine | **Not built** — the only remaining work. External by design. |
+| External assessment engine | **Complete** — 3 app-owned prompts (study / assess / wrap-up), copy-paste |
 
 Verified at each stage close, not assumed:
 
-- `pytest` → **601 passed**. `ruff check .` → clean. `lint-imports` → 3 contracts kept.
+- `pytest` → **655 passed**. `ruff check .` → clean. `lint-imports` → 3 contracts kept.
 - The purity contract is **proven to bite**: injecting `sqlalchemy`/`datetime`/`random` imports
   into `knowledgeos/engine` fails all three with line numbers, exit 1.
 - `python build_graph.py` → `ERRORS: 0, WARNINGS: 0`; `python make_fixture.py` → `ERRORS: 0`.
@@ -42,6 +44,58 @@ Verified at each stage close, not assumed:
   four views with **0 console errors**.
 - The README's own steps were followed end to end: `alembic upgrade head` → `seed.py --demo` →
   `uvicorn` → `/overview` and `/recommendations` return the seeded state.
+
+---
+
+## Assessment prompts — added 2026-08-07
+
+The external assessment engine is a set of **prompts the application generates**, not an API
+integration. An LLM in any chat window executes them; nothing is metered.
+
+`knowledgeos/assessment/prompts.py`, served at
+`GET /sessions/open/{id}/prompt?phase=study|assess|wrapup|full`.
+
+**Three prompts, not one.** An LLM told up front to "teach, then test, then emit JSON"
+reliably emits the JSON early or drifts from the contract across a long conversation — and the
+learner, not the model, should decide when they are done being tested. `assess` also works
+standalone for someone who studied elsewhere.
+
+| Phase | Does |
+|---|---|
+| `study` | Teaches to the target depth, then gives reading + practice + interview framing |
+| `assess` | Tests. Does not teach, hint freely, or reveal scores — each would corrupt the measurement |
+| `wrapup` | Emits the Schema B |
+| `full` | study + assess in one paste, with the phase boundary still enforced |
+
+**The app owns the scoring rubric, not the model.** The moment an LLM decides what `depth`
+means, two sessions stop being comparable and the mastery number stops being evidence. So the
+prompts carry anchored 0.00/0.25/0.50/0.75/1.00 scales for recall, depth and transfer, and
+adapt teaching *and* questioning to the node's required depth (at `awareness` a missing
+derivation is not a gap; at `derivation` fluent recitation is not the same as deriving).
+
+**A large part of each prompt exists purely to fight score inflation**, which is the single
+failure mode that would corrupt everything downstream — mastery, readiness, priority and the
+whole ranking are functions of these three numbers. Left alone an LLM scores a mediocre answer
+at ~0.75. The prompts state that most genuine first sessions land below 0.50, that needing a
+hint lowers the score, that paraphrase fluency is recall rather than depth, and that an
+inflated score is the specific harm the system exists to prevent.
+
+**Failure modes designed out rather than instructed against:**
+- `session_id`, `node_id` and `completed_at` are **pre-filled** — a mismatched id or a
+  hallucinated date is a hard rejection, and neither needs to be asked for.
+- `prerequisite_flags` lists the **exact valid node_ids**; an unknown id is rejected.
+- `recommended_next_concepts` is pre-filled `[]` — the app ranks by leverage, cost and
+  readiness, which the model cannot see.
+- Prior mastery is included for targeting but explicitly marked "not a target, not a floor",
+  because telling a model the previous score invites it to confirm that score.
+- The prompt states that `llm_confidence` is capped at 20% of update weight, removing any
+  incentive to overstate it.
+- The UI strips a markdown fence before parsing: models add one despite instructions, and the
+  contract that matters is the object's shape, not its packaging.
+
+A test asserts that a **filled-in wrap-up template is actually accepted by the ingestion
+pipeline**. If the template and validator ever drift, every session would fail at the last
+step — after the learner has done all the work.
 
 ---
 

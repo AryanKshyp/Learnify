@@ -103,6 +103,12 @@ export const api = {
       body: JSON.stringify({ node_id: nodeId, min_questions: minQuestions }),
     }),
 
+  /** The prompt to paste into an external LLM. The app owns these, not the model. */
+  prompt: (sessionId: string, phase: "study" | "assess" | "wrapup" | "full") =>
+    request<{ phase: string; description: string; prompt: string }>(
+      `/sessions/open/${sessionId}/prompt${query({ phase })}`,
+    ),
+
   ingest: (payload: unknown) =>
     request<IngestResponse>("/sessions/ingest", {
       method: "POST",

@@ -12,6 +12,7 @@ This layer owns the clock: it converts real timestamps into the `days_elapsed` f
 engine consumes, so the engine itself stays reproducible.
 """
 
+from . import prompts
 from .errors import (
     AssessmentError,
     SchemaValidationError,
@@ -42,6 +43,7 @@ from .service import (
 
 __all__ = [
     "SCHEMA_A_NAME",
+    "prompts",
     "SCHEMA_B_NAME",
     "SCHEMA_VERSION",
     "AssessmentDirectives",

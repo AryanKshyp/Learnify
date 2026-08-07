@@ -16,10 +16,11 @@ from typing import Any
 from uuid import UUID
 
 from fastapi import APIRouter, Body, Query, status
+from fastapi.exceptions import RequestValidationError
 
 from knowledgeos.api.dependencies import Context, Service
 from knowledgeos.api.schemas import IngestResponse, SessionRecordOut, SessionRequest
-from knowledgeos.assessment import SchemaA
+from knowledgeos.assessment import SchemaA, UnknownSessionError
 
 router = APIRouter(tags=["sessions"])
 
@@ -61,10 +62,61 @@ def get_open_session(session_id: UUID, service: Service) -> dict[str, Any]:
     """Re-fetch a Schema A the user did not finish copying."""
     schema_a: SchemaA | None = service.pending.peek(session_id)
     if schema_a is None:
-        from knowledgeos.assessment import UnknownSessionError
-
         raise UnknownSessionError(session_id)
     return schema_a.to_payload()
+
+
+@router.get("/sessions/open/{session_id}/prompt", response_model=dict)
+def get_prompt(
+    session_id: UUID,
+    context: Context,
+    phase: str = Query("full", description="study | assess | wrapup | full"),
+) -> dict[str, Any]:
+    """The prompt to paste into an external LLM for this session.
+
+    The application owns these, not the model. What to teach, how deep to go, what to observe
+    and how to score it are all decided here — the moment the LLM decides them, scores stop
+    being comparable between sessions and the knowledge model becomes anecdote.
+
+    `study` and `assess` are separate because a learner may have prepared elsewhere and want
+    only the test. `wrapup` is separate because an LLM told up front to emit JSON at the end
+    tends to emit it early or drift from the contract over a long conversation.
+    """
+    from knowledgeos.assessment import prompts
+
+    if phase not in prompts.PHASES:
+        raise RequestValidationError(
+            [
+                {
+                    "loc": ("query", "phase"),
+                    "msg": f"must be one of {', '.join(sorted(prompts.PHASES))}",
+                    "type": "value_error",
+                }
+            ]
+        )
+
+    schema_a = context.service.pending.peek(session_id)
+    if schema_a is None:
+        raise UnknownSessionError(session_id)
+
+    builder = {
+        "study": prompts.study,
+        "assess": prompts.assessment,
+        "full": prompts.full_session,
+    }
+    text = (
+        prompts.wrapup(schema_a, completed_at=context.now)
+        if phase == "wrapup"
+        else builder[phase](schema_a)
+    )
+    return {
+        "session_id": str(session_id),
+        "node_id": schema_a.target.node_id,
+        "node_name": schema_a.target.name,
+        "phase": phase,
+        "description": prompts.PHASES[phase],
+        "prompt": text,
+    }
 
 
 @router.post("/sessions/ingest", response_model=IngestResponse)

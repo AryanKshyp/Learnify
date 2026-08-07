@@ -61,7 +61,7 @@ class TestOpsAndDocs:
     def test_openapi_renders(self, client):
         response = client.get("/openapi.json")
         assert response.status_code == 200
-        assert len(response.json()["paths"]) == 16
+        assert len(response.json()["paths"]) == 17
 
     def test_docs_render(self, client):
         assert client.get("/docs").status_code == 200

@@ -78,10 +78,20 @@ Knowledge state changes **only** through a validated Schema B. Reading, watching
 ready never move a number, and nothing in the UI accepts a typed score — that would make it an
 opinion rather than evidence.
 
-**The assessment engine itself is not built.** It is deliberately external and replaceable: any
-engine honouring the two schemas works. Until one exists, paste a hand-written Schema B (the
-shape is in `BUILD_SPEC.md` C.8, and the API rejects anything malformed with every problem
-listed at once).
+The assessment engine is **an LLM in any chat window** — no API key, nothing metered. The
+application generates the prompts, in three steps:
+
+1. **Study** — teaches the concept to the depth your target role needs, then gives reading and
+   practice.
+2. **Assess** — tests you. It will not teach, hint freely, or tell you how you are doing; each
+   of those would corrupt the measurement.
+3. **Wrap up** — the LLM replies with one JSON object. Paste it back.
+
+The app owns the prompts deliberately. The moment the LLM decides what "depth" means, two
+sessions stop being comparable and the mastery number stops being evidence of anything — so
+the scoring rubric, the depth targets and the anti-inflation calibration all live in the
+application. Identifiers and timestamps are pre-filled so the model cannot mismatch them, and
+anything malformed is rejected with every problem listed at once.
 
 ## Commands
 
