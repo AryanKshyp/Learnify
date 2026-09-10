@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learnify — Business Plan &amp; Rollout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ground */
+  --ink:#0E1520;
+  --ink-2:#141D2B;
+  --panel:#182233;
+  --panel-2:#1E2A3D;
+  --rule:#2B3A50;
+  --rule-soft:#233145;
+
+  /* text */
+  --paper:#E8EEF6;
+  --paper-2:#B9C6D7;
+  --muted:#7C8CA3;
+  --faint:#5A6B82;
+
+  /* mastery signal palette — these encode state, not decoration */
+  --solid:#3FBFA8;   /* proved & trusted */
+  --shaky:#E5A63C;   /* decayed / at risk */
+  --blocked:#E0675C; /* root cause */
+  --unmeasured:#54657E;
+  --accent:#8AA6F7;  /* actions, links, brand */
+
+  --slide-pad: clamp(28px, 5vw, 76px);
+  --maxw: 1180px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--paper);
+  font-family:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── deck chrome ─────────────────────────────────────────── */
+.deck{
+  height:100vh;
+  overflow-y:scroll;
+  scroll-snap-type:y mandatory;
+  scroll-behavior:smooth;
+}
+.slide{
+  min-height:100vh;
+  scroll-snap-align:start;
+  padding:var(--slide-pad);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+  border-bottom:1px solid var(--rule-soft);
+}
+.slide-inner{width:100%;max-width:var(--maxw);margin:0 auto}
+
+.progress{
+  position:fixed;top:0;left:0;height:2px;background:var(--accent);
+  z-index:60;width:0;transition:width .18s linear;
+}
+.rail{
+  position:fixed;left:14px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:9px;z-index:55;
+}
+.rail button{
+  width:7px;height:7px;padding:0;border:0;border-radius:50%;
+  background:var(--rule);cursor:pointer;transition:background .2s, transform .2s;
+}
+.rail button:hover{background:var(--faint)}
+.rail button[aria-current="true"]{background:var(--accent);transform:scale(1.5)}
+.counter{
+  position:fixed;right:18px;bottom:16px;z-index:55;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;
+  letter-spacing:.09em;color:var(--faint);
+}
+.counter b{color:var(--paper-2);font-weight:500}
+
+/* ── type system ─────────────────────────────────────────── */
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 18px;display:flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--accent);opacity:.6}
+
+h1,h2,h3{font-family:"Bricolage Grotesque","Instrument Sans",sans-serif;margin:0;letter-spacing:-.02em}
+h1{font-size:clamp(38px,6.4vw,76px);font-weight:800;line-height:1.02}
+h2{font-size:clamp(27px,3.9vw,46px);font-weight:700;line-height:1.08;margin-bottom:22px}
+h3{font-size:17px;font-weight:700;letter-spacing:-.01em;margin-bottom:7px}
+
+.lede{font-size:clamp(16px,1.7vw,21px);color:var(--paper-2);max-width:66ch;line-height:1.5}
+.small{font-size:14px;color:var(--muted);line-height:1.55}
+.tiny{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--faint)}
+.hl{color:var(--paper);font-weight:600}
+.sig{color:var(--solid)}
+.warn{color:var(--shaky)}
+.bad{color:var(--blocked)}
+em.q{color:var(--paper-2);font-style:italic}
+
+/* ── building blocks ─────────────────────────────────────── */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+
+.card{
+  background:var(--panel);border:1px solid var(--rule-soft);
+  border-radius:3px;padding:20px 20px 22px;
+}
+.card .num{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--faint);
+  letter-spacing:.1em;display:block;margin-bottom:12px;
+}
+.card p{margin:0;font-size:14.5px;color:var(--paper-2);line-height:1.5}
+.card.edge-solid{border-left:2px solid var(--solid)}
+.card.edge-shaky{border-left:2px solid var(--shaky)}
+.card.edge-bad{border-left:2px solid var(--blocked)}
+.card.edge-accent{border-left:2px solid var(--accent)}
+
+.stat{font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(28px,3.4vw,42px);font-weight:800;line-height:1;letter-spacing:-.03em}
+.stat-lbl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:9px}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+th{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--faint);font-weight:500;border-bottom-color:var(--rule);
+}
+td{color:var(--paper-2)}
+td.k{color:var(--paper);font-weight:600}
+td.n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:none}
+tr.total td{border-top:1px solid var(--rule);color:var(--paper);font-weight:600;background:rgba(138,166,247,.05)}
+
+.pill{
+  display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:.09em;text-transform:uppercase;padding:3px 8px;border-radius:2px;
+  border:1px solid var(--rule);color:var(--muted);
+}
+.pill.on{border-color:var(--solid);color:var(--solid)}
+.cbar{height:6px;width:100%;max-width:110px;background:var(--rule-soft);border-radius:99px;overflow:hidden;display:inline-block;vertical-align:middle}
+.cbar i{display:block;height:100%;border-radius:99px;background:var(--blocked)}
+.cbar.mid i{background:var(--shaky)}
+.cbar.lo i{background:var(--solid)}
+.pill.no{border-color:var(--blocked);color:var(--blocked)}
+
+/* ── hero ────────────────────────────────────────────────── */
+.hero-mark{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:26px;
+}
+.hero-mark b{color:var(--paper);font-weight:600}
+.hero-sub{margin-top:22px;font-size:clamp(16px,1.8vw,20px);color:var(--paper-2);max-width:60ch}
+.hero-meta{
+  margin-top:34px;display:flex;flex-wrap:wrap;gap:10px 26px;
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.07em;color:var(--faint);
+}
+.hero-meta span b{color:var(--paper-2);font-weight:500}
+
+/* ── the graph demo (signature) ──────────────────────────── */
+.demo{
+  background:var(--ink-2);border:1px solid var(--rule-soft);border-radius:3px;
+  padding:18px 18px 14px;
+}
+.demo-head{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  margin-bottom:6px;flex-wrap:wrap;
+}
+.demo-title{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+svg.graph{width:100%;height:auto;display:block}
+.gnode rect{
+  fill:var(--panel-2);stroke:var(--unmeasured);stroke-width:1.5;
+  transition:fill .5s ease, stroke .5s ease;
+}
+.gnode text{
+  font-family:"Instrument Sans",sans-serif;font-size:11.5px;font-weight:500;
+  fill:var(--paper-2);transition:fill .5s ease;
+}
+.gnode.s-ok rect{fill:rgba(63,191,168,.16);stroke:var(--solid)}
+.gnode.s-ok text{fill:#CDEFE7}
+.gnode.s-risk rect{fill:rgba(229,166,60,.14);stroke:var(--shaky)}
+.gnode.s-risk text{fill:#F2DCB4}
+.gnode.s-bad rect{fill:rgba(224,103,92,.16);stroke:var(--blocked)}
+.gnode.s-bad text{fill:#F6CFCA}
+.gnode.pulse rect{animation:pop .6s ease}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.045)}100%{transform:scale(1)}}
+.gnode{transform-box:fill-box;transform-origin:center}
+.gedge{stroke:var(--rule);stroke-width:1.4;fill:none;transition:stroke .5s ease}
+.gedge.e-ok{stroke:rgba(63,191,168,.55)}
+.gedge.e-risk{stroke:rgba(229,166,60,.4)}
+
+.demo-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.06em;color:var(--faint)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.btn{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  background:var(--accent);color:#0B1220;border:0;padding:10px 16px;border-radius:2px;
+  cursor:pointer;font-weight:600;transition:filter .18s, opacity .18s;
+}
+.btn:hover{filter:brightness(1.12)}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--rule)}
+.btn.ghost:hover{color:var(--paper-2);border-color:var(--faint)}
+.btn:disabled{opacity:.4;cursor:default}
+.demo-note{font-size:12.5px;color:var(--muted);margin:10px 0 0;min-height:1.5em;transition:color .3s}
+.demo-note.live{color:var(--solid)}
+
+/* ── season calendar ─────────────────────────────────────── */
+.seasons{display:grid;gap:10px;margin-top:8px}
+.season{
+  display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:start;
+  border-left:2px solid var(--rule);padding:14px 0 14px 20px;
+}
+.season.now{border-left-color:var(--blocked)}
+.season.pay{border-left-color:var(--solid)}
+.season.sell{border-left-color:var(--accent)}
+.season-when{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;color:var(--paper)}
+.season-what{font-size:11px;font-family:"IBM Plex Mono",monospace;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+.season h3{margin-bottom:5px}
+.season p{margin:0;font-size:14px;color:var(--paper-2)}
+
+/* ── gantt ───────────────────────────────────────────────── */
+.gantt-wrap{overflow-x:auto;padding-bottom:8px}
+.gantt{min-width:820px}
+.gt-head{display:grid;grid-template-columns:190px repeat(20,1fr);align-items:end;gap:0;margin-bottom:6px}
+.gt-year{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--faint);
+  border-bottom:1px solid var(--rule);padding-bottom:4px;text-align:center;
+}
+.gt-months{display:grid;grid-template-columns:190px repeat(20,1fr);margin-bottom:10px}
+.gt-m{font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--faint);text-align:center}
+.gt-m.season-on{color:var(--paper-2)}
+.gt-row{display:grid;grid-template-columns:190px repeat(20,1fr);align-items:center;height:34px;position:relative}
+.gt-row::after{
+  content:"";position:absolute;left:190px;right:0;top:50%;height:1px;
+  background:var(--rule-soft);z-index:0;
+}
+.gt-lbl{font-size:13px;color:var(--paper-2);padding-right:14px;z-index:2}
+.gt-bar{
+  grid-row:1;height:16px;border-radius:2px;z-index:1;position:relative;
+  display:flex;align-items:center;padding:0 8px;
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.05em;
+  white-space:nowrap;overflow:hidden;
+}
+.b-build{background:rgba(138,166,247,.28);border:1px solid var(--accent);color:#CBD8FB}
+.b-learn{background:rgba(224,103,92,.22);border:1px solid var(--blocked);color:#F3C9C4}
+.b-rev{background:rgba(63,191,168,.24);border:1px solid var(--solid);color:#C6EDE4}
+.b-sell{background:rgba(229,166,60,.22);border:1px solid var(--shaky);color:#F0DAB2}
+.gt-seasonband{
+  position:absolute;top:0;bottom:0;background:rgba(255,255,255,.028);
+  z-index:0;pointer-events:none;
+}
+.gate{
+  display:grid;grid-template-columns:190px repeat(20,1fr);align-items:center;
+  margin-top:12px;padding-top:12px;border-top:1px solid var(--rule);
+}
+.gate-lbl{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.gate-pin{grid-row:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.gate-pin i{width:8px;height:8px;background:var(--paper);transform:rotate(45deg);display:block}
+.gate-pin span{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--paper-2);text-align:center;line-height:1.3;letter-spacing:.02em}
+
+/* ── misc ────────────────────────────────────────────────── */
+.kicker{
+  border-left:2px solid var(--accent);padding:14px 0 14px 20px;margin:22px 0 0;
+  font-size:16px;color:var(--paper);max-width:74ch;line-height:1.5;
+}
+.kicker.warnline{border-left-color:var(--shaky)}
+.rowlist{display:grid;gap:0}
+.rowlist > div{
+  display:grid;grid-template-columns:auto 1fr;gap:18px;
+  padding:15px 0;border-bottom:1px solid var(--rule-soft);align-items:baseline;
+}
+.rowlist > div:last-child{border-bottom:none}
+.rowlist .idx{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--accent);letter-spacing:.08em;padding-top:3px}
+.rowlist p{margin:5px 0 0;font-size:14px;color:var(--paper-2)}
+
+.scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.sc{border:1px solid var(--rule-soft);border-radius:3px;padding:18px;background:var(--panel)}
+.sc.base{border-color:var(--solid);background:rgba(63,191,168,.07)}
+.sc-name{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+.sc.base .sc-name{color:var(--solid)}
+.sc-fig{font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(26px,3.2vw,38px);font-weight:800;letter-spacing:-.03em;line-height:1}
+.sc dl{margin:16px 0 0;display:grid;gap:8px;font-size:13px}
+.sc dl div{display:flex;justify-content:space-between;gap:12px;color:var(--muted)}
+.sc dl b{color:var(--paper-2);font-weight:500;font-family:"IBM Plex Mono",monospace;font-size:12px}
+
+.ask-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:44px;align-items:start}
+.buy{display:grid;gap:0}
+.buy > div{display:grid;grid-template-columns:20px 1fr;gap:14px;padding:13px 0;border-bottom:1px solid var(--rule-soft);align-items:start}
+.buy > div:last-child{border-bottom:none}
+.buy .tick{color:var(--solid);font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.5}
+.buy p{margin:0;font-size:14px;color:var(--paper-2)}
+
+.endline{font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(20px,2.6vw,32px);font-weight:700;letter-spacing:-.02em;line-height:1.25;max-width:24ch}
+
+.footnote{margin-top:26px;font-size:12px;color:var(--faint);max-width:80ch;line-height:1.55}
+
+/* ── responsive ──────────────────────────────────────────── */
+@media (max-width:960px){
+  .split,.ask-grid{grid-template-columns:1fr;gap:30px}
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:1fr}
+  .scenarios{grid-template-columns:1fr}
+  .season{grid-template-columns:1fr;gap:8px}
+  .rail{display:none}
+  .slide{min-height:auto;padding-top:60px;padding-bottom:60px}
+  .deck{scroll-snap-type:none}
+}
+@media (max-width:620px){
+  .g2,.g4{grid-template-columns:1fr}
+  table{font-size:13px}
+  th,td{padding:9px 8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition-duration:.01ms !important}
+  html,.deck{scroll-behavior:auto}
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<nav class="rail" id="rail" aria-label="Slides"></nav>
+<div class="counter"><b id="cur">01</b> / <span id="tot">19</span></div>
+
+<main class="deck" id="deck">
+
+<!-- 01 — HERO -->
+<section class="slide" data-title="Cover">
+  <div class="slide-inner">
+    <div class="hero-mark"><b>Learnify</b> &nbsp;·&nbsp; built on KnowledgeOS</div>
+    <h1>You studied<br>everything.<br>You still failed.</h1>
+    <p class="hero-sub">Learnify finds the gaps you don't know you have, traces each one to the prerequisite that caused it, and proves — in your own voice — that you've closed it.</p>
+
+    <div class="hero-meta">
+      <span>Business plan &amp; rollout <b>Aug 2026 → Mar 2028</b></span>
+      <span>Stage <b>Working engine, pre-revenue</b></span>
+      <span>Beachhead <b>Technical placements, India</b></span>
+    </div>
+
+    <div class="demo" style="margin-top:36px" id="demo">
+      <div class="demo-head">
+        <span class="demo-title">Live · prerequisite propagation</span>
+        <span class="tiny">Nothing downstream is re-tested</span>
+      </div>
+
+      <svg class="graph" viewBox="0 0 720 290" role="img" aria-label="A prerequisite graph in which restudying Probability restores six downstream concepts without re-testing any of them.">
+        <g id="edges" stroke-linecap="round">
+          <path class="gedge" data-to="rv"     d="M119 145 C 155 145, 155 85, 190 85"/>
+          <path class="gedge" data-to="bayes"  d="M119 155 C 155 155, 155 215, 190 215"/>
+          <path class="gedge" data-to="exp"    d="M310 82  C 325 82, 325 65, 340 65"/>
+          <path class="gedge" data-to="nb"     d="M310 218 C 325 218, 325 235, 340 235"/>
+          <path class="gedge" data-to="mle"    d="M460 68  C 480 68, 480 135, 490 135"/>
+          <path class="gedge" data-to="mle"    d="M460 232 C 480 232, 480 145, 490 145"/>
+          <path class="gedge" data-to="logreg" d="M608 135 C 625 135, 625 85, 640 85"/>
+          <path class="gedge" data-to="gmm"    d="M608 145 C 625 145, 625 205, 640 205"/>
+        </g>
+        <g id="nodes">
+          <g class="gnode" data-id="prob"   data-depth="0" transform="translate(1,131)">
+            <rect width="118" height="38" rx="3"/><text x="59" y="23" text-anchor="middle">Probability</text></g>
+          <g class="gnode" data-id="rv"     data-depth="1" transform="translate(190,66)">
+            <rect width="120" height="38" rx="3"/><text x="60" y="23" text-anchor="middle">Random variables</text></g>
+          <g class="gnode" data-id="bayes"  data-depth="1" transform="translate(190,196)">
+            <rect width="120" height="38" rx="3"/><text x="60" y="23" text-anchor="middle">Bayes' theorem</text></g>
+          <g class="gnode" data-id="exp"    data-depth="2" transform="translate(340,46)">
+            <rect width="120" height="38" rx="3"/><text x="60" y="23" text-anchor="middle">Expectation</text></g>
+          <g class="gnode" data-id="nb"     data-depth="2" transform="translate(340,216)">
+            <rect width="120" height="38" rx="3"/><text x="60" y="23" text-anchor="middle">Naive Bayes</text></g>
+          <g class="gnode" data-id="mle"    data-depth="3" transform="translate(490,121)">
+            <rect width="118" height="38" rx="3"/><text x="59" y="23" text-anchor="middle">MLE</text></g>
+          <g class="gnode" data-id="logreg" data-depth="4" transform="translate(640,66)">
+            <rect width="79" height="38" rx="3"/><text x="39" y="23" text-anchor="middle">Logistic reg.</text></g>
+          <g class="gnode" data-id="gmm"    data-depth="4" transform="translate(640,186)">
+            <rect width="79" height="38" rx="3"/><text x="39" y="23" text-anchor="middle">Gaussian mix.</text></g>
+        </g>
+      </svg>
+
+      <div class="demo-foot">
+        <div class="legend">
+          <span><i style="background:var(--blocked)"></i>Root cause</span>
+          <span><i style="background:var(--shaky)"></i>No longer trusted</span>
+          <span><i style="background:var(--solid)"></i>Trusted</span>
+          <span style="color:var(--muted)">Outline = what you proved. Fill = what we can currently trust.</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" id="fix">Restudy Probability · 20 min</button>
+          <button class="btn ghost" id="reset">Reset</button>
+        </div>
+      </div>
+      <p class="demo-note" id="note">Probability decayed four months ago. Six concepts downstream are now untrustworthy — and the student has no idea why Naive Bayes keeps going wrong.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 02 — PROBLEM -->
+<section class="slide" data-title="Problem">
+  <div class="slide-inner">
+    <p class="eyebrow">The problem</p>
+    <h2>Students cannot see what is<br>missing from their own preparation.</h2>
+    <p class="lede">They finish the problem lists, the playlists, the courses — and still fail. In the interview, a question surfaces a conceptual gap they never knew they had. You cannot fix a gap you cannot name, so the next round of preparation is more of the same, chosen by guesswork.</p>
+
+    <div class="grid g3" style="margin-top:38px">
+      <div class="card edge-bad">
+        <span class="num">01 · INVISIBLE</span>
+        <h3>You don't know what you don't know</h3>
+        <p>Content completion is not knowledge. Finishing a playlist measures attendance, not understanding — and no tool distinguishes the two.</p>
+      </div>
+      <div class="card edge-bad">
+        <span class="num">02 · UPSTREAM</span>
+        <h3>The cause is four months back</h3>
+        <p>Failing Naive Bayes is usually a Probability problem. Nothing on the market traces a failure to the prerequisite that produced it.</p>
+      </div>
+      <div class="card edge-bad">
+        <span class="num">03 · DECAYING</span>
+        <h3>Knowledge leaves quietly</h3>
+        <p>What you studied in June is not what you know in November, and nothing tells you which parts went.</p>
+      </div>
+    </div>
+
+    <p class="kicker warnline">The pain is not that unprepared students fail. It's that <span class="hl">prepared students fail</span> — the ones who did the work and still could not see what was missing.</p>
+  </div>
+</section>
+
+<!-- 03 — HOW YOU USE IT -->
+<section class="slide" data-title="How you use it">
+  <div class="slide-inner">
+    <p class="eyebrow">How you use it</p>
+    <h2>One loop, run once per concept.</h2>
+
+    <div class="split" style="margin-top:26px;align-items:start">
+      <div>
+        <p class="tiny" style="margin-bottom:12px">DAY ONE — THE TWELVE MINUTES</p>
+        <div class="rowlist">
+          <div><span class="idx">01</span><div><h3>Pick your tracks</h3><p>AI Engineer · SDE · Data · Quant, several at once. Three taps. This is the only setup step — no onboarding survey, no tutorial.</p></div></div>
+          <div><span class="idx">02</span><div><h3>Start the session</h3><p>We don't ask what you want to work on. The system picks from the diagnostic ladder — the concepts where surface familiarity and real understanding diverge most.</p></div></div>
+          <div><span class="idx">03</span><div><h3>Get examined</h3><p>It probes derivation depth, not recall. No hints, no encouragement. Hard stop at twelve minutes.</p></div></div>
+          <div><span class="idx">04</span><div><h3>See the gap</h3><p>Not a score — a sentence. <em class="q">"You can state Bayes' theorem. You couldn't derive it from the product rule. That's blocking four things on your track."</em></p></div></div>
+        </div>
+      </div>
+
+      <div>
+        <p class="tiny" style="margin-bottom:12px">EVERY SESSION AFTER</p>
+        <svg viewBox="0 0 380 322" style="width:100%;height:auto;display:block" role="img" aria-label="A four-step loop: voice session, diagnose, teach, re-prove — with a return arrow showing decay reopening concepts later.">
+          <defs><marker id="lp" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.4" stroke-linecap="round"/></marker></defs>
+
+          <rect x="70" y="8" width="250" height="46" rx="3" fill="rgba(63,191,168,.14)" stroke="var(--solid)" stroke-width="1"/>
+          <text x="195" y="27" text-anchor="middle" fill="#CDEFE7" font-family="Instrument Sans, sans-serif" font-size="14" font-weight="600">Voice session</text>
+          <text x="195" y="44" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="10.5">12 minutes, hard stop</text>
+
+          <rect x="70" y="80" width="250" height="46" rx="3" fill="rgba(138,166,247,.14)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="195" y="99" text-anchor="middle" fill="#CBD8FB" font-family="Instrument Sans, sans-serif" font-size="14" font-weight="600">Diagnose</text>
+          <text x="195" y="116" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="10.5">engine traces the root cause</text>
+
+          <rect x="70" y="152" width="250" height="46" rx="3" fill="rgba(63,191,168,.14)" stroke="var(--solid)" stroke-width="1"/>
+          <text x="195" y="171" text-anchor="middle" fill="#CDEFE7" font-family="Instrument Sans, sans-serif" font-size="14" font-weight="600">Teach</text>
+          <text x="195" y="188" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="10.5">to your role's depth, no further</text>
+
+          <rect x="70" y="224" width="250" height="46" rx="3" fill="rgba(63,191,168,.14)" stroke="var(--solid)" stroke-width="1"/>
+          <text x="195" y="243" text-anchor="middle" fill="#CDEFE7" font-family="Instrument Sans, sans-serif" font-size="14" font-weight="600">Re-prove</text>
+          <text x="195" y="260" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="10.5">evidence recorded, never deleted</text>
+
+          <line x1="195" y1="54" x2="195" y2="74" stroke="var(--rule)" stroke-width="1.4" marker-end="url(#lp)"/>
+          <line x1="195" y1="126" x2="195" y2="146" stroke="var(--rule)" stroke-width="1.4" marker-end="url(#lp)"/>
+          <line x1="195" y1="198" x2="195" y2="218" stroke="var(--rule)" stroke-width="1.4" marker-end="url(#lp)"/>
+          <path d="M70 247 L34 247 L34 31 L64 31" fill="none" stroke="var(--shaky)" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#lp)"/>
+          <text x="195" y="298" text-anchor="middle" fill="var(--faint)" font-family="IBM Plex Mono, monospace" font-size="10.5">Decay and prerequisite changes</text>
+          <text x="195" y="313" text-anchor="middle" fill="var(--faint)" font-family="IBM Plex Mono, monospace" font-size="10.5">reopen concepts later</text>
+        </svg>
+
+        <p class="small" style="margin-top:16px">The home screen only ever answers one question: <span class="hl">what is tonight's hour worth most on?</span> What's due for review, what's blocking the most downstream work, what has never been measured.</p>
+      </div>
+    </div>
+
+    <p class="kicker">Every concept carries two numbers. <span class="hl sig">What you proved</span> — permanent, never altered by time. And <span class="hl warn">what we can currently trust</span> — proved × retention × prerequisite health. The student never sees either as a number. They see the consequence: <em class="q">"three things you knew in June need twenty minutes this week."</em> And closing one upstream concept silently repairs everything beneath it.</p>
+  </div>
+</section>
+
+<!-- 04 — STATUS -->
+<section class="slide" data-title="Where we are">
+  <div class="slide-inner">
+    <p class="eyebrow">Honest position, August 2026</p>
+    <h2>The engine is real. The product isn't finished.</h2>
+    <div class="split" style="margin-top:30px;align-items:start">
+      <div>
+        <p class="tiny" style="margin-bottom:14px">BUILT AND WORKING</p>
+        <div class="rowlist">
+          <div><span class="idx sig">✓</span><div><h3>The deterministic engine</h3><p>Measurement, forgetting, prerequisite propagation, root-cause detection, effort-optimal sequencing. The evidence-preservation guarantee is locked by a regression test.</p></div></div>
+          <div><span class="idx sig">✓</span><div><h3>566-node curriculum, 6 role tracks</h3><p>Validated for structural correctness: no duplicates, no dangling links, no cycles.</p></div></div>
+          <div><span class="idx sig">✓</span><div><h3>API and web application</h3><p>Browse the graph, see recommendations, run a session end to end.</p></div></div>
+          <div><span class="idx sig">✓</span><div><h3>Calibrated anti-inflation scoring</h3><p>The work that stops a model rating a mediocre answer highly. This is why "ask ChatGPT to quiz me" fails.</p></div></div>
+        </div>
+      </div>
+      <div>
+        <p class="tiny" style="margin-bottom:14px">NOT YET BUILT — THE NEXT TWO QUARTERS</p>
+        <div class="rowlist">
+          <div><span class="idx" style="color:var(--shaky)">○</span><div><h3>Voice sessions</h3><p>The product. Everything else is a wrapper around it.</p></div></div>
+          <div><span class="idx" style="color:var(--shaky)">○</span><div><h3>Multi-user accounts and tenant isolation</h3><p>Precondition for every business model. ~4–6 weeks.</p></div></div>
+          <div><span class="idx" style="color:var(--shaky)">○</span><div><h3>Mobile</h3><p>The beachhead is phone-first and short voice reviews are phone-shaped.</p></div></div>
+        </div>
+        <p class="kicker warnline" style="margin-top:24px">Validated on one user — me, through my own preparation. External validation is the immediate next milestone, not a claim being made now.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 — COMPETITION -->
+<section class="slide" data-title="Landscape">
+  <div class="slide-inner">
+    <p class="eyebrow">Landscape</p>
+    <h2>The market is not short of teaching.<br>It is short of diagnosis.</h2>
+    <table style="margin-top:28px">
+      <thead><tr><th>Alternative</th><th>What it models</th><th>What it misses</th><th>Our edge</th></tr></thead>
+      <tbody>
+        <tr><td class="k">LeetCode · InterviewBit</td><td>Problem-level pass/fail</td><td>No concept model, no prerequisites, no forgetting, never <em>why</em></td><td>Diagnosis, not volume</td></tr>
+        <tr><td class="k">Scaler · Interview Kickstart</td><td>Curriculum and cohorts</td><td>One static path for everyone; measurement is self-report; ₹3L+</td><td>Personalised, evidence-based, ~1% of the price</td></tr>
+        <tr><td class="k">Anki · SuperMemo</td><td>Item-level retention, very well</td><td>Items not concepts; no graph; no role targeting</td><td>Concept decay <em>with propagation</em></td></tr>
+        <tr><td class="k">ChatGPT as a tutor</td><td>Nothing persistent</td><td>No memory of what you knew, no decay model — <span class="hl">and it flatters you</span></td><td>Persistence + calibration</td></tr>
+        <tr><td class="k">AI mock-interview tools</td><td>A performance, scored once</td><td>No knowledge model between sessions; no causality</td><td>Longitudinal state, not an event</td></tr>
+      </tbody>
+    </table>
+    <p class="footnote">The sober counterweight, stated plainly: knowledge-graph adaptive learning has a long history of technically impressive systems that could not sustain direct-to-consumer businesses. Treat that as the base rate. Two things are new — the assessor is now cheap, and distribution can be campus- and community-led rather than paid. Neither is a guarantee.</p>
+  </div>
+</section>
+
+<!-- 06 — MARKET -->
+<section class="slide" data-title="Market">
+  <div class="slide-inner">
+    <div class="split" style="align-items:start">
+      <div>
+        <p class="eyebrow">Market, built from the bottom</p>
+        <h2>A defensible number, not a multiplication.</h2>
+        <p class="small" style="margin-top:14px;max-width:52ch">"1.5 million graduates × ₹2,000 = ₹300 crore" assumes every graduate pays us. It is not a market size. This is the build we will actually defend under questioning.</p>
+        <p class="kicker" style="margin-top:26px">The credible ceiling is not domestic B2C. It's institutional contracts and international ARPU — which is exactly why both are in the plan from month one.</p>
+      </div>
+      <div>
+        <table>
+          <tbody>
+            <tr><td>Serious technical preparers per year, India</td><td class="n">400k – 600k</td></tr>
+            <tr><td>Of whom already pay for preparation<br><span class="tiny">bootcamps, cohorts, mock services, courses</span></td><td class="n">25 – 35%</td></tr>
+            <tr><td class="k">Addressable paying population</td><td class="n k">100k – 200k</td></tr>
+            <tr><td>Realistic capture at our price, 5 yrs</td><td class="n">2 – 5%</td></tr>
+            <tr class="total"><td>Reachable India B2C</td><td class="n">₹5 – 25 cr</td></tr>
+            <tr><td>+ Institutional<br><span class="tiny">2,000+ engineering colleges × ₹2–8L</span></td><td class="n">Large, slower</td></tr>
+            <tr><td>+ International at ~3× ARPU</td><td class="n">The real ceiling</td></tr>
+          </tbody>
+        </table>
+        <p class="footnote">Note on a stat we will <span class="hl">not</span> use: the India Skills Report 2026 puts BE/BTech employability near 70% and CS/IT near 80%. Any deck claiming "placement rates below 50%" gets corrected in the room. Our claim doesn't need it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 — GTM THESIS -->
+<section class="slide" data-title="GTM thesis">
+  <div class="slide-inner">
+    <p class="eyebrow">Go-to-market</p>
+    <h2>Five decisions that shape everything else.</h2>
+    <div class="rowlist" style="margin-top:24px">
+      <div><span class="idx">01</span><div><h3>The 2026 season is already gone. Don't chase it.</h3><p>It's August; on-campus drives are starting and we have no voice. Trying to monetise this season is the most expensive mistake available. We use it as a research harvest instead.</p></div></div>
+      <div><span class="idx">02</span><div><h3>Sell to the rejected, not the preparing.</h3><p>Willingness to pay for diagnosis peaks in the 72 hours after a bad interview — that's when the invisible gap becomes visible. A student who thinks their prep is fine has no reason to buy a product that says otherwise.</p></div></div>
+      <div><span class="idx">03</span><div><h3>Every channel must be earned. Paid acquisition is arithmetically dead.</h3><p>Qualified signups cost ₹150–400 at ~5% conversion. That's ₹3,000–8,000 CAC against ₹1,600 ARPU. Campus, community, and referral-paid-in-voice-minutes are the only three that fit.</p></div></div>
+      <div><span class="idx">04</span><div><h3>India builds the product. The diaspora funds it.</h3><p>Indian-origin MS/PhD candidates abroad: same user, same channels, same COGS, ~3× the price. ~18% of base-case revenue for ~5% of the build.</p></div></div>
+      <div><span class="idx">05</span><div><h3>Session length <em>is</em> the business model.</h3><p>At 12 minutes, gross margin is ~70–75%. At 30 minutes it's ~40–55%. Shorter sessions are also better pedagogy and fresher evidence. Everything points the same direction.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 — THE CALENDAR -->
+<section class="slide" data-title="Season calendar">
+  <div class="slide-inner">
+    <p class="eyebrow">The calendar is the strategy</p>
+    <h2>Indian technical hiring is seasonal.<br>Everything pins to it.</h2>
+
+    <div class="seasons" style="margin-top:26px">
+      <div class="season now">
+        <div><div class="season-when">Aug – Dec 2026</div><div class="season-what">On-campus · class of 2027</div></div>
+        <div><h3>No product. Do not monetise.</h3><p>Run 20–30 students by hand, in text mode, over WhatsApp, while they are in live interviews. Zero new code. This starts the outcome journal, resolves the survey, and produces the diagnostic ladder the voice session needs.</p></div>
+      </div>
+      <div class="season pay">
+        <div><div class="season-when">Jan – Jun 2027</div><div class="season-what">Off-campus grind</div></div>
+        <div><h3>First paid launch — India and international together.</h3><p>Unplaced 2027 grads and the class of 2028 preparing early. High intent, no gatekeeper, paying with their own money, and reachable in the exact places people go after a bad interview.</p></div>
+      </div>
+      <div class="season sell">
+        <div><div class="season-when">Feb – Jun 2027</div><div class="season-what">Institutional selling window</div></div>
+        <div><h3>Budgets for the July academic year are decided now.</h3><p>Miss this window and the first institutional rupee arrives in July <em>2028</em>. Pitches must be in front of TPOs and Deans by February.</p></div>
+      </div>
+      <div class="season pay">
+        <div><div class="season-when">Aug – Dec 2027</div><div class="season-what">On-campus · class of 2028</div></div>
+        <div><h3>The first season we are actually ready for.</h3><p>Full B2C launch, institutional contracts live on campus, international cohort compounding. This is the first real revenue quarter.</p></div>
+      </div>
+    </div>
+
+    <p class="kicker warnline">Two hard deadlines fall out of this. <span class="hl">Voice live by 31 December 2026</span> — a two-month slip costs nine months. <span class="hl">Institutional pitches by February 2027</span> — or wait a full academic year.</p>
+  </div>
+</section>
+
+<!-- 09 — ROADMAP GANTT -->
+<section class="slide" data-title="Rollout plan">
+  <div class="slide-inner">
+    <p class="eyebrow">Rollout · 20 months</p>
+    <h2>The plan, with dates.</h2>
+
+    <div class="gantt-wrap" style="margin-top:26px">
+      <div class="gantt">
+        <div class="gt-head">
+          <div></div>
+          <div class="gt-year" style="grid-column:2 / 7">2026</div>
+          <div class="gt-year" style="grid-column:7 / 19">2027</div>
+          <div class="gt-year" style="grid-column:19 / 22">2028</div>
+        </div>
+        <div class="gt-months">
+          <div></div>
+          <div class="gt-m season-on">A</div><div class="gt-m season-on">S</div><div class="gt-m season-on">O</div><div class="gt-m season-on">N</div><div class="gt-m season-on">D</div>
+          <div class="gt-m">J</div><div class="gt-m">F</div><div class="gt-m">M</div><div class="gt-m">A</div><div class="gt-m">M</div><div class="gt-m">J</div>
+          <div class="gt-m season-on">J</div><div class="gt-m season-on">A</div><div class="gt-m season-on">S</div><div class="gt-m season-on">O</div><div class="gt-m season-on">N</div><div class="gt-m season-on">D</div>
+          <div class="gt-m">J</div><div class="gt-m">F</div><div class="gt-m">M</div>
+        </div>
+
+        <div class="gt-row"><div class="gt-lbl">Concierge cohort · 30 students</div><div class="gt-bar b-learn" style="grid-column:2 / 7">hand-run, text mode, outcome journal</div></div>
+        <div class="gt-row"><div class="gt-lbl">Public interactive demo</div><div class="gt-bar b-build" style="grid-column:2 / 4">top of every funnel</div></div>
+        <div class="gt-row"><div class="gt-lbl">Voice pipeline · STT→LLM→TTS</div><div class="gt-bar b-build" style="grid-column:2 / 7">cost measured week one</div></div>
+        <div class="gt-row"><div class="gt-lbl">Multi-user + tenant isolation</div><div class="gt-bar b-build" style="grid-column:4 / 8">isolation suite, not code review</div></div>
+        <div class="gt-row"><div class="gt-lbl">Standing surface · plan · reviews</div><div class="gt-bar b-build" style="grid-column:4 / 8">F2–F6</div></div>
+        <div class="gt-row"><div class="gt-lbl">Mobile web</div><div class="gt-bar b-build" style="grid-column:6 / 9">phone-first beachhead</div></div>
+        <div class="gt-row"><div class="gt-lbl">Paid launch · India + international</div><div class="gt-bar b-rev" style="grid-column:7 / 22">first revenue</div></div>
+        <div class="gt-row"><div class="gt-lbl">Institutional selling</div><div class="gt-bar b-sell" style="grid-column:8 / 13">AY 2027–28 budgets</div></div>
+        <div class="gt-row"><div class="gt-lbl">Institutional deployment</div><div class="gt-bar b-rev" style="grid-column:13 / 22">2–4 colleges live</div></div>
+        <div class="gt-row"><div class="gt-lbl">Finance / quant · second domain</div><div class="gt-bar b-build" style="grid-column:14 / 18">proves domain-agnostic engine</div></div>
+        <div class="gt-row"><div class="gt-lbl">User-defined goals → curriculum</div><div class="gt-bar b-build" style="grid-column:18 / 22">the platform step</div></div>
+
+        <div class="gate">
+          <div class="gate-lbl">Gates</div>
+          <div class="gate-pin" style="grid-column:6"><i></i><span>31 Dec 26<br>Voice live</span></div>
+          <div class="gate-pin" style="grid-column:8"><i></i><span>Feb 27<br>First rupee</span></div>
+          <div class="gate-pin" style="grid-column:13"><i></i><span>Jul 27<br>Contracts live</span></div>
+          <div class="gate-pin" style="grid-column:21"><i></i><span>Mar 28<br>₹33L run-rate</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend" style="margin-top:22px">
+      <span><i style="background:rgba(224,103,92,.6);border:1px solid var(--blocked)"></i>Learn</span>
+      <span><i style="background:rgba(138,166,247,.6);border:1px solid var(--accent)"></i>Build</span>
+      <span><i style="background:rgba(229,166,60,.6);border:1px solid var(--shaky)"></i>Sell</span>
+      <span><i style="background:rgba(63,191,168,.6);border:1px solid var(--solid)"></i>Earn</span>
+      <span style="color:var(--muted)">Lighter month columns = placement season</span>
+    </div>
+  </div>
+</section>
+
+<!-- 10 — PHASE GATES -->
+<section class="slide" data-title="Phase gates">
+  <div class="slide-inner">
+    <p class="eyebrow">Gates, not milestones</p>
+    <h2>Each phase has a condition for starting the next one.</h2>
+    <table style="margin-top:26px">
+      <thead><tr><th style="width:18%">Phase</th><th style="width:24%">What we do</th><th>The gate to pass before moving on</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="k">Phase 0<br><span class="tiny">Sep – Dec 26</span></td>
+          <td>Concierge cohort. Voice prototype for cost measurement only.</td>
+          <td>≥20 non-founder students with ≥3 assessed concepts each · <span class="hl">≥60% describe a gap they didn't know they had</span> · ≥15 real interviews logged with state snapshots · measured cost per session, not an estimate</td>
+        </tr>
+        <tr>
+          <td class="k">Phase 1<br><span class="tiny">Jan – Jun 27</span></td>
+          <td>Paid launch, India + international. Community-led acquisition.</td>
+          <td>≥100 paying users · activation ≥55% sustained · gross margin ≥65% on measured COGS · referral loop producing ≥15% of signups</td>
+        </tr>
+        <tr>
+          <td class="k">Phase 2<br><span class="tiny">Jul 27 – Mar 28</span></td>
+          <td>Full season. Institutional deployments. Second domain.</td>
+          <td>2–4 institutions live and renewing · ≥600 paying students · directional outcome evidence linking closed gaps to interview results</td>
+        </tr>
+        <tr>
+          <td class="k">Phase 3<br><span class="tiny">2028+</span></td>
+          <td>User-defined domains. Platform.</td>
+          <td>Generated curricula passing the validator with zero errors and surviving first-cohort evidence review</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="kicker warnline">The gate that matters most is the cheapest one. If Phase 0 activation lands below 40%, the gap-discovery moment isn't landing — and no amount of distribution fixes that. Better to learn it in November 2026 with 30 people than in September 2027 with a launch.</p>
+  </div>
+</section>
+
+<!-- 11 — ACTIVATION FUNNEL -->
+<section class="slide" data-title="Activation">
+  <div class="slide-inner">
+    <div class="split" style="align-items:start">
+      <div>
+        <p class="eyebrow">Activation</p>
+        <h2>Everything converts through twelve minutes.</h2>
+        <p class="lede">One short voice session that surfaces one real gap the student did not know they had. Acquisition, word of mouth and conversion all run through that single moment.</p>
+        <p class="small" style="margin-top:22px"><span class="hl">The three things that will break it:</span></p>
+        <div class="rowlist" style="margin-top:8px">
+          <div><span class="idx">A</span><div><h3>Opening concept selection</h3><p>With no prior information, which concept does session one probe? Get it wrong and a strong student passes trivially and leaves. Fixed by the hand-curated diagnostic ladder from Phase 0.</p></div></div>
+          <div><span class="idx">B</span><div><h3>Voice as a starting barrier</h3><p>Nobody talks to a laptop at 11pm in a shared hostel room. Text mode is a first-class equal path — and it's also the free tier.</p></div></div>
+          <div><span class="idx">C</span><div><h3>A generic gap statement</h3><p>"Review probability" is worthless. The precision of the sentence <em>is</em> the activation event.</p></div></div>
+        </div>
+      </div>
+      <div>
+        <table>
+          <thead><tr><th>Funnel step</th><th style="text-align:right">Target</th></tr></thead>
+          <tbody>
+            <tr><td>Demo → signup</td><td class="n" style="text-align:right">15%</td></tr>
+            <tr><td>Signup → track selected</td><td class="n" style="text-align:right">85%</td></tr>
+            <tr><td>Track → first session started<br><span class="tiny">the drop-off cliff</span></td><td class="n" style="text-align:right">50%</td></tr>
+            <tr><td>Started → completed</td><td class="n" style="text-align:right">75%</td></tr>
+            <tr class="total"><td>Completed → <span class="sig">"it found something I didn't know"</span><br><span class="tiny">the only metric that isn't vanity</span></td><td class="n" style="text-align:right">≥60%</td></tr>
+            <tr><td>Activated → second session in 7 days</td><td class="n" style="text-align:right">40%</td></tr>
+            <tr><td>Activated → paid in 21 days</td><td class="n" style="text-align:right">8–12%</td></tr>
+          </tbody>
+        </table>
+        <p class="footnote">Referral is paid in voice minutes, not cash — ₹30–45 of COGS per referred user, triggered at the activation moment. The shareable object is a gap receipt, never a score, which keeps the loop compatible with our refusal to publish comparable numbers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 — MONETISATION · COST STACK -->
+<section class="slide" data-title="Cost stack">
+  <div class="slide-inner">
+    <p class="eyebrow">Monetisation · 01 / 04</p>
+    <h2>The expensive things are<br>the commodity things.</h2>
+    <p class="lede">This is the luckiest fact about our cost structure. What costs nothing to serve is the part nobody else has. What costs real money is the part everyone has.</p>
+
+    <table style="margin-top:28px">
+      <thead><tr><th>Layer</th><th style="width:130px">Marginal cost</th><th style="width:120px"></th><th>Defensibility</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="k">Deterministic engine<br><span class="tiny">diagnosis · root cause · decay · sequencing</span></td>
+          <td class="n sig">~₹0 <span class="tiny">CPU</span></td>
+          <td><span class="cbar lo"><i style="width:3%"></i></span></td>
+          <td><span class="pill on">The moat</span></td>
+        </tr>
+        <tr>
+          <td class="k">Pre-generated explainers<br><span class="tiny">566 nodes × 3 depths ≈ 1,700 files</span></td>
+          <td class="n sig">₹0 <span class="tiny">after build</span></td>
+          <td><span class="cbar lo"><i style="width:2%"></i></span></td>
+          <td>Commodity</td>
+        </tr>
+        <tr>
+          <td class="k">Text assessment session<br><span class="tiny">15 turns, cached prefix</span></td>
+          <td class="n">~₹7</td>
+          <td><span class="cbar mid"><i style="width:26%"></i></span></td>
+          <td>The evidence engine</td>
+        </tr>
+        <tr>
+          <td class="k">Live tutoring dialogue<br><span class="tiny">per follow-up turn, unbounded</span></td>
+          <td class="n warn">₹0.45 <span class="tiny">/turn</span></td>
+          <td><span class="cbar"><i style="width:62%"></i></span></td>
+          <td>Commodity</td>
+        </tr>
+        <tr>
+          <td class="k">Voice session<br><span class="tiny">12 min · STT → LLM → TTS → scoring</span></td>
+          <td class="n warn">~₹22</td>
+          <td><span class="cbar"><i style="width:100%"></i></span></td>
+          <td><span class="pill on">Differentiator</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="kicker">Teaching is the commodity we consume, not the product we sell. So metering teaching and giving away diagnosis isn't a compromise on the free tier — <span class="hl">it's our positioning turned into a pricing rule.</span></p>
+
+    <p class="footnote">One-time cost to generate the full explainer library at mid-tier quality: <span class="hl">~₹5,000</span>. It removes ~40% of live tutoring turns permanently, and the content becomes reviewable, versionable and correctable — which text generated live and thrown away never is. Model routing follows the same logic: <span class="hl">teach on mid-tier, probe on small, score on strong.</span> A weak model teaching a derivation badly produces a student who confidently believes something wrong, and the engine records it as proved mastery.</p>
+  </div>
+</section>
+
+<!-- 13 — MONETISATION · FREE TIER -->
+<section class="slide" data-title="Free tier">
+  <div class="slide-inner">
+    <p class="eyebrow">Monetisation · 02 / 04</p>
+    <h2>The free tier is not a cost centre.<br>It is the acquisition channel.</h2>
+
+    <div class="split" style="margin-top:26px;align-items:start">
+      <div>
+        <table>
+          <thead><tr><th>Free plan</th><th style="text-align:right">Limit</th></tr></thead>
+          <tbody>
+            <tr><td>Graph, standing surface, recommendations,<br>root-cause detection, decay queue</td><td class="n sig" style="text-align:right">Unlimited</td></tr>
+            <tr><td>Pre-generated explainers</td><td class="n sig" style="text-align:right">Unlimited</td></tr>
+            <tr><td class="k">Assessment sessions</td><td class="n" style="text-align:right">2 / week</td></tr>
+            <tr><td class="k">Teaching depth<br><span class="tiny">derivation and transfer are paid</span></td><td class="n" style="text-align:right">Depth 1–2</td></tr>
+            <tr><td class="k">Live follow-up dialogue</td><td class="n" style="text-align:right">5 turns / concept</td></tr>
+            <tr><td class="k">Voice</td><td class="n" style="text-align:right">1 session, ever</td></tr>
+          </tbody>
+        </table>
+        <p class="footnote">Weekly refill, not monthly — it smooths infrastructure load, keeps evidence fresh, and creates 52 conversion moments a year instead of 12. Limits are denominated in the product's own vocabulary: "2 assessments a week" reads as a plan, "50,000 tokens" reads as a meter.</p>
+      </div>
+
+      <div>
+        <div class="card edge-solid">
+          <span class="num">THE DEPTH GATE — OUR BEST LIMIT</span>
+          <p>The curriculum already carries per-role depth targets. Free teaches to depth 2. Paid teaches to depth 3.<br><br>So the free tier can tell a student <em class="q">"you can state Bayes' theorem but you can't derive it"</em> — <span class="hl">and then cannot close it.</span><br><br>The founding story, converted into a paywall. It costs less to serve, it's honest about what it withholds, and the thing behind the wall is precisely the thing the student now knows they need.</p>
+        </div>
+
+        <div class="grid g2" style="margin-top:16px">
+          <div class="card">
+            <span class="num">CAPPED</span>
+            <div class="stat sig">₹2.50</div>
+            <div class="stat-lbl">Blended cost / free user / month</div>
+            <p style="margin-top:14px;font-size:13px">25,000 free · 18% active · ₹14 per active<br><span class="tiny">= ₹63,000 / MONTH</span></p>
+          </div>
+          <div class="card">
+            <span class="num">UNCAPPED</span>
+            <div class="stat" style="color:var(--blocked)">₹30</div>
+            <div class="stat-lbl">Blended cost / free user / month</div>
+            <p style="margin-top:14px;font-size:13px">Same base · ₹165 per active<br><span class="tiny">= ₹7.4L / MONTH</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="kicker">₹2.50/user/month over six months at ~3% conversion is a <span class="hl">₹500 cost to acquire a paying customer</span>, against ₹1,600 ARPU at 75% margin. Free-tier cost is not COGS — it's our CAC line, and it is 6–16× cheaper than the ₹3,000–8,000 paid acquisition would cost. Uncapped, the same math gives ₹6,000 and the funnel dies.</p>
+  </div>
+</section>
+
+<!-- 14 — MONETISATION · PRICING -->
+<section class="slide" data-title="Pricing">
+  <div class="slide-inner">
+    <p class="eyebrow">Monetisation · 03 / 04</p>
+    <h2>One-time session packs,<br>not subscriptions.</h2>
+    <p class="lede">Customer life is 2.5–4 months because students leave when they get an offer. UPI AutoPay debits fail at 8–15% against 2–3% for card mandates. And ₹0 → ₹899/month is too big a step for someone who has known us for eleven minutes.</p>
+
+    <table style="margin-top:26px">
+      <thead><tr><th>Plan</th><th>Price</th><th>Includes</th><th style="text-align:right">COGS if fully used</th><th style="text-align:right">Worst-case margin</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Free</td><td class="n">₹0</td><td>Full engine · capped assessment · depth 1–2 · 1 voice session</td><td class="n" style="text-align:right">₹14<span class="tiny">/mo active</span></td><td class="n" style="text-align:right">CAC line</td></tr>
+        <tr><td class="k">Diagnostic Sprint</td><td class="n">₹499 <span class="tiny">one-time · 30d</span></td><td>8 voice sessions · full depth</td><td class="n" style="text-align:right">₹176</td><td class="n sig" style="text-align:right">65%</td></tr>
+        <tr><td class="k">Season Pass</td><td class="n">₹2,499 <span class="tiny">one-time · 4mo</span></td><td>40 voice sessions · recordings · priority</td><td class="n" style="text-align:right">₹880</td><td class="n sig" style="text-align:right">65%</td></tr>
+        <tr><td class="k">Top-up</td><td class="n">₹249</td><td>4 voice sessions</td><td class="n" style="text-align:right">₹88</td><td class="n sig" style="text-align:right">65%</td></tr>
+        <tr><td class="k">International</td><td class="n">$19 / $79</td><td>Same two packs, same engine</td><td class="n" style="text-align:right">₹176 / ₹880</td><td class="n sig" style="text-align:right">89% / 87%</td></tr>
+        <tr><td class="k">Institutional</td><td class="n">₹300–500<span class="tiny">/student/yr · ₹2L floor</span></td><td>Bottleneck reports · seats capped at 15 sessions/yr</td><td class="n" style="text-align:right">₹330<span class="tiny">/student</span></td><td class="n sig" style="text-align:right">~66%</td></tr>
+        <tr><td class="k">Upkeep <span class="pill">2028 only</span></td><td class="n">₹299 <span class="tiny">/month</span></td><td>Post-offer decay maintenance, multi-domain</td><td class="n" style="text-align:right">₹90</td><td class="n sig" style="text-align:right">70%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="grid g3" style="margin-top:24px">
+      <div class="card edge-accent">
+        <span class="num">THE ANCHOR</span>
+        <p>Scaler's flagship programmes sit around <span class="hl">₹3.25 lakh</span>. Put that on the pricing page. Next to it, ₹2,499 stops being a price and becomes an obvious arbitrage.</p>
+      </div>
+      <div class="card edge-accent">
+        <span class="num">WHY PACKS, NOT CREDITS</span>
+        <p>Per-session credits align price to cost perfectly — and make students ration assessments to save money. That <span class="hl">corrupts the evidence</span>, which is the one thing we cannot afford.</p>
+      </div>
+      <div class="card edge-shaky">
+        <span class="num">WHAT WE WILL NOT SELL</span>
+        <p>Not to employers as a hiring signal. Not content. No ads, no job board, no placement commission, <span class="hl">no cross-student rankings</span> — and no ISA. Each corrupts the incentive to be honest with the learner.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 15 — MONETISATION · UNIT ECONOMICS -->
+<section class="slide" data-title="Unit economics">
+  <div class="slide-inner">
+    <p class="eyebrow">Monetisation · 04 / 04</p>
+    <h2>Price against expected use.<br>Guardrail against full use.</h2>
+
+    <div class="split" style="margin-top:26px;align-items:start">
+      <div>
+        <table>
+          <thead><tr><th>Season Pass · ₹2,499</th><th style="text-align:right">Sessions</th><th style="text-align:right">COGS</th><th style="text-align:right">Margin</th></tr></thead>
+          <tbody>
+            <tr><td>Sold as</td><td class="n" style="text-align:right">40</td><td class="n" style="text-align:right">—</td><td class="n" style="text-align:right">—</td></tr>
+            <tr><td>Expected consumption</td><td class="n" style="text-align:right">22–28</td><td class="n" style="text-align:right">₹484–616</td><td class="n sig" style="text-align:right">75–81%</td></tr>
+            <tr class="total"><td>Fully consumed <span class="tiny">worst case</span></td><td class="n" style="text-align:right">40</td><td class="n" style="text-align:right">₹880</td><td class="n" style="text-align:right">65%</td></tr>
+          </tbody>
+        </table>
+        <p class="footnote">Breakage is where the real margin lives, and it is honest breakage — nobody does 2.5 assessments a week for sixteen weeks. Sell top-ups to the heavy tail rather than pricing the whole base for them.</p>
+
+        <div class="card edge-shaky" style="margin-top:22px">
+          <span class="num">THE GUARDRAIL</span>
+          <p><span class="hl">No plan ships whose fully-consumed COGS exceeds 35% of its price.</span> Cost per session, per user, per plan, on a dashboard from the first paying customer. Metered-backend startups don't die from bad pricing — they die from finding the p95 user twelve weeks late.</p>
+        </div>
+      </div>
+
+      <div>
+        <p class="tiny" style="margin-bottom:14px">LEAKAGE TO BUDGET FOR — 10–15% ON TOP OF MODELLED COGS</p>
+        <div class="buy">
+          <div><span class="tick" style="color:var(--shaky)">·</span><p><span class="hl">Abandoned sessions.</span> Mic fails at minute nine. We've paid for nine minutes, the student got nothing, we refund the credit and eat both.</p></div>
+          <div><span class="tick" style="color:var(--shaky)">·</span><p><span class="hl">Session overrun.</span> A 12-minute session that drifts to 20 costs 65% more. Hard-stop in code, not in the prompt.</p></div>
+          <div><span class="tick" style="color:var(--shaky)">·</span><p><span class="hl">Refused scoring.</span> Low-confidence transcripts we correctly decline to score still cost full price to produce.</p></div>
+          <div><span class="tick" style="color:var(--shaky)">·</span><p><span class="hl">Recording egress.</span> ~12MB per session, append-only forever. Set retention before 100,000 sessions, not after.</p></div>
+        </div>
+
+        <p class="tiny" style="margin:26px 0 12px">CIRCUIT BREAKERS</p>
+        <div class="buy">
+          <div><span class="tick">→</span><p>Verified auth before any model call · per-IP and per-device registration caps. The free voice session is worth ₹22 and people will farm accounts for it.</p></div>
+          <div><span class="tick">→</span><p>Scope classifier — we are a technical tutor, not general chat. Protects cost <em>and</em> positioning.</p></div>
+          <div><span class="tick">→</span><p><span class="hl">Global daily spend ceiling that degrades to explainer-only mode.</span> A bug, an abuse wave or a viral moment hits a floor, not a ₹10 lakh surprise.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g3" style="margin-top:26px">
+      <div class="card"><div class="stat sig">~75%</div><div class="stat-lbl">Blended gross margin at expected use</div></div>
+      <div class="card"><div class="stat">₹2.3L</div><div class="stat-lbl">Steady-state fixed cost / month, early 2028</div></div>
+      <div class="card"><div class="stat warn">₹37L</div><div class="stat-lbl">Break-even ARR — just above the base-case exit run-rate</div></div>
+    </div>
+
+    <p class="footnote">We finish the plan close to break-even but not quite through it. One additional institutional contract, or ~150 more international users, closes the gap. Every figure on these four slides holds at ₹22 per 12-minute voice session — <span class="hl">a number we measure in week one, before any of it is committed to.</span></p>
+  </div>
+</section>
+
+<!-- 16 — INSTITUTIONAL -->
+<section class="slide" data-title="Institutional">
+  <div class="slide-inner">
+    <div class="split" style="align-items:start">
+      <div>
+        <p class="eyebrow">The institutional motion</p>
+        <h2>Sell the bottleneck report,<br>never the ranking.</h2>
+        <p class="lede">Placement cells are judged on outcomes and currently measure attendance. We price per student, into the campus training budget that already exists — not as an unfamiliar flat SaaS line item.</p>
+        <table style="margin-top:24px">
+          <tbody>
+            <tr><td class="k">Champion</td><td>Training &amp; Placement Officer</td></tr>
+            <tr><td class="k">Economic buyer</td><td>Dean / Director / Trustee</td></tr>
+            <tr><td class="k">Budget line</td><td>Existing campus training &amp; assessment spend</td></tr>
+            <tr><td class="k">Decision window</td><td>March – June, for the AY starting July</td></tr>
+            <tr><td class="k">Deal size</td><td>₹1.5L (500 students) → ₹10L (2,000)</td></tr>
+            <tr><td class="k">Target, AY 27–28</td><td>2–4 signed. First two priced low, deliberately.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <p class="tiny" style="margin-bottom:12px">THE OBJECTION EVERY TPO WILL RAISE</p>
+        <div class="card" style="border-left:2px solid var(--shaky)">
+          <p style="font-size:16px;color:var(--paper)"><em class="q">"Can I see a ranked list of my students?"</em></p>
+        </div>
+        <p class="tiny" style="margin:22px 0 12px">THE ANSWER, MEMORISED</p>
+        <div class="card edge-solid">
+          <p style="font-size:15px;line-height:1.6">No — and that refusal is why the data is worth anything. The moment a student thinks this reports on them, they perform instead of being honest, and you get the same useless number your current assessment gives you.<br><br>What you get instead is more actionable: <span class="hl">61% of this batch is blocked on the same four probability concepts</span>, and your data track has 8% coverage against your SDE track's 40%. That tells you what to teach next week. A ranking tells you who to worry about, which you already know.</p>
+        </div>
+        <p class="footnote">This converts a philosophical constraint into a positioning advantage and a privacy guarantee. It goes on the pricing page, not in a footnote.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 17 — REVENUE -->
+<section class="slide" data-title="Revenue">
+  <div class="slide-inner">
+    <p class="eyebrow">Revenue model · bottoms-up</p>
+    <h2>Cumulative through March 2028.</h2>
+
+    <div class="scenarios" style="margin-top:26px">
+      <div class="sc">
+        <div class="sc-name">Low</div>
+        <div class="sc-fig">₹6.4L</div>
+        <dl>
+          <div><span>Paying students</span><b>225</b></div>
+          <div><span>International</span><b>41</b></div>
+          <div><span>Institutions</span><b>1</b></div>
+          <div><span>Exit run-rate</span><b>~₹9L</b></div>
+        </dl>
+      </div>
+      <div class="sc base">
+        <div class="sc-name">Base · the number we present</div>
+        <div class="sc-fig sig">₹23.2L</div>
+        <dl>
+          <div><span>Paying students</span><b>705</b></div>
+          <div><span>International</span><b>150</b></div>
+          <div><span>Institutions</span><b>3</b></div>
+          <div><span>Exit run-rate</span><b>~₹33L</b></div>
+        </dl>
+      </div>
+      <div class="sc">
+        <div class="sc-name">High</div>
+        <div class="sc-fig">₹56.1L</div>
+        <dl>
+          <div><span>Paying students</span><b>1,700</b></div>
+          <div><span>International</span><b>375</b></div>
+          <div><span>Institutions</span><b>6</b></div>
+          <div><span>Exit run-rate</span><b>~₹78L</b></div>
+        </dl>
+      </div>
+    </div>
+
+    <table style="margin-top:30px">
+      <thead><tr><th>Base case</th><th style="text-align:right">Jan–Jun 27</th><th style="text-align:right">Jul 27–Mar 28</th><th style="text-align:right">Total</th></tr></thead>
+      <tbody>
+        <tr><td>India B2C</td><td class="n" style="text-align:right">₹1.4L</td><td class="n" style="text-align:right">₹9.9L</td><td class="n" style="text-align:right">₹11.3L</td></tr>
+        <tr><td>International B2C</td><td class="n" style="text-align:right">₹0.6L</td><td class="n" style="text-align:right">₹3.8L</td><td class="n" style="text-align:right">₹4.4L</td></tr>
+        <tr><td>Institutional</td><td class="n" style="text-align:right">—</td><td class="n" style="text-align:right">₹7.5L</td><td class="n" style="text-align:right">₹7.5L</td></tr>
+        <tr class="total"><td>Revenue</td><td class="n" style="text-align:right">₹2.0L</td><td class="n" style="text-align:right">₹21.2L</td><td class="n" style="text-align:right">₹23.2L</td></tr>
+      </tbody>
+    </table>
+
+    <p class="kicker">Year one is not a revenue story and we won't pretend it is. It's a <span class="hl">validity</span> story: outcome data, activation rate, measured cost per session, and two or three institutional references. Institutional is 35% of base revenue from three contracts. International is 18% for about 5% of the build.</p>
+  </div>
+</section>
+
+<!-- 18 — ORIGIN -->
+<section class="slide" data-title="Origin">
+  <div class="slide-inner">
+    <div class="split">
+      <div>
+        <p class="eyebrow">Why this exists</p>
+        <h2>Fifteen rejections in one internship season.</h2>
+        <p class="lede">I completed every standard preparation resource. In almost every interview, a question exposed a conceptual gap I did not know I had.</p>
+        <p class="lede" style="margin-top:18px">After two graduate courses in Educational Technology on adaptive tutoring systems, I built the diagnostic engine I needed and ran my own preparation through it. This deck is the plan to put it in front of everyone else.</p>
+      </div>
+      <div class="grid" style="gap:14px">
+        <div class="card"><div class="stat sig">566</div><div class="stat-lbl">Concepts, hand-authored &amp; validated</div></div>
+        <div class="card"><div class="stat sig">847</div><div class="stat-lbl">Prerequisite links · acyclic, deduplicated</div></div>
+        <div class="card"><div class="stat sig">655</div><div class="stat-lbl">Automated tests green</div></div>
+        <div class="card"><div class="stat">1</div><div class="stat-lbl">External users. That is the problem this plan solves.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 19 — ASK -->
+<section class="slide" data-title="The ask">
+  <div class="slide-inner">
+    <div class="ask-grid">
+      <div>
+        <p class="eyebrow">The ask</p>
+        <h2>₹18 – 25 lakh<br>for 18 months.</h2>
+        <p class="lede">Enough to reach the March 2028 base case with a small margin for the voice-cost measurement coming in worse than modelled.</p>
+        <table style="margin-top:26px">
+          <thead><tr><th>Use of funds</th><th style="text-align:right">Monthly, at base</th></tr></thead>
+          <tbody>
+            <tr><td>Voice COGS</td><td class="n" style="text-align:right">₹8k → ₹45k</td></tr>
+            <tr><td>Infrastructure &amp; vendor minimums</td><td class="n" style="text-align:right">₹8–15k</td></tr>
+            <tr><td>One engineer, from Q2 2027</td><td class="n" style="text-align:right">₹80k–1.2L</td></tr>
+            <tr><td>Campus travel, design, tooling</td><td class="n" style="text-align:right">₹15–25k</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <p class="tiny" style="margin-bottom:14px">WHAT IT BUYS, IN VERIFIABLE MILESTONES</p>
+        <div class="buy">
+          <div><span class="tick">→</span><p><span class="hl">Dec 2026</span> — voice sessions live, with a measured cost per session and 30 students' worth of observed first sessions behind the design.</p></div>
+          <div><span class="tick">→</span><p><span class="hl">Feb 2027</span> — first revenue, India and international, with the referral loop instrumented.</p></div>
+          <div><span class="tick">→</span><p><span class="hl">Jun 2027</span> — 2–4 institutional contracts signed for the academic year.</p></div>
+          <div><span class="tick">→</span><p><span class="hl">Mar 2028</span> — ~₹33L run-rate, ~700 paying students, and the first real outcome dataset linking diagnosed gaps to interview results.</p></div>
+        </div>
+        <p class="tiny" style="margin:30px 0 12px">WHAT WOULD MAKE US WRONG</p>
+        <div class="buy">
+          <div><span class="tick" style="color:var(--blocked)">×</span><p>Phase 0 activation under 40% → the diagnosis isn't landing. Stop and rework before writing voice code.</p></div>
+          <div><span class="tick" style="color:var(--blocked)">×</span><p>Measured session cost above ₹40 for 12 minutes → India goes free-tier-led and institutional-funded; international leads.</p></div>
+          <div><span class="tick" style="color:var(--blocked)">×</span><p>Students activate but don't return in week two → we've built a diagnostic, not a learning product. The study plan becomes existential.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="endline" style="margin-top:48px">Learnify finds the gaps you don't know you have — and proves you've closed them.</p>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+  /* ── graph demo ─────────────────────────────────────── */
+  var nodes = Array.prototype.slice.call(document.querySelectorAll('.gnode'));
+  var edges = Array.prototype.slice.call(document.querySelectorAll('.gedge'));
+  var fixBtn = document.getElementById('fix');
+  var resetBtn = document.getElementById('reset');
+  var note = document.getElementById('note');
+  var timers = [];
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var BROKEN = "Probability decayed four months ago. Six concepts downstream are now untrustworthy — and the student has no idea why Naive Bayes keeps going wrong.";
+  var FIXED  = "Six concepts recovered. None of them were re-tested, and none of them were ever forgotten — their prerequisite was.";
+
+  function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
+
+  function setState(id, cls){
+    nodes.forEach(function(n){
+      if(n.dataset.id !== id) return;
+      n.classList.remove('s-ok','s-risk','s-bad');
+      n.classList.add(cls, 'pulse');
+      setTimeout(function(){ n.classList.remove('pulse'); }, 620);
+    });
+    edges.forEach(function(e){
+      if(e.dataset.to !== id) return;
+      e.classList.remove('e-ok','e-risk');
+      e.classList.add(cls === 's-ok' ? 'e-ok' : 'e-risk');
+    });
+  }
+
+  function broken(){
+    clearTimers();
+    setState('prob','s-bad');
+    ['rv','bayes','exp','nb','mle','logreg','gmm'].forEach(function(id){ setState(id,'s-risk'); });
+    note.textContent = BROKEN;
+    note.classList.remove('live');
+    fixBtn.disabled = false;
+  }
+
+  function repair(){
+    clearTimers();
+    fixBtn.disabled = true;
+    note.textContent = "Restudying Probability…";
+    note.classList.remove('live');
+    var step = reduced ? 0 : 320;
+    var waves = [['prob'],['rv','bayes'],['exp','nb'],['mle'],['logreg','gmm']];
+    waves.forEach(function(wave, i){
+      timers.push(setTimeout(function(){
+        wave.forEach(function(id){ setState(id,'s-ok'); });
+      }, i * step));
+    });
+    timers.push(setTimeout(function(){
+      note.textContent = FIXED;
+      note.classList.add('live');
+    }, waves.length * step + 120));
+  }
+
+  if(fixBtn){
+    broken();
+    fixBtn.addEventListener('click', repair);
+    resetBtn.addEventListener('click', broken);
+  }
+
+  /* ── deck navigation ────────────────────────────────── */
+  var deck = document.getElementById('deck');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var rail = document.getElementById('rail');
+  var cur = document.getElementById('cur');
+  var progress = document.getElementById('progress');
+  document.getElementById('tot').textContent = String(slides.length).padStart(2,'0');
+
+  slides.forEach(function(s, i){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', (i+1) + '. ' + (s.dataset.title || 'Slide'));
+    b.addEventListener('click', function(){
+      s.scrollIntoView({behavior: reduced ? 'auto' : 'smooth'});
+    });
+    rail.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(rail.children);
+
+  var active = 0;
+  function mark(i){
+    if(i === active) return;
+    active = i;
+    dots.forEach(function(d, j){ d.setAttribute('aria-current', j === i ? 'true' : 'false'); });
+    cur.textContent = String(i+1).padStart(2,'0');
+    progress.style.width = ((i+1) / slides.length * 100) + '%';
+  }
+  mark(0);
+
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting) mark(slides.indexOf(en.target));
+      });
+    }, {root: deck, threshold: 0.55});
+    slides.forEach(function(s){ io.observe(s); });
+  }
+
+  document.addEventListener('keydown', function(e){
+    if(e.target.tagName === 'BUTTON' && (e.key === ' ' || e.key === 'Enter')) return;
+    var next = null;
+    if(e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') next = active + 1;
+    if(e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') next = active - 1;
+    if(e.key === 'Home') next = 0;
+    if(e.key === 'End') next = slides.length - 1;
+    if(next === null) return;
+    next = Math.max(0, Math.min(slides.length - 1, next));
+    e.preventDefault();
+    slides[next].scrollIntoView({behavior: reduced ? 'auto' : 'smooth'});
+  });
+})();
+</script>
+</body>
+</html>
