@@ -40,19 +40,30 @@ await page.waitForTimeout(1800);
 await page.screenshot({ path: "shot-2-focused.png" });
 console.log("2. clicked a node");
 
+// browse tab - the searchable index of every concept
+await page.getByRole("button", { name: "Browse", exact: true }).click();
+await page.waitForSelector(".browse-row", { timeout: 15000 });
+console.log(`3. browse rendered: ${await page.locator(".browse-row").count()} rows`);
+await page.locator("input.search").fill("bayes");
+await page.waitForTimeout(300);
+const found = await page.locator(".browse-name > span:first-child").allTextContents();
+console.log(`   search "bayes" -> ${found.join(", ")}`);
+await page.screenshot({ path: "shot-3-browse.png" });
+await page.getByRole("button", { name: "Clear" }).click();
+
 // recommendations tab
 await page.getByRole("button", { name: "What next" }).click();
 await page.waitForSelector(".rec", { timeout: 15000 });
 await page.waitForTimeout(600);
-await page.screenshot({ path: "shot-3-recommendations.png" });
-console.log("3. recommendations rendered");
+await page.screenshot({ path: "shot-4-recommendations.png" });
+console.log("4. recommendations rendered");
 
 // readiness tab
 await page.getByRole("button", { name: "Readiness" }).click();
 await page.waitForSelector(".big-number", { timeout: 15000 });
 await page.waitForTimeout(600);
-await page.screenshot({ path: "shot-4-readiness.png" });
-console.log("4. readiness rendered");
+await page.screenshot({ path: "shot-5-readiness.png" });
+console.log("5. readiness rendered");
 
 console.log(errors.length ? `CONSOLE ERRORS:\n  ${errors.join("\n  ")}` : "no console errors");
 await browser.close();

@@ -310,7 +310,9 @@ is deliberately loud in the log so you never lose work believing it was saved.
 ## What to do first
 
 1. Click a concept in the graph. The panel on the right shows **Mastery** and **Importance**;
-   everything else is under **Advanced**.
+   everything else is under **Advanced**. To find a specific topic rather than pan for it, use
+   the **Browse** tab — search all 566 concepts and filter by section, competency, status, or
+   whether the prerequisites are already met.
 2. Hit **Start assessment**. You get three prompts to copy into any LLM chat window — study,
    assess, then wrap up. No API key; nothing is metered.
 3. Paste the JSON the LLM returns into the box. That is the only thing in the application that

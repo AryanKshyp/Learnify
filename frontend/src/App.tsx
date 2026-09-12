@@ -15,6 +15,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { api } from "./api/client";
 import type { GraphOut, Role } from "./api/types";
+import { Browse } from "./components/Browse";
 import { GraphView } from "./components/GraphView";
 import { NodeInspector } from "./components/NodeInspector";
 import { Overview } from "./components/Overview";
@@ -22,12 +23,16 @@ import { Recommendations } from "./components/Recommendations";
 import { SessionFlow } from "./components/SessionFlow";
 import { DOMAINS, sectionName } from "./lib/domain";
 
-type Tab = "graph" | "recommendations" | "overview";
+type Tab = "graph" | "browse" | "recommendations" | "overview";
 
 export default function App() {
   const [tab, setTab] = useState<Tab>("graph");
   const [graph, setGraph] = useState<GraphOut | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
+  // Every section, fetched once. `graph.sections` narrows to whatever the current filter
+  // returned, so using it to build the section filter would leave you unable to switch
+  // sections once you picked one.
+  const [allSections, setAllSections] = useState<string[]>([]);
   const [role, setRole] = useState<string | undefined>();
   const [section, setSection] = useState<string | undefined>();
   const [focusId, setFocusId] = useState<string | null>(null);
@@ -38,6 +43,7 @@ export default function App() {
 
   useEffect(() => {
     api.roles().then(setRoles).catch((e) => setError(String(e)));
+    api.sections().then(setAllSections).catch((e) => setError(String(e)));
   }, []);
 
   useEffect(() => {
@@ -73,6 +79,9 @@ export default function App() {
         <nav className="tabs">
           <button className={tab === "graph" ? "active" : ""} onClick={() => setTab("graph")}>
             Graph
+          </button>
+          <button className={tab === "browse" ? "active" : ""} onClick={() => setTab("browse")}>
+            Browse
           </button>
           <button
             className={tab === "recommendations" ? "active" : ""}
@@ -122,7 +131,7 @@ export default function App() {
             All sections
           </button>
           {DOMAINS.map((domain) => {
-            const available = domain.sections.filter((s) => graph?.sections.includes(s));
+            const available = domain.sections.filter((s) => allSections.includes(s));
             if (available.length === 0) return null;
             return (
               <div className="domain-group" key={domain.label}>
@@ -153,6 +162,19 @@ export default function App() {
             />
           )}
           {tab === "graph" && !graph && <div className="spinner">Loading graph…</div>}
+          {tab === "browse" && graph && (
+            <Browse
+              nodes={graph.nodes}
+              section={section}
+              availableSections={allSections}
+              focusId={focusId}
+              onSectionChange={setSection}
+              onInspect={setFocusId}
+              onShowInGraph={select}
+              onAssess={assess}
+            />
+          )}
+          {tab === "browse" && !graph && <div className="spinner">Loading concepts…</div>}
           {tab === "recommendations" && (
             <Recommendations
               roles={roles}
