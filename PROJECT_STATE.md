@@ -4,14 +4,14 @@
 the end of any session that changes status, makes a decision, or finds an issue. Durable principles
 belong in [CLAUDE.md](CLAUDE.md); system design belongs in [ARCHITECTURE.md](ARCHITECTURE.md).
 
-**Last updated:** 2026-08-07
+**Last updated:** 2026-09-14
 
 ---
 
 ## Current position
 
 **ALL NINE STAGES COMPLETE (0–8).** The build plan in `BUILD_SPEC.md` Part H is finished.
-**601 tests green**, ruff and layer contracts clean, frontend verified in a real browser with
+**664 tests green**, ruff and layer contracts clean, frontend verified in a real browser with
 0 console errors, and the README's steps reproduce a running system.
 
 **The assessment engine is now prompt-driven and complete.** The application generates the
@@ -34,7 +34,7 @@ score it. See "Assessment prompts" below.
 
 Verified at each stage close, not assumed:
 
-- `pytest` → **655 passed**. `ruff check .` → clean. `lint-imports` → 3 contracts kept.
+- `pytest` → **664 passed**. `ruff check .` → clean. `lint-imports` → 3 contracts kept.
 - The purity contract is **proven to bite**: injecting `sqlalchemy`/`datetime`/`random` imports
   into `knowledgeos/engine` fails all three with line numbers, exit 1.
 - `python build_graph.py` → `ERRORS: 0, WARNINGS: 0`; `python make_fixture.py` → `ERRORS: 0`.
@@ -199,11 +199,67 @@ and is gitignored.
 | 2026-08-01 | **Cold defaults applied on READ, not pre-seeded as rows.** | Adding curriculum nodes then never requires a migration of user state: a new node is simply cold until assessed. `get()` returns `None` for "no record" so the overlay, not the store, owns the default. |
 | 2026-08-01 | **Postgres persistence deferred until the daemon runs** (see known issue #8). | Writing storage code that cannot be executed would mean reporting Stage 2 as done on the strength of untested code. Stage 3 is pure and needs no DB, so the critical path is unaffected. |
 | 2026-08-01 | **Engine takes `days_elapsed: float` and returns *days until review*, never a timestamp.** | The purity contract forbids `datetime` in `engine/`, which forced the cleaner design: time is an input, so every score is reproducible from stored evidence. The caller converts to a timestamp. |
+| 2026-09-14 | **Session role is chosen by the learner; the default is the node's most *important* role, not its highest-*ranked* one.** | Rank alone meant every node tagged for AI Research (rank 1) was assessed at the AI Research depth however marginal it was to that role — `dsa-big-o` was taught to `working` (importance 0.60) instead of `derivation` (importance 0.95 for Software Engineering). The learner targets six overlapping roles and only they know which one a session serves, so `POST /sessions` now takes an optional `role_id`; the importance-ranked default only fires when none is given. Rule written up as `BUILD_SPEC.md` C.7.1. |
 | 2026-08-01 | **Purity contract relaxed to `allow_indirect_imports`.** | The engine legitimately imports the Layer 2 `Status` type, whose module references `datetime`/`uuid` as *field types*. That transitive edge is not a clock read. Direct imports of `datetime`/`random`/`os` in engine code are still rejected — re-verified by injection after the change. |
 
 ---
 
 ## Known issues
+
+### 15. The Postgres tests deleted the development database — **fixed 2026-09-14**
+`tests/state/test_postgres.py`'s `engine` fixture connected to `settings.database_url` — the same
+database the running app uses — and the `states` fixture called `repo.clear()` (`DELETE FROM
+session_history; DELETE FROM knowledge_state`) before **and** after each of its 23 tests. There
+was no separate test database. Every full `pytest` run therefore wiped all real assessment
+history, silently, and had done so since the Postgres tests landed: the container log carries the
+same constraint-violation signature on 08-01, 08-04, 08-07, 08-13, 09-05, 09-06, 09-09, 09-10,
+09-11, 09-12 and 09-14. Two real sessions (`dsa-big-o`, `dsa-arrays-strings`) were destroyed on
+2026-09-14; they are not recoverable — there are no backups, WAL archiving is not configured, and
+no endpoint exposes the stored `schema_b` needed to replay them.
+
+Fixed with `settings.test_database_url` (default `…/knowledgeos_test`), which the fixture creates
+via the `postgres` maintenance database if absent, plus two refusals **before any connection is
+opened**: the database name must end in `_test`, and it must differ from `database_url`. The guard
+is the durable half — a separate URL alone would be one mis-set env var away from the same loss.
+
+Verified: a sentinel row written to the dev database survives a full `pytest` run (664 passed);
+pointing `TEST_DATABASE_URL` at `knowledgeos` fails every test at setup with
+`refusing to run: … does not end in '_test'` and deletes nothing.
+
+**Unrelated finding, still open.** The backend serving port 8000 on 2026-09-12–14 was started by
+hand under system Python (not `backend/.venv`) and was running code old enough that only `states`
+was wired to Postgres — `session_history` was in-memory, so `/sessions` reported two records that
+no longer existed in the database. Worth knowing when a symptom looks impossible: check the
+process was started from `run.cmd` and is running current code before trusting what it reports.
+
+### 14. Every prompt was framed for AI Research — **fixed 2026-09-14**
+`select_role_context` picked the role with the lowest `priority_rank`, and AI Research is rank 1.
+Importance and required depth were never consulted, so any node AI Research touched was taught
+and tested through that lens at that depth. Studying Big-O as a Software Engineering candidate
+produced an AI-Research-framed prompt targeting `working` when the role needs `derivation` —
+under-preparing the learner on their most important algorithms topic, which is the exact failure
+this system exists to prevent.
+
+Fixed in three parts:
+
+- `POST /sessions` accepts an optional `role_id`; `AssessmentService.generate` and
+  `select_role_context` thread it through. A role the node is not tagged for is a 422
+  (`RoleNotApplicableError`) naming the roles that do apply; an unknown role is the existing 404.
+- The default became "most important role", ties on `priority_rank` then `role_id` — still fully
+  deterministic. `dsa-big-o` now defaults to software-engineering / `derivation`.
+- `SessionFlow` shows an **Assessing for** selector listing the node's roles with their depths,
+  defaulted from the global role filter when the node serves it. That filter existed already but
+  was never passed to the session — the one place it mattered most.
+
+Verified: 664 tests green; `dsa-big-o` over HTTP returns software-engineering/`derivation` by
+default, ai-research/`working` when asked for; driven in headless Chrome (`frontend/drive-role.mjs`)
+switching the role and re-reading the generated prompt's depth, 0 console errors.
+
+**Consequence to be aware of:** nodes are now assessed by default at the depth of whichever role
+needs them most, which can be a role low on the priority list — `prob-axioms` defaults to
+finance-quant / `derivation` rather than ai-research / `deep`. That errs toward over-depth, which
+costs time; the previous behaviour erred toward under-depth, which costs the offer. Selecting a
+role in the dropdown removes the ambiguity entirely.
 
 ### 1. `build_graph.py` crashed when it found errors — **fixed 2026-07-31**
 The script printed `✗`/`!` and interpolated node names into error strings, which Windows' cp1252

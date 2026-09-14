@@ -36,14 +36,50 @@ NOW = datetime(2026, 8, 1, 12, 0, tzinfo=UTC)
 
 @pytest.fixture(scope="session")
 def engine():
+    """A connection to the **test** database, created if it does not exist.
+
+    Deliberately not `settings.database_url`. The fixtures below truncate both tables around
+    every test, so pointing this at the development database deletes real assessment history —
+    which it did, unnoticed, on every full test run between 2026-08-01 and 2026-09-14. The
+    guard below is the part that matters: it makes the mistake unrepeatable even if someone
+    later edits the setting or exports the wrong env var.
+    """
+    url = sa.engine.make_url(settings.test_database_url)
+    if not (url.database or "").endswith("_test"):
+        pytest.fail(
+            "refusing to run: test_database_url points at "
+            f"{url.database!r}, which does not end in '_test'. These tests DELETE every row "
+            "in knowledge_state and session_history."
+        )
+    if url.render_as_string(hide_password=False) == settings.database_url:
+        pytest.fail("refusing to run: test_database_url equals database_url")
+
     try:
-        engine = sa.create_engine(settings.database_url, pool_pre_ping=True)
+        _create_database_if_absent(url)
+        engine = sa.create_engine(url, pool_pre_ping=True)
         with engine.connect() as connection:
             connection.execute(sa.text("select 1"))
     except Exception as exc:  # pragma: no cover - environment dependent
         pytest.skip(f"Postgres unavailable ({exc.__class__.__name__}); run `docker compose up -d`")
-    metadata.create_all(engine)  # no-op when alembic has already run
+    metadata.create_all(engine)  # the test database has no alembic history of its own
     return engine
+
+
+def _create_database_if_absent(url) -> None:
+    """`CREATE DATABASE` cannot run inside a transaction, hence AUTOCOMMIT.
+
+    Connects to the `postgres` maintenance database, which always exists, so a fresh clone
+    needs no manual setup step before `pytest` works.
+    """
+    admin = sa.create_engine(url.set(database="postgres"), isolation_level="AUTOCOMMIT")
+    with admin.connect() as connection:
+        exists = connection.execute(
+            sa.text("select 1 from pg_database where datname = :name"),
+            {"name": url.database},
+        ).scalar()
+        if not exists:
+            connection.execute(sa.text(f'create database "{url.database}"'))
+    admin.dispose()
 
 
 @pytest.fixture

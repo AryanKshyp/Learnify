@@ -182,7 +182,7 @@ Generated on command by the application from curriculum + current state. Tells t
     "competency": "transformers"
   },
   "role_context": {
-    "role_id": "ai-research",           // highest-priority role tagging this node (see C.8 selection rule)
+    "role_id": "ai-research",           // the role this session is for (see the selection rule below)
     "importance": 0.95,
     "required_depth": "derivation"      // engine should probe to at least this depth
   },
@@ -203,6 +203,30 @@ Generated on command by the application from curriculum + current state. Tells t
   }
 }
 ```
+
+### C.7.1 `role_context` selection rule
+
+A node is shared across roles and is worth a different `importance` and `required_depth` to
+each — that is the point of shared nodes (A.5.4). Exactly one role is chosen per session, and
+it decides the depth taught and probed and the lens the whole prompt is written through.
+
+1. **An explicitly requested role wins.** `POST /sessions` accepts an optional `role_id`. The
+   learner is preparing for six overlapping roles, and only they know which one today's session
+   serves; the graph cannot infer it. If the node is not tagged for that role there is no depth
+   to target and no importance to weigh, so the request is rejected (422) rather than falling
+   back — and the applicable roles are named in the error.
+2. **Otherwise, the node's most important role**, ties broken on the role's `priority_rank`,
+   then on `role_id`. Deterministic: the same node always produces the same Schema A.
+
+Rule 2 was originally "the highest-priority role tagging the node", which was wrong. Rank alone
+meant every node tagged for AI Research (rank 1) was assessed through the AI Research lens at
+the AI Research depth however marginal it was to that role. `dsa-big-o` is the clean example —
+importance 0.60 / `working` for AI Research against 0.95 / `derivation` for Software
+Engineering — and rank picked the shallower one, leaving a Software Engineering candidate
+under-prepared on their most important algorithms topic.
+
+Where no role is given, ranking by importance errs toward over-depth. That is the cheaper
+mistake: over-depth costs time, under-depth costs the offer.
 
 ### C.8 Schema B — Assessment OUTPUT (assessment engine → application)
 The **only** way knowledge state changes. The application validates it strictly, then feeds the scores into the deterministic engine. The engine — not the LLM — computes mastery from these observations.
@@ -377,7 +401,7 @@ Every schema is versioned (`schema_version`). Validation is strict and fails lou
 
 ### Stage 4 — Assessment interface (Layer 4 boundary)
 **Objective:** Generate Schema A; validate + ingest Schema B; drive the update pipeline.
-**Deliverables:** Schema A generator (C.7) that selects `role_context` as the **highest-priority role tagging the node** and pulls prerequisite context from the graph; strict Schema B validator (C.8 rules); ingestion pipeline: validate → run engine (Stage 3) → persist new state → append history → recompute retention/propagation/readiness/priorities; schema versioning + clear rejection errors.
+**Deliverables:** Schema A generator (C.7) that selects `role_context` per the rule in C.7.1 and pulls prerequisite context from the graph; strict Schema B validator (C.8 rules); ingestion pipeline: validate → run engine (Stage 3) → persist new state → append history → recompute retention/propagation/readiness/priorities; schema versioning + clear rejection errors.
 **Success:** any concept yields a valid Schema A; a valid Schema B updates state deterministically and appends history; malformed / mismatched-`session_id` / out-of-range Schema B is rejected with a precise message; a full round-trip (generate A → feed mock B → state changes) passes and is reproducible.
 **Do NOT:** build the assessment engine, questioning, or teaching — that is a separate external project.
 

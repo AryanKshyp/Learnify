@@ -97,10 +97,19 @@ export const api = {
 
   unexplored: (limit = 20) => request<NodeSummary[]>(`/unexplored${query({ limit })}`),
 
-  openSession: (nodeId: string, minQuestions = 5) =>
+  /**
+   * `roleId` is the role the session is for. It decides the depth taught and probed, so it is
+   * sent explicitly rather than left to the server's default whenever the learner has picked
+   * one — the same concept is a passing mention for one role and a derivation for another.
+   */
+  openSession: (nodeId: string, roleId?: string, minQuestions = 5) =>
     request<Record<string, unknown>>("/sessions", {
       method: "POST",
-      body: JSON.stringify({ node_id: nodeId, min_questions: minQuestions }),
+      body: JSON.stringify({
+        node_id: nodeId,
+        min_questions: minQuestions,
+        ...(roleId ? { role_id: roleId } : {}),
+      }),
     }),
 
   /** The prompt to paste into an external LLM. The app owns these, not the model. */

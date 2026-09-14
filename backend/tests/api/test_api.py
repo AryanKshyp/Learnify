@@ -187,7 +187,47 @@ class TestSessionLoop:
         body = response.json()
         assert body["schema"] == "knowledgeos.assessment.input"
         assert body["target"]["node_id"] == "prob-axioms"
-        assert body["role_context"]["role_id"] == "ai-research"
+        # No role asked for, so the node's most important one: finance-quant at 0.90.
+        assert body["role_context"]["role_id"] == "finance-quant"
+
+    def test_generate_schema_a_for_an_explicit_role(self, client):
+        response = client.post(
+            "/sessions", json={"node_id": "prob-axioms", "role_id": "software-engineering"}
+        )
+        assert response.status_code == 201
+        body = response.json()
+        assert body["role_context"]["role_id"] == "software-engineering"
+        assert body["role_context"]["required_depth"] == "awareness"
+        assert body["assessment_directives"]["must_probe_depth"] == "awareness"
+
+    def test_prompt_follows_the_chosen_role(self, client):
+        """The role decides the depth the prompt teaches and probes to."""
+        prompts = {}
+        for role_id in ("software-engineering", "finance-quant"):
+            schema_a = client.post(
+                "/sessions", json={"node_id": "prob-axioms", "role_id": role_id}
+            ).json()
+            prompts[role_id] = client.get(
+                f"/sessions/open/{schema_a['session_id']}/prompt?phase=assess"
+            ).json()["prompt"]
+        assert "`awareness`" in prompts["software-engineering"]
+        assert "`derivation`" in prompts["finance-quant"]
+        assert "software-engineering" in prompts["software-engineering"]
+
+    def test_role_the_node_does_not_serve_is_rejected(self, client):
+        response = client.post(
+            "/sessions", json={"node_id": "ml-naive-bayes", "role_id": "finance-quant"}
+        )
+        assert response.status_code == 422
+        error = response.json()["error"]
+        assert error["type"] == "RoleNotApplicableError"
+        assert "data-science" in error["valid_roles"]
+
+    def test_unknown_role_is_a_404(self, client):
+        response = client.post(
+            "/sessions", json={"node_id": "prob-axioms", "role_id": "astronaut"}
+        )
+        assert response.status_code == 404
 
     def test_open_sessions_are_listed_and_retrievable(self, client):
         schema_a = client.post("/sessions", json={"node_id": "prob-axioms"}).json()

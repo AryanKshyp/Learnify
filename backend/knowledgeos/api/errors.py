@@ -20,6 +20,7 @@ from fastapi.responses import JSONResponse
 
 from knowledgeos.assessment import (
     AssessmentError,
+    RoleNotApplicableError,
     SchemaValidationError,
     SessionMismatchError,
     UnknownNodeReferenceError,
@@ -67,6 +68,19 @@ def register_error_handlers(app: FastAPI) -> None:
             status_code=status.HTTP_409_CONFLICT,
             content=error_body(
                 exc, field=exc.field, expected=str(exc.expected), received=str(exc.received)
+            ),
+        )
+
+    @app.exception_handler(RoleNotApplicableError)
+    async def _role_not_applicable(
+        request: Request, exc: RoleNotApplicableError
+    ) -> JSONResponse:
+        # 422 rather than 404: both the node and the role exist, the combination does not.
+        # The applicable roles come back so the client can correct the request directly.
+        return JSONResponse(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            content=error_body(
+                exc, node_id=exc.node_id, role_id=exc.role_id, valid_roles=exc.valid_roles
             ),
         )
 

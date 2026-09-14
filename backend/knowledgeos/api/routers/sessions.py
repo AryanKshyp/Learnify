@@ -46,7 +46,10 @@ def open_session(request: SessionRequest, context: Context) -> dict[str, Any]:
     engine is written against.
     """
     schema_a = context.service.generate(
-        request.node_id, now=context.now, min_questions=request.min_questions
+        request.node_id,
+        now=context.now,
+        min_questions=request.min_questions,
+        role_id=request.role_id,
     )
     return schema_a.to_payload()
 

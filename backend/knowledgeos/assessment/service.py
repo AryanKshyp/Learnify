@@ -35,6 +35,7 @@ from knowledgeos.state import (
 )
 
 from .errors import (
+    RoleNotApplicableError,
     SchemaValidationError,
     SessionMismatchError,
     UnknownNodeReferenceError,
@@ -149,20 +150,52 @@ class AssessmentService:
 
     # ------------------------------------------------------------- Schema A
 
-    def select_role_context(self, node_id: str) -> RoleContext:
-        """The highest-priority role tagging this node (C.7 selection rule).
+    def select_role_context(
+        self, node_id: str, *, role_id: str | None = None
+    ) -> RoleContext:
+        """Which role this session is *for* (C.7 selection rule).
 
-        Deterministic even when several roles share a rank: ties break on role_id, so the same
-        node always produces the same Schema A.
+        An explicit `role_id` wins outright. The learner is preparing for six overlapping
+        roles and only they know which one today's session serves; a node's importance to the
+        role they are actually interviewing for is not something the graph can infer.
+
+        With no explicit role, the node's **most important** role is chosen, ties breaking on
+        priority rank and then `role_id` — so the same node always produces the same Schema A.
+
+        Ranking by importance rather than by priority rank is deliberate, and was a fix: rank
+        alone meant every node tagged for AI Research (rank 1) was taught through the AI
+        Research lens at the AI Research depth, however marginal it was to that role. Big-O is
+        the clean example — importance 0.60 / `working` for AI Research, 0.95 / `derivation`
+        for Software Engineering — and rank picked the shallower one, leaving a Software
+        Engineering candidate under-prepared on their single most important algorithms topic.
+
+        When nothing is specified, erring toward the role that needs this node *most* errs
+        toward over-depth. That is the cheaper mistake: over-depth costs time, under-depth
+        costs the offer, and the latter is the failure this system exists to prevent.
         """
         node = self._curriculum.node(node_id)
         if not node.roles:
             raise ValueError(f"node {node_id!r} serves no roles and cannot be assessed")
 
-        best = min(
-            node.roles,
-            key=lambda r: (self._curriculum.role(r.role_id).priority_rank, r.role_id),
-        )
+        if role_id is not None:
+            self._curriculum.role(role_id)  # RoleNotFoundError (404) on an unknown role
+            requirement = node.requirement_for(role_id)
+            if requirement is None:
+                raise RoleNotApplicableError(
+                    node_id=node_id,
+                    role_id=role_id,
+                    valid_roles=[r.role_id for r in node.roles],
+                )
+            best = requirement
+        else:
+            best = min(
+                node.roles,
+                key=lambda r: (
+                    -r.importance,
+                    self._curriculum.role(r.role_id).priority_rank,
+                    r.role_id,
+                ),
+            )
         return RoleContext(
             role_id=best.role_id,
             importance=best.importance,
@@ -176,15 +209,20 @@ class AssessmentService:
         now: datetime,
         session_id: UUID | None = None,
         min_questions: int = 5,
+        role_id: str | None = None,
     ) -> SchemaA:
         """Build the Schema A for a node and open the session.
+
+        `role_id` names the role this session is for; omitted, it is selected per
+        `select_role_context`. It decides the depth taught and probed and the lens the whole
+        prompt is written through, so it is the one choice worth handing to the learner.
 
         Prerequisite context carries each direct prerequisite's intrinsic mastery so the
         external engine can distinguish "does not understand this" from "never learned what it
         rests on", and flag the latter upstream.
         """
         node = self._curriculum.node(node_id)
-        role_context = self.select_role_context(node_id)
+        role_context = self.select_role_context(node_id, role_id=role_id)
         state = self._overlay.state_for(node_id)
 
         elapsed = days_between(state.last_assessed_at, now)

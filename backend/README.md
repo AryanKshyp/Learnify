@@ -21,7 +21,8 @@ cp .env.example .env
 ## Commands
 
 ```bash
-pytest                 # test suite
+pytest                 # test suite (Postgres tests use the separate knowledgeos_test
+                       # database, created on first run - never your real data)
 pytest -k <pattern>    # a single test / subset
 ruff check .           # lint
 ruff format .          # format

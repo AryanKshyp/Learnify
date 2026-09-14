@@ -64,3 +64,22 @@ class UnknownNodeReferenceError(AssessmentError):
         self.node_ids = list(node_ids)
         joined = ", ".join(repr(n) for n in sorted(self.node_ids))
         super().__init__(f"{field} references unknown node(s): {joined}")
+
+
+class RoleNotApplicableError(AssessmentError):
+    """A session asked for a role the target node is not tagged for.
+
+    Not a 404 — both the node and the role exist; they simply do not meet. Assessing a node
+    "for" a role that does not want it has no depth to target and no importance to weigh, so
+    there is nothing sensible to fall back to. The roles that *do* apply are named, because the
+    caller is almost always one dropdown away from a valid request.
+    """
+
+    def __init__(self, *, node_id: str, role_id: str, valid_roles: list[str]) -> None:
+        self.node_id = node_id
+        self.role_id = role_id
+        self.valid_roles = sorted(valid_roles)
+        joined = ", ".join(repr(r) for r in self.valid_roles) or "none"
+        super().__init__(
+            f"node {node_id!r} is not tagged for role {role_id!r}; it serves: {joined}"
+        )

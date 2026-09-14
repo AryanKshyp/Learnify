@@ -191,6 +191,8 @@ export default function App() {
           {assessing ? (
             <SessionFlow
               nodeId={assessing}
+              role={role}
+              roles={roles}
               onDone={finish}
               onCancel={() => setAssessing(null)}
             />

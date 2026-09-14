@@ -15,6 +15,7 @@ engine consumes, so the engine itself stays reproducible.
 from . import prompts
 from .errors import (
     AssessmentError,
+    RoleNotApplicableError,
     SchemaValidationError,
     SessionMismatchError,
     UnknownNodeReferenceError,
@@ -56,6 +57,7 @@ __all__ = [
     "PendingSessionStore",
     "PrerequisiteContext",
     "RoleContext",
+    "RoleNotApplicableError",
     "SchemaA",
     "SchemaB",
     "SchemaValidationError",

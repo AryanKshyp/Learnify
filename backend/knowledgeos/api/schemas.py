@@ -188,6 +188,13 @@ class SessionRequest(BaseModel):
 
     node_id: str
     min_questions: int = Field(default=5, ge=1, le=50)
+    role_id: str | None = Field(
+        default=None,
+        description=(
+            "The role this session is for. Decides the depth taught and probed, and the lens "
+            "the prompt is written through. Omitted, the node's most important role is used."
+        ),
+    )
 
 
 class SessionRecordOut(BaseModel):

@@ -14,6 +14,7 @@ import pytest
 
 from knowledgeos.assessment import (
     AssessmentService,
+    RoleNotApplicableError,
     SchemaA,
     SchemaValidationError,
     SessionMismatchError,
@@ -21,7 +22,7 @@ from knowledgeos.assessment import (
     UnknownSessionError,
     days_between,
 )
-from knowledgeos.curriculum import fixture_repository
+from knowledgeos.curriculum import Depth, RoleNotFoundError, fixture_repository
 from knowledgeos.state import (
     InMemoryKnowledgeStateRepository,
     InMemorySessionHistoryRepository,
@@ -72,15 +73,55 @@ class TestSchemaAGeneration:
             assert schema_a.schema_version == 1
             assert schema_a.assessment_directives.must_probe_depth
 
-    def test_role_context_is_the_highest_priority_role(self, service, curriculum):
-        """C.7 selection rule."""
+    def test_role_context_defaults_to_the_most_important_role(self, service, curriculum):
+        """C.7 selection rule: highest importance, ties broken on priority rank."""
         for node in curriculum:
             schema_a = service.generate(node.node_id, now=NOW)
             chosen = schema_a.role_context.role_id
-            ranks = {
-                r.role_id: curriculum.role(r.role_id).priority_rank for r in node.roles
-            }
+            best = max(r.importance for r in node.roles)
+            assert schema_a.role_context.importance == best
+            tied = [r.role_id for r in node.roles if r.importance == best]
+            ranks = {r: curriculum.role(r).priority_rank for r in tied}
             assert ranks[chosen] == min(ranks.values())
+
+    def test_default_role_selection_is_deterministic(self, service, curriculum):
+        """Same node, same Schema A role — every time, or scores stop being comparable."""
+        for node in curriculum:
+            chosen = {
+                service.generate(node.node_id, now=NOW).role_context.role_id
+                for _ in range(3)
+            }
+            assert len(chosen) == 1
+
+    def test_explicit_role_overrides_the_default(self, service, curriculum):
+        """The learner, not the graph, says which role today's session is for."""
+        node = curriculum.node("prob-axioms")
+        for requirement in node.roles:
+            context = service.generate(
+                "prob-axioms", now=NOW, role_id=requirement.role_id
+            ).role_context
+            assert context.role_id == requirement.role_id
+            assert context.importance == requirement.importance
+            assert context.required_depth == requirement.required_depth
+
+    def test_explicit_role_sets_the_depth_to_probe(self, service):
+        """The depth follows the chosen role — this is the whole point of choosing."""
+        shallow = service.generate("prob-axioms", now=NOW, role_id="software-engineering")
+        deep = service.generate("prob-axioms", now=NOW, role_id="finance-quant")
+        assert shallow.assessment_directives.must_probe_depth == Depth.AWARENESS
+        assert deep.assessment_directives.must_probe_depth == Depth.DERIVATION
+
+    def test_role_the_node_does_not_serve_is_rejected(self, service):
+        """A node with no importance or depth for a role cannot be assessed for it."""
+        with pytest.raises(RoleNotApplicableError) as caught:
+            service.generate("ml-naive-bayes", now=NOW, role_id="finance-quant")
+        assert caught.value.node_id == "ml-naive-bayes"
+        assert "finance-quant" not in caught.value.valid_roles
+        assert "data-science" in caught.value.valid_roles
+
+    def test_unknown_role_is_a_curriculum_error(self, service):
+        with pytest.raises(RoleNotFoundError):
+            service.generate("prob-axioms", now=NOW, role_id="astronaut")
 
     def test_prerequisite_context_comes_from_the_graph(self, service, curriculum):
         schema_a = service.generate("ml-naive-bayes", now=NOW)

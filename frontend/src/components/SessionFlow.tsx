@@ -15,11 +15,15 @@
 import { useEffect, useState } from "react";
 
 import { ApiError, api } from "../api/client";
-import type { IngestResponse } from "../api/types";
+import type { IngestResponse, Role, RoleRequirement } from "../api/types";
 import { STATUS_LABEL, pct } from "../lib/domain";
 
 interface Props {
   nodeId: string;
+  /** The globally selected role, used as the default for this session when the node serves it. */
+  role: string | undefined;
+  /** Every role in the curriculum, for display names. */
+  roles: Role[];
   onDone: (result: IngestResponse) => void;
   onCancel: () => void;
 }
@@ -47,9 +51,14 @@ const STEPS: { phase: Phase; label: string; blurb: string }[] = [
   },
 ];
 
-export function SessionFlow({ nodeId, onDone, onCancel }: Props) {
+export function SessionFlow({ nodeId, role, roles, onDone, onCancel }: Props) {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [nodeName, setNodeName] = useState("");
+  // `undefined` = the node's roles have not loaded yet, so we do not know what to ask for;
+  // `null` = ask for nothing and let the application pick the node's most important role.
+  const [chosenRole, setChosenRole] = useState<string | null | undefined>(undefined);
+  const [nodeRoles, setNodeRoles] = useState<RoleRequirement[]>([]);
+  const [usedRole, setUsedRole] = useState<string | null>(null);
   const [step, setStep] = useState<Phase>("study");
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(true);
@@ -59,16 +68,20 @@ export function SessionFlow({ nodeId, onDone, onCancel }: Props) {
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // open the session once
+  // Which roles this node is even tagged for, and at what depth. Fetched before the session
+  // is opened: asking for a role the node does not serve is a hard rejection, so the default
+  // is only applied once we know it is valid.
   useEffect(() => {
     let cancelled = false;
+    setChosenRole(undefined);
     api
-      .openSession(nodeId)
-      .then((schemaA) => {
+      .node(nodeId)
+      .then((detail) => {
         if (cancelled) return;
-        setSessionId(String(schemaA.session_id));
-        const target = schemaA.target as { name?: string } | undefined;
-        setNodeName(target?.name ?? nodeId);
+        setNodeRoles(detail.roles);
+        setNodeName(detail.name);
+        const serves = detail.roles.some((r) => r.role_id === role);
+        setChosenRole(role && serves ? role : null);
       })
       .catch((error) =>
         setProblems(error instanceof ApiError ? error.problems : [String(error)]),
@@ -76,7 +89,32 @@ export function SessionFlow({ nodeId, onDone, onCancel }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [nodeId]);
+  }, [nodeId, role]);
+
+  // Open the session — again whenever the role changes, because the role is baked into the
+  // Schema A at generation time and decides every depth in the prompt.
+  useEffect(() => {
+    if (chosenRole === undefined) return;
+    let cancelled = false;
+    api
+      .openSession(nodeId, chosenRole ?? undefined)
+      .then((schemaA) => {
+        if (cancelled) return;
+        setSessionId(String(schemaA.session_id));
+        const target = schemaA.target as { name?: string } | undefined;
+        setNodeName(target?.name ?? nodeId);
+        // Read back what was actually used, so the selector shows the application's own
+        // choice rather than a blank when no role was asked for.
+        const context = schemaA.role_context as { role_id?: string } | undefined;
+        setUsedRole(context?.role_id ?? null);
+      })
+      .catch((error) =>
+        setProblems(error instanceof ApiError ? error.problems : [String(error)]),
+      );
+    return () => {
+      cancelled = true;
+    };
+  }, [nodeId, chosenRole]);
 
   // fetch the prompt for whichever step is showing
   useEffect(() => {
@@ -154,6 +192,9 @@ export function SessionFlow({ nodeId, onDone, onCancel }: Props) {
   }
 
   const current = STEPS.find((s) => s.phase === step) ?? STEPS[0]!;
+  const roleName = (roleId: string) =>
+    roles.find((r) => r.role_id === roleId)?.name ?? roleId;
+  const depthForUsedRole = nodeRoles.find((r) => r.role_id === usedRole)?.required_depth;
 
   return (
     <div className="stack">
@@ -161,6 +202,41 @@ export function SessionFlow({ nodeId, onDone, onCancel }: Props) {
         <h2 style={{ fontSize: 18 }}>{nodeName || "Session"}</h2>
         <button onClick={onCancel}>Close</button>
       </div>
+
+      {nodeRoles.length > 0 && (
+        <div className="card">
+          <span className="label">Assessing for</span>
+          <select
+            value={chosenRole ?? ""}
+            onChange={(event) => setChosenRole(event.target.value || null)}
+            style={{ width: "100%", marginTop: 6 }}
+            title="The role decides how deep this session goes and how the concept is framed"
+          >
+            <option value="">
+              Most important role{usedRole ? ` — ${roleName(usedRole)}` : ""}
+            </option>
+            {nodeRoles.map((r) => (
+              <option key={r.role_id} value={r.role_id}>
+                {roleName(r.role_id)} · {r.required_depth}
+              </option>
+            ))}
+          </select>
+          <p className="tiny muted" style={{ marginTop: 6 }}>
+            {depthForUsedRole ? (
+              <>
+                Teaching and testing to <strong>{depthForUsedRole}</strong>. The same concept is
+                a passing mention for one role and a derivation for another — pick the role you
+                are actually interviewing for.
+              </>
+            ) : (
+              "The role decides how deep this session goes and how the concept is framed."
+            )}
+          </p>
+          <p className="tiny muted" style={{ marginTop: 4 }}>
+            Changing this starts a fresh session, so choose before you paste the prompt.
+          </p>
+        </div>
+      )}
 
       <div className="row" style={{ flexWrap: "wrap" }}>
         {STEPS.map((s) => (
