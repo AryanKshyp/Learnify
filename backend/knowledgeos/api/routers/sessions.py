@@ -128,22 +128,19 @@ def ingest_session(context: Context, payload: dict[str, Any] = Body(...)) -> Ing
 
     Nothing is written until validation fully passes, so a rejected paste leaves state
     untouched and the session still open to retry.
-    """
-    node_id = payload.get("node_id")
-    status_before = (
-        context.service.overlay.state_for(node_id).status
-        if isinstance(node_id, str) and node_id in context.curriculum
-        else None
-    )
 
+    The status transition comes off the result rather than being read here before and after:
+    status is derived, not stored, so only the service can take the "before" reading against
+    the same clock as the "after".
+    """
     result = context.service.ingest(payload, now=context.now)
 
     return IngestResponse(
         node_id=result.record.node_id,
         intrinsic_mastery_before=result.state_before.intrinsic_mastery,
         intrinsic_mastery_after=result.state_after.intrinsic_mastery,
-        status_before=status_before or result.state_before.status,
-        status_after=result.state_after.status,
+        status_before=result.status_before,
+        status_after=result.status_after,
         next_review_at=result.state_after.next_review_at,
         session=_record_out(result.record),
         computation_trace=result.record.computation_trace,

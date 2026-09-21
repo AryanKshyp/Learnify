@@ -12,17 +12,16 @@ import random
 import pytest
 
 from knowledgeos.curriculum import Depth, fixture_repository
-from knowledgeos.engine import (
-    DEFAULT_CONFIG,
-    Observation,
+from knowledgeos.engine import DEFAULT_CONFIG, Observation, apply_session, recompute
+
+# Stage functions are an internal seam: not part of the package interface, reached through
+# their own modules by the engine's own tests.
+from knowledgeos.engine.observation import session_ability, update_intrinsic_mastery
+from knowledgeos.engine.propagation import (
     PrerequisiteInput,
-    apply_session,
     effective_mastery,
     prerequisite_confidence,
     propagate,
-    recompute,
-    session_ability,
-    update_intrinsic_mastery,
 )
 from knowledgeos.state import KnowledgeState
 

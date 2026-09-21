@@ -27,34 +27,32 @@ from knowledgeos.engine import recommend, unexplored
 router = APIRouter(tags=["recommendations"])
 
 
-def _explain(context: Context, node_id: str, snapshot) -> str:
-    """Why this node, in one sentence a human can check."""
-    curriculum = context.curriculum
+def _explain(candidate) -> str:
+    """Why this node, in one sentence a human can check.
+
+    Pure formatting. Every fact comes off the candidate the engine returned — this used to
+    recompute the bottlenecks and the descendant count here, which meant the API layer ran
+    graph algebra against inputs the engine had already been over.
+    """
     reasons = []
 
-    blocking = [
-        role.role_id
-        for role in curriculum.roles
-        if snapshot.readiness[role.role_id].bottleneck_node_id == node_id
-    ]
-    if blocking:
-        reasons.append(f"currently the bottleneck for {', '.join(blocking)}")
+    if candidate.blocking_roles:
+        reasons.append(f"currently the bottleneck for {', '.join(candidate.blocking_roles)}")
 
-    unlocks = len(curriculum.descendants(node_id))
-    if unlocks:
+    if candidate.unlocks:
+        unlocks = candidate.unlocks
         reasons.append(f"unlocks {unlocks} downstream concept{'s' if unlocks != 1 else ''}")
 
-    cost = snapshot.learning_cost[node_id]
-    if cost:
-        reasons.append(f"~{cost:.1f}h to reach its depth target")
+    if candidate.learning_cost:
+        reasons.append(f"~{candidate.learning_cost:.1f}h to reach its depth target")
 
-    if snapshot.frontier[node_id]:
+    if candidate.is_frontier:
         reasons.append("prerequisites are already met")
 
     return "; ".join(reasons) or "on the learning frontier"
 
 
-def _to_out(context: Context, candidate, snapshot) -> RecommendationOut:
+def _to_out(context: Context, candidate) -> RecommendationOut:
     node = context.curriculum.node(candidate.node_id)
     return RecommendationOut(
         node_id=node.node_id,
@@ -66,18 +64,17 @@ def _to_out(context: Context, candidate, snapshot) -> RecommendationOut:
         learning_cost_hours=candidate.learning_cost,
         leverage=candidate.leverage,
         current_importance=candidate.current_importance,
-        reason=_explain(context, node.node_id, snapshot),
+        reason=_explain(candidate),
     )
 
 
 @router.get("/recommendations", response_model=RecommendationGroup)
 def overall(context: Context, limit: int = Query(5, ge=1, le=50)):
     """The Overall list — best next steps across everything, MMR-diversified."""
-    snapshot = context.snapshot()
-    picks = recommend(context.curriculum, snapshot, limit=limit)
+    picks = recommend(context.curriculum, context.snapshot(), limit=limit)
     return RecommendationGroup(
         lens="overall",
-        recommendations=tuple(_to_out(context, c, snapshot) for c in picks),
+        recommendations=tuple(_to_out(context, c) for c in picks),
     )
 
 
@@ -89,34 +86,35 @@ def by_role(role_id: str, context: Context, limit: int = Query(5, ge=1, le=50)):
     genuinely different ranking rather than a filtered copy of Overall.
     """
     context.curriculum.role(role_id)  # 404 on unknown role
-    snapshot = context.snapshot(active_role_id=role_id)
-    eligible = {n.node_id for n in context.curriculum.nodes_by_role(role_id)}
-    picks = [
-        c
-        for c in recommend(context.curriculum, snapshot, limit=limit * 4)
-        if c.node_id in eligible
-    ][:limit]
+    picks = recommend(
+        context.curriculum,
+        context.snapshot(active_role_id=role_id),
+        limit=limit,
+        role_id=role_id,
+    )
     return RecommendationGroup(
         lens="role",
         key=role_id,
-        recommendations=tuple(_to_out(context, c, snapshot) for c in picks),
+        recommendations=tuple(_to_out(context, c) for c in picks),
     )
 
 
 @router.get("/recommendations/competency/{section}", response_model=RecommendationGroup)
 def by_competency(section: str, context: Context, limit: int = Query(5, ge=1, le=50)):
-    """Recommendations within one section."""
-    snapshot = context.snapshot()
-    eligible = {n.node_id for n in context.curriculum.nodes_by_section(section)}
-    picks = [
-        c
-        for c in recommend(context.curriculum, snapshot, limit=limit * 8)
-        if c.node_id in eligible
-    ][:limit]
+    """Recommendations within one section.
+
+    "Competency" here means a section, per `BUILD_SPEC.md` Part E ("Competency (section)") and
+    C.1, which calls `section` the "top-level grouping (a.k.a. competency area)". The per-node
+    `competency` field is a finer sub-grouping and is a different thing; the lens name follows
+    the spec's wording rather than that field.
+    """
+    picks = recommend(
+        context.curriculum, context.snapshot(), limit=limit, section=section
+    )
     return RecommendationGroup(
         lens="competency",
         key=section,
-        recommendations=tuple(_to_out(context, c, snapshot) for c in picks),
+        recommendations=tuple(_to_out(context, c) for c in picks),
     )
 
 

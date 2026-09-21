@@ -12,13 +12,12 @@ requires a migration of user state — a new node is simply cold until it is ass
 
 from __future__ import annotations
 
-from collections.abc import Iterator
 from dataclasses import dataclass
 
 from knowledgeos.curriculum import CurriculumGraph, Node
 
 from .errors import UnknownNodeError
-from .models import KnowledgeState, Status
+from .models import KnowledgeState
 from .repository import KnowledgeStateRepository
 
 
@@ -37,17 +36,22 @@ class NodeState:
     def is_assessed(self) -> bool:
         return self.state.is_assessed
 
-    def importance_for(self, role_id: str) -> float:
-        """Static per-role importance from the curriculum (NOT `current_importance`)."""
-        requirement = self.node.requirement_for(role_id)
-        return requirement.importance if requirement else 0.0
-
 
 class StateOverlay:
     """Read/write access to knowledge state, scoped to a curriculum.
 
-    Writes are validated against the curriculum: state for an unknown node is refused rather
-    than silently stored, so the overlay cannot drift from the graph it describes.
+    Three methods, because it enforces exactly two rules and callers only ever need those:
+
+    * **Writes are validated against the curriculum.** State for an unknown node is refused
+      rather than silently stored, so the overlay cannot drift from the graph it describes.
+    * **Cold defaults are applied on read.** A node with no stored record reads back cold,
+      which is why adding curriculum nodes never needs a migration of user state.
+
+    It deliberately offers no lenses — `for_role`, `for_section`, `assessed`, `with_status` and
+    friends existed here and were called by nothing but their own tests. Each was a one-line
+    filter over `all()` that made the interface wider than the rules it protects, and callers
+    that wanted a slice already had `CurriculumGraph` to slice by. Selecting and ranking are
+    the engine's job; this joins two layers and guards the join.
     """
 
     def __init__(
@@ -55,10 +59,6 @@ class StateOverlay:
     ) -> None:
         self._curriculum = curriculum
         self._repository = repository
-
-    @property
-    def curriculum(self) -> CurriculumGraph:
-        return self._curriculum
 
     # ---------------------------------------------------------------- reading
 
@@ -69,12 +69,6 @@ class StateOverlay:
         """
         self._require_known(node_id)
         return self._repository.get(node_id) or KnowledgeState.cold(node_id)
-
-    def get(self, node_id: str) -> NodeState:
-        self._require_known(node_id)
-        return NodeState(
-            node=self._curriculum.node(node_id), state=self.state_for(node_id)
-        )
 
     def _stored(self) -> dict[str, KnowledgeState]:
         """Every persisted state, in ONE repository call.
@@ -99,40 +93,11 @@ class StateOverlay:
         """Every curriculum node with its state, cold where unassessed."""
         return self._join(self._curriculum, self._stored())
 
-    def __iter__(self) -> Iterator[NodeState]:
-        return iter(self.all())
-
-    def for_role(self, role_id: str) -> tuple[NodeState, ...]:
-        """Every node serving `role_id`, with state. Ordered as the curriculum orders them."""
-        return self._join(self._curriculum.nodes_by_role(role_id), self._stored())
-
-    def for_section(self, section: str) -> tuple[NodeState, ...]:
-        return self._join(self._curriculum.nodes_by_section(section), self._stored())
-
-    def assessed(self) -> tuple[NodeState, ...]:
-        return tuple(item for item in self.all() if item.is_assessed)
-
-    def unassessed(self) -> tuple[NodeState, ...]:
-        """Nodes with no evidence — the cold-start backlog (CALC_ENGINE_SPEC.md §12).
-
-        Kept separate from assessed-but-weak nodes so the two can never be confused: a node
-        nobody has looked at is not the same as one the user demonstrably struggles with.
-        """
-        return tuple(item for item in self.all() if not item.is_assessed)
-
-    def with_status(self, status: Status) -> tuple[NodeState, ...]:
-        return tuple(item for item in self.all() if item.state.status is status)
-
     # ---------------------------------------------------------------- writing
 
     def save(self, state: KnowledgeState) -> None:
         self._require_known(state.node_id)
         self._repository.save(state)
-
-    def save_many(self, states: tuple[KnowledgeState, ...]) -> None:
-        for state in states:
-            self._require_known(state.node_id)
-        self._repository.save_many(states)
 
     def _require_known(self, node_id: str) -> None:
         if node_id not in self._curriculum:

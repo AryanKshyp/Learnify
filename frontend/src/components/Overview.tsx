@@ -9,28 +9,27 @@
  * measure, so "62%" alone is not actionable; "62%, held back by Self-Attention" is.
  */
 
-import { useEffect, useState } from "react";
-
 import { api } from "../api/client";
+import { useServerState } from "../api/server-state";
 import type { Overview as OverviewData } from "../api/types";
 import { pct } from "../lib/domain";
 
 interface Props {
-  refreshKey: number;
   onSelect: (nodeId: string) => void;
 }
 
-export function Overview({ refreshKey, onSelect }: Props) {
-  const [data, setData] = useState<OverviewData | null>(null);
+export function Overview({ onSelect }: Props) {
+  const { data, problems } = useServerState<OverviewData>(() => api.overview(), []);
 
-  useEffect(() => {
-    let cancelled = false;
-    api.overview().then((value) => !cancelled && setData(value));
-    return () => {
-      cancelled = true;
-    };
-  }, [refreshKey]);
-
+  if (problems.length > 0) {
+    return (
+      <div className="error">
+        {problems.map((problem) => (
+          <div key={problem}>{problem}</div>
+        ))}
+      </div>
+    );
+  }
   if (!data) return <div className="spinner">Loading…</div>;
   const h = data.health;
 

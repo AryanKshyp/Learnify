@@ -10,6 +10,7 @@ import pytest
 
 from knowledgeos.curriculum import Depth, fixture_repository
 from knowledgeos.engine import (
+    DEFAULT_CONFIG,
     Observation,
     apply_session,
     recommend,
@@ -107,7 +108,7 @@ class TestSessionUpdatesState:
                 session_count=update.session_count,
                 stability=update.stability,
                 difficulty=update.difficulty,
-                assessment_variance=update.variance,
+                assessment_variance_raw=update.variance_raw,
             )
         assert values == sorted(values), "consistent strong evidence must not oscillate"
         assert values[-1] > 0.8
@@ -214,9 +215,128 @@ class TestRecommendations:
     def test_mmr_diversifies_away_from_one_competency(self, curriculum, cold_states):
         snapshot = recompute(curriculum, cold_states)
         picks = recommend(curriculum, snapshot, limit=5)
-        if len(picks) >= 3:
-            competencies = {
-                (curriculum.node(p.node_id).section, curriculum.node(p.node_id).competency)
-                for p in picks
-            }
-            assert len(competencies) > 1, "MMR must not return five clones"
+        # previously guarded by `if len(picks) >= 3`, which passed silently whenever the
+        # fixture produced fewer — i.e. exactly when the guarantee was worth checking
+        assert len(picks) >= 3, "the fixture must yield enough candidates to diversify"
+        competencies = {
+            (curriculum.node(p.node_id).section, curriculum.node(p.node_id).competency)
+            for p in picks
+        }
+        assert len(competencies) > 1, "MMR must not return five clones"
+
+
+class TestRecommendationLens:
+    """Role and section lenses, applied before scoring rather than after.
+
+    The router used to over-fetch `limit * 4` unfiltered picks and filter them down. That ranks
+    and MMR-diversifies a set it is about to discard, so the diversity guarantee landed on the
+    wrong list and the endpoint could silently return fewer than `limit` — or nothing — when a
+    lens's eligible nodes all ranked below the over-fetch window.
+    """
+
+    def eligible(self, curriculum, snapshot, node_ids):
+        """The candidate set — frontier ∪ high-CPV — restricted to `node_ids`."""
+        candidates = {n for n, on in snapshot.frontier.items() if on}
+        candidates |= {
+            n
+            for n, cpv in snapshot.critical_path_value.items()
+            if cpv >= DEFAULT_CONFIG.high_cpv_threshold
+            and snapshot.effective_mastery[n] < snapshot.targets[n]
+        }
+        return candidates & set(node_ids)
+
+    def test_role_lens_returns_only_that_role_s_nodes(self, curriculum, cold_states):
+        for role in curriculum.roles:
+            snapshot = recompute(curriculum, cold_states, active_role_id=role.role_id)
+            picks = recommend(curriculum, snapshot, limit=5, role_id=role.role_id)
+            allowed = {n.node_id for n in curriculum.nodes_by_role(role.role_id)}
+            assert {p.node_id for p in picks} <= allowed
+
+    def test_section_lens_returns_only_that_section_s_nodes(self, curriculum, cold_states):
+        snapshot = recompute(curriculum, cold_states)
+        for section in {n.section for n in curriculum}:
+            picks = recommend(curriculum, snapshot, limit=5, section=section)
+            assert all(curriculum.node(p.node_id).section == section for p in picks)
+
+    def test_a_lens_never_silently_under_returns(self, curriculum, cold_states):
+        """Exactly min(limit, eligible) — the guarantee post-filtering could not make."""
+        snapshot = recompute(curriculum, cold_states)
+        for section in {n.section for n in curriculum}:
+            in_section = [n.node_id for n in curriculum.nodes_by_section(section)]
+            expected = min(3, len(self.eligible(curriculum, snapshot, in_section)))
+            picks = recommend(curriculum, snapshot, limit=3, section=section)
+            assert len(picks) == expected, section
+
+    def test_lenses_intersect(self, curriculum, cold_states):
+        role = curriculum.roles[0].role_id
+        snapshot = recompute(curriculum, cold_states, active_role_id=role)
+        sections = {n.section for n in curriculum.nodes_by_role(role)}
+        for section in sections:
+            picks = recommend(
+                curriculum, snapshot, limit=5, role_id=role, section=section
+            )
+            for pick in picks:
+                node = curriculum.node(pick.node_id)
+                assert node.section == section
+                assert node.requirement_for(role) is not None
+
+    def test_an_empty_lens_returns_nothing_rather_than_falling_back(
+        self, curriculum, cold_states
+    ):
+        snapshot = recompute(curriculum, cold_states)
+        assert recommend(curriculum, snapshot, limit=5, section="no-such-section") == ()
+
+    def test_diversification_runs_on_the_filtered_set(self, curriculum, cold_states):
+        """MMR must see only eligible candidates, or it diversifies against the wrong list."""
+        snapshot = recompute(curriculum, cold_states)
+        for role in curriculum.roles:
+            picks = recommend(curriculum, snapshot, limit=5, role_id=role.role_id)
+            if len(picks) >= 3:
+                competencies = {
+                    (curriculum.node(p.node_id).section, curriculum.node(p.node_id).competency)
+                    for p in picks
+                }
+                assert len(competencies) > 1, role.role_id
+
+    def test_lensed_results_are_deterministic(self, curriculum, cold_states):
+        snapshot = recompute(curriculum, cold_states)
+        role = curriculum.roles[0].role_id
+        first = [c.node_id for c in recommend(curriculum, snapshot, limit=5, role_id=role)]
+        second = [c.node_id for c in recommend(curriculum, snapshot, limit=5, role_id=role)]
+        assert first == second
+
+
+class TestRecommendationReasons:
+    """Explanation factors come off the engine, not from re-deriving in the API layer."""
+
+    def test_every_pick_carries_its_reason_factors(self, curriculum, cold_states):
+        snapshot = recompute(curriculum, cold_states)
+        picks = recommend(curriculum, snapshot, limit=5)
+        assert picks
+        for pick in picks:
+            assert pick.unlocks == len(curriculum.descendants(pick.node_id))
+            assert pick.is_frontier == snapshot.frontier[pick.node_id]
+            assert pick.blocking_roles == tuple(
+                sorted(
+                    role_id
+                    for role_id, readiness in snapshot.readiness.items()
+                    if readiness.bottleneck_node_id == pick.node_id
+                )
+            )
+
+    def test_blocking_roles_are_populated_when_a_pick_is_a_bottleneck(
+        self, curriculum, cold_states
+    ):
+        snapshot = recompute(curriculum, cold_states)
+        bottlenecks = {
+            r.bottleneck_node_id for r in snapshot.readiness.values() if r.bottleneck_node_id
+        }
+        picks = recommend(curriculum, snapshot, limit=len(curriculum))
+        flagged = {p.node_id for p in picks if p.blocking_roles}
+        assert flagged == {p.node_id for p in picks} & bottlenecks
+
+    def test_reason_factors_survive_a_lens(self, curriculum, cold_states):
+        role = curriculum.roles[0].role_id
+        snapshot = recompute(curriculum, cold_states, active_role_id=role)
+        for pick in recommend(curriculum, snapshot, limit=5, role_id=role):
+            assert pick.unlocks == len(curriculum.descendants(pick.node_id))

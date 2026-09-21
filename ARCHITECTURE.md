@@ -44,6 +44,7 @@ backend/
 │   ├── engine/       # L3 — pure deterministic calculation; NO I/O
 │   │   └── config.py #      every [TUNABLE] parameter, in one place
 │   ├── assessment/   # L4 boundary — Schema A generation, Schema B validation/ingest
+│   ├── documents/    # L4 peer — document prep: Schema C (catalogue+prompt) / Schema D
 │   ├── api/          # FastAPI routers over L1–L4
 │   └── config.py     # infrastructure settings only (kept apart from engine tuning)
 ├── tests/conftest.py
@@ -111,6 +112,17 @@ about how it works and must function against any engine honoring the contracts. 
 *structured observations* — it never computes mastery, retention, readiness, priority, or
 recommendations.
 
+### Layer 4 (peer) — Document prep (external, replaceable)
+Reads a paper, report or job description and reports **which curriculum concepts it requires and
+how deep**, through Schema C (concept catalogue + prompt, out) and Schema D (extraction, in). The
+document is never uploaded to KnowledgeOS and never parsed here — the app stores what a document
+*requires*, not what it says.
+
+Same contract discipline, same reason: the extraction returns *observations about a document*. It
+never decides what the user is missing, what to study first, in what order, or how long it will
+take. Those need the prerequisite DAG and the user's mastery, so they are computed in Layer 3
+(`engine/document.py`) and the prompt explicitly forbids the model from attempting them.
+
 ---
 
 ## 4. Layer boundaries as import rules
@@ -123,6 +135,7 @@ The boundary is enforceable in code review as a dependency rule:
 | `state/` | `curriculum` (types) | `engine`, `api` |
 | `engine/` | `curriculum` + `state` **types only** | any storage, DB, HTTP, clock, or filesystem |
 | `assessment/` | `curriculum`, `state`, `engine` | `api` |
+| `documents/` | `curriculum`, `state`, `engine`, `assessment` | `api` |
 | `api/` | all of the above | — |
 
 The critical rule: **`engine/` imports no I/O of any kind.** Time is an *input parameter*, never

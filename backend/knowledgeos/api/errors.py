@@ -27,7 +27,14 @@ from knowledgeos.assessment import (
     UnknownSessionError,
 )
 from knowledgeos.curriculum import CurriculumError, NodeNotFoundError, RoleNotFoundError
-from knowledgeos.state import StateError, UnknownNodeError
+from knowledgeos.documents import (
+    DocumentError,
+    DuplicateConceptError,
+    EmptyExtractionError,
+    ExtractionValidationError,
+    UnknownConceptError,
+)
+from knowledgeos.state import DocumentNotFoundError, StateError, UnknownNodeError
 
 
 def error_body(exc: Exception, **extra: Any) -> dict[str, Any]:
@@ -42,6 +49,7 @@ def register_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(NodeNotFoundError)
     @app.exception_handler(RoleNotFoundError)
     @app.exception_handler(UnknownNodeError)
+    @app.exception_handler(DocumentNotFoundError)
     async def _not_found(request: Request, exc: Exception) -> JSONResponse:
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND, content=error_body(exc))
@@ -56,10 +64,33 @@ def register_error_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(SchemaValidationError)
-    async def _schema_invalid(request: Request, exc: SchemaValidationError) -> JSONResponse:
+    @app.exception_handler(ExtractionValidationError)
+    async def _schema_invalid(request: Request, exc: Exception) -> JSONResponse:
         return JSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             content=error_body(exc, problems=exc.problems),
+        )
+
+    @app.exception_handler(UnknownConceptError)
+    async def _unknown_concepts(request: Request, exc: UnknownConceptError) -> JSONResponse:
+        # The offending ids travel with the error so the client can name them rather than
+        # making the user diff a five-hundred-line catalogue by eye.
+        return JSONResponse(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            content=error_body(exc, field="concepts", node_ids=exc.node_ids),
+        )
+
+    @app.exception_handler(DuplicateConceptError)
+    async def _duplicate_concepts(request: Request, exc: DuplicateConceptError) -> JSONResponse:
+        return JSONResponse(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            content=error_body(exc, field="concepts", node_ids=exc.node_ids),
+        )
+
+    @app.exception_handler(EmptyExtractionError)
+    async def _empty_extraction(request: Request, exc: EmptyExtractionError) -> JSONResponse:
+        return JSONResponse(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, content=error_body(exc)
         )
 
     @app.exception_handler(SessionMismatchError)
@@ -114,6 +145,7 @@ def register_error_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(AssessmentError)
     @app.exception_handler(CurriculumError)
+    @app.exception_handler(DocumentError)
     @app.exception_handler(StateError)
     async def _domain_error(request: Request, exc: Exception) -> JSONResponse:
         return JSONResponse(

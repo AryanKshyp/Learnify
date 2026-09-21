@@ -1,4 +1,4 @@
-"""The canonical pipeline. CALC_ENGINE_SPEC.md §1.
+"""The canonical pipeline, and the stages it sequences. CALC_ENGINE_SPEC.md §1.
 
 Two entry points:
 
@@ -9,6 +9,13 @@ Two entry points:
 Ordering is not negotiable: PC before EM, EM before readiness, readiness before priority. Each
 stage is a pure function of the previous, and every produced value carries a
 `computation_trace` so any score can answer "how was this calculated?" from stored evidence.
+
+The stages with no consumer but this file live here rather than in a module each — frontier and
+graph position (§9-10), status (§13) and knowledge health (§14). Splitting them out put one
+number's derivation across four files without hiding anything: each interface was as wide as
+its implementation, so there was nothing to read the small module *instead of*. The stages that
+are genuinely shared stay separate and are imported above: `observation`, `retention`,
+`propagation`, `readiness` and `recommend` all have callers besides this one.
 """
 
 from __future__ import annotations
@@ -20,21 +27,15 @@ from knowledgeos.curriculum import CurriculumGraph, Depth
 from knowledgeos.state import KnowledgeState, Status
 
 from .config import DEFAULT_CONFIG, EngineConfig
-from .health import KnowledgeHealth, knowledge_health
 from .observation import (
     EvidenceQuality,
     Observation,
     SessionAbility,
+    clamp,
     evidence_quality,
+    normalized_variance,
     session_ability,
     update_intrinsic_mastery,
-)
-from .position import (
-    critical_path_values,
-    current_importance,
-    intrinsic_importance,
-    is_frontier,
-    leverage_values,
 )
 from .propagation import propagate
 from .readiness import RoleReadiness, all_role_readiness
@@ -44,6 +45,7 @@ from .recommend import (
     diversify,
     expected_readiness_gain,
     learning_cost,
+    min_max_normalize,
     score_candidates,
 )
 from .retention import (
@@ -53,7 +55,6 @@ from .retention import (
     retention,
     update_stability,
 )
-from .status import derive_status
 
 
 @dataclass(frozen=True, slots=True)
@@ -98,7 +99,7 @@ def apply_session(
     quality = evidence_quality(
         ability,
         previous_mean=previous_running_mean,
-        previous_variance_raw=state.assessment_variance * config.variance_normalizer,
+        previous_variance_raw=state.assessment_variance_raw,
         session_count=state.session_count,
         days_since_last_session=days_since_last_session,
         llm_confidence=observation.llm_confidence,
@@ -173,6 +174,285 @@ def apply_session(
     )
 
 
+# Stages 7-8 — frontier, critical path, leverage, current importance. §9, §10.
+#
+# The frontier is the idea that makes recommendations both fast and explainable: a node is only
+# worth suggesting if its prerequisites are actually ready. A weak node whose prerequisites are
+# themselves weak is NOT on the frontier — the engine routes to the prerequisite instead, which
+# is exactly the "your real problem is upstream" behaviour the product exists to provide.
+
+def is_frontier(
+    effective_mastery: float,
+    prerequisite_confidence: float,
+    target: float,
+    config: EngineConfig = DEFAULT_CONFIG,
+) -> bool:
+    """On the frontier = not yet sufficient, but ready to be learned.
+
+    Both halves matter. Drop the first and you recommend things already known; drop the second
+    and you recommend things the user cannot yet understand.
+    """
+    return (
+        effective_mastery < target
+        and prerequisite_confidence >= config.frontier_prerequisite_threshold
+    )
+
+
+def intrinsic_importance(curriculum: CurriculumGraph, node_id: str) -> float:
+    """Highest static importance this node carries across the roles it serves."""
+    node = curriculum.node(node_id)
+    return max((r.importance for r in node.roles), default=0.0)
+
+
+def critical_path_values(
+    curriculum: CurriculumGraph, config: EngineConfig = DEFAULT_CONFIG
+) -> dict[str, float]:
+    """CPV — how much high-importance material sits downstream of each node.
+
+        CPV_raw(X) = Σ over descendants d of  importance(d) · ζ^hops(X→d)
+
+    ζ = 0.6 discounts per hop, so being a direct gateway to something critical counts for far
+    more than being five steps upstream of it. Normalised across all nodes.
+
+    This is a pure property of the curriculum: it depends on no user state, so it can be
+    computed once per graph rather than per recompute.
+    """
+    import networkx as nx  # noqa: PLC0415 - graph algorithms only, no I/O
+
+    dag = curriculum.dag
+    discount = config.critical_path_discount
+    raw: dict[str, float] = {}
+
+    for node_id in dag.nodes:
+        hops = nx.single_source_shortest_path_length(dag, node_id)
+        total = 0.0
+        for descendant, distance in hops.items():
+            if descendant == node_id:
+                continue
+            total += intrinsic_importance(curriculum, descendant) * (discount**distance)
+        raw[node_id] = total
+
+    return min_max_normalize(raw)
+
+
+def leverage_values(
+    curriculum: CurriculumGraph,
+    critical_path: dict[str, float],
+    config: EngineConfig = DEFAULT_CONFIG,
+) -> dict[str, float]:
+    """Lev — breadth of impact of improving a node.
+
+        Lev_raw = a·immediate_unlocks + b·indirect_unlocks + c·role_overlap + d·CPV
+
+    Then min-max normalised across all nodes, exactly as the spec specifies.
+
+    NOTE (flagged, not silently corrected): the four terms are on very different scales.
+    `immediate_unlocks` and `indirect_unlocks` are unbounded counts while CPV and role_overlap
+    are small, so in a large graph the count terms dominate and CPV contributes almost nothing
+    before normalisation. The spec is explicit that normalisation happens AFTER combining, so
+    that is what is implemented; see PROJECT_STATE.md for the observation. Normalising each
+    term first would be a change to the spec's math, not an implementation detail.
+    """
+    raw: dict[str, float] = {}
+    for node in curriculum:
+        node_id = node.node_id
+        immediate = len(curriculum.dependents_of(node_id))
+        indirect = len(curriculum.descendants(node_id))
+        role_overlap = sum(r.importance for r in node.roles)
+        raw[node_id] = (
+            config.leverage_immediate * immediate
+            + config.leverage_indirect * indirect
+            + config.leverage_role_overlap * role_overlap
+            + config.leverage_critical_path * critical_path.get(node_id, 0.0)
+        )
+    return min_max_normalize(raw)
+
+
+def current_importance(
+    curriculum: CurriculumGraph,
+    node_id: str,
+    *,
+    leverage: float,
+    active_role_id: str | None = None,
+    date_factor: float = 1.0,
+    is_bottleneck: bool = False,
+    config: EngineConfig = DEFAULT_CONFIG,
+) -> float:
+    """CurImp — importance as of right now, derived rather than authored.
+
+        CurImp = IntrinsicImp_r* · date_factor · bottleneck_factor · (1 + η·Lev)
+
+    The static graph weights are never rewritten; this is recomputed each pass. `r*` is the
+    active role, or the highest-priority role tagging the node when none is set.
+
+    May exceed 1.0 by design — it is a ranking multiplier, not a probability.
+    """
+    node = curriculum.node(node_id)
+
+    if active_role_id is not None:
+        requirement = node.requirement_for(active_role_id)
+        base = requirement.importance if requirement else 0.0
+    else:
+        ranked = sorted(
+            (r for r in node.roles),
+            key=lambda r: curriculum.role(r.role_id).priority_rank,
+        )
+        base = ranked[0].importance if ranked else 0.0
+
+    bottleneck_factor = 1.0 + config.bottleneck_boost if is_bottleneck else 1.0
+    return (
+        base
+        * date_factor
+        * bottleneck_factor
+        * (1.0 + config.leverage_importance_boost * clamp(leverage))
+    )
+
+
+# Stage 13 — status derivation. §13. Status is always derived from evidence, never set by hand.
+#
+# A deliberate deviation from the spec's stated evaluation order: the spec lists the tiers as
+# `unassessed → learning → practiced → retained → mastered` and says "evaluate top-down; first
+# match wins". Taken literally that is wrong: `retained` requires EM ≥ 0.70 and `mastered`
+# requires EM ≥ 0.85, so a genuinely mastered node matches `retained` first and can never be
+# reported as mastered. Resolved by evaluating **most demanding first** — plainly the intent,
+# since the tiers are otherwise a ladder:
+#
+#     unassessed  (no evidence at all, so nothing else can apply)
+#     learning    (evidence is weak OR too inconsistent to trust)
+#     mastered
+#     retained
+#     practiced
+#
+# `learning` stays ahead of the strong tiers on purpose. Its σ² clause means "the observations
+# disagree with each other"; a node whose evidence is self-contradictory should not be reported
+# as retained regardless of how high the average looks. `mastered` already demands low variance,
+# so it is unaffected.
+
+def derive_status(
+    *,
+    effective_mastery: float,
+    retention: float,
+    variance: float,
+    session_count: int,
+    target: float,
+    config: EngineConfig = DEFAULT_CONFIG,
+) -> Status:
+    """The node's status given its current evidence."""
+    if session_count == 0:
+        return Status.UNASSESSED
+
+    if (
+        effective_mastery < config.status_learning_em
+        or variance > config.status_learning_variance
+    ):
+        return Status.LEARNING
+
+    enough_sessions = session_count >= config.status_min_sessions
+
+    if (
+        effective_mastery >= max(config.status_mastered_em, target)
+        and retention >= config.status_mastered_retention
+        and variance <= config.status_mastered_variance
+        and enough_sessions
+    ):
+        return Status.MASTERED
+
+    if (
+        effective_mastery >= config.status_practiced_em
+        and retention >= config.status_retained_retention
+        and enough_sessions
+    ):
+        return Status.RETAINED
+
+    return Status.PRACTICED
+
+
+# Stage 14 — knowledge health. §14.
+#
+# One number for the home view, always reported alongside its four components. A single opaque
+# score invites the question "why is it 62?", so the parts that produced it travel with it.
+#
+# "Critical" means intrinsic importance at or above the threshold for the active role — health
+# deliberately ignores peripheral nodes, so grinding low-importance material cannot inflate it.
+
+@dataclass(frozen=True, slots=True)
+class KnowledgeHealth:
+    """The score, and the four components that produced it."""
+
+    score: float  # 0..100
+    coverage: float
+    mean_effective_mastery: float
+    mean_retention: float
+    critical_gap_ratio: float
+    critical_node_count: int
+    frontier_size: int
+
+
+def knowledge_health(
+    curriculum: CurriculumGraph,
+    *,
+    effective_mastery: dict[str, float],
+    retention: dict[str, float],
+    session_counts: dict[str, int],
+    targets: dict[str, float],
+    frontier_size: int,
+    active_role_id: str | None = None,
+    config: EngineConfig = DEFAULT_CONFIG,
+) -> KnowledgeHealth:
+    """Health = 100·(h1·coverage + h2·mean_EM + h3·mean_R + h4·(1 − gap_ratio)).
+
+    All three means are importance-weighted, so a weak node that matters counts for more than
+    a weak node that does not.
+    """
+    role_id = active_role_id or curriculum.roles[0].role_id
+    threshold = config.critical_importance_threshold
+
+    critical: list[tuple[str, float]] = []
+    for node in curriculum.nodes_by_role(role_id):
+        requirement = node.requirement_for(role_id)
+        if requirement and requirement.importance >= threshold:
+            critical.append((node.node_id, requirement.importance))
+
+    if not critical:
+        return KnowledgeHealth(0.0, 0.0, 0.0, 0.0, 0.0, 0, frontier_size)
+
+    total_importance = sum(importance for _, importance in critical)
+    assessed = sum(1 for node_id, _ in critical if session_counts.get(node_id, 0) > 0)
+
+    coverage = assessed / len(critical)
+    mean_em = (
+        sum(importance * effective_mastery.get(nid, 0.0) for nid, importance in critical)
+        / total_importance
+    )
+    mean_retention = (
+        sum(importance * retention.get(nid, 0.0) for nid, importance in critical)
+        / total_importance
+    )
+    gaps = sum(
+        1
+        for node_id, _ in critical
+        if effective_mastery.get(node_id, 0.0) < targets.get(node_id, 0.0)
+    )
+    gap_ratio = gaps / len(critical)
+
+    score = 100.0 * (
+        config.health_coverage * coverage
+        + config.health_mean_em * mean_em
+        + config.health_mean_retention * mean_retention
+        + config.health_gap * (1.0 - gap_ratio)
+    )
+
+    return KnowledgeHealth(
+        score=score,
+        coverage=coverage,
+        mean_effective_mastery=mean_em,
+        mean_retention=mean_retention,
+        critical_gap_ratio=gap_ratio,
+        critical_node_count=len(critical),
+        frontier_size=frontier_size,
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class EngineSnapshot:
     """Everything stages 5-14 produce, for the whole graph."""
@@ -180,6 +460,8 @@ class EngineSnapshot:
     prerequisite_confidence: dict[str, float]
     effective_mastery: dict[str, float]
     retention: dict[str, float]
+    #: σ² on 0..1 — the lens on the stored raw variance, for thresholds and display.
+    variance: dict[str, float]
     targets: dict[str, float]
     frontier: dict[str, bool]
     critical_path_value: dict[str, float]
@@ -225,6 +507,10 @@ def recompute(
     intrinsic = {n.node_id: state_of(n.node_id).intrinsic_mastery for n in curriculum}
     retentions = {
         n.node_id: retention(elapsed.get(n.node_id, 0.0), state_of(n.node_id).stability)
+        for n in curriculum
+    }
+    variances = {
+        n.node_id: normalized_variance(state_of(n.node_id).assessment_variance_raw, config)
         for n in curriculum
     }
 
@@ -286,7 +572,7 @@ def recompute(
         node_id: derive_status(
             effective_mastery=effective[node_id],
             retention=retentions[node_id],
-            variance=state_of(node_id).assessment_variance,
+            variance=variances[node_id],
             session_count=state_of(node_id).session_count,
             target=targets[node_id],
             config=config,
@@ -310,6 +596,7 @@ def recompute(
         prerequisite_confidence=confidence,
         effective_mastery=effective,
         retention=retentions,
+        variance=variances,
         targets=targets,
         frontier=frontier,
         critical_path_value=critical_path,
@@ -342,12 +629,25 @@ def recommend(
     snapshot: EngineSnapshot,
     *,
     limit: int = 5,
+    role_id: str | None = None,
+    section: str | None = None,
     config: EngineConfig = DEFAULT_CONFIG,
 ) -> tuple[Candidate, ...]:
     """Stages 11-12 — build the candidate set, rank it, diversify it.
 
     Candidates are `frontier ∪ high-CPV`, never every node: searching the frontier is both
     faster and the reason a recommendation can always explain itself.
+
+    `role_id` and `section` narrow the candidate set **before** scoring and diversification,
+    which is the only placement that works. Filtering afterwards ranks and MMR-diversifies a
+    set the caller is about to discard, so the diversity guarantee ends up applied to the wrong
+    list — the survivors can all be near-duplicates of each other — and there is no way to know
+    how far to over-fetch to still end up with `limit` of them. Both may be given; the
+    candidate set is the intersection.
+
+    The returned candidates carry their explanation factors. Those are computed here, after
+    selection, because `unlocks` is a descendant traversal per node and the candidate set is
+    much larger than the list.
     """
     candidate_ids = {n for n, on in snapshot.frontier.items() if on}
     candidate_ids |= {
@@ -355,6 +655,10 @@ def recommend(
         for n, cpv in snapshot.critical_path_value.items()
         if cpv >= config.high_cpv_threshold and snapshot.effective_mastery[n] < snapshot.targets[n]
     }
+    if role_id is not None:
+        candidate_ids &= {n.node_id for n in curriculum.nodes_by_role(role_id)}
+    if section is not None:
+        candidate_ids &= {n.node_id for n in curriculum.nodes_by_section(section)}
     if not candidate_ids:
         return ()
 
@@ -374,7 +678,31 @@ def recommend(
         )
         for node_id in sorted(candidate_ids)
     )
-    return diversify(curriculum, score_candidates(candidates, config), limit, config)
+    picks = diversify(curriculum, score_candidates(candidates, config), limit, config)
+    return tuple(_with_reasons(curriculum, snapshot, c) for c in picks)
+
+
+def _with_reasons(
+    curriculum: CurriculumGraph, snapshot: EngineSnapshot, candidate: Candidate
+) -> Candidate:
+    """Attach the facts that answer "why was this recommended?" (A.5.6).
+
+    Every one of them is already known here — the readiness stage computed the bottlenecks and
+    the graph knows its own descendants — so a caller that re-derived them would be running
+    graph algebra outside the engine against the same inputs.
+    """
+    node_id = candidate.node_id
+    return candidate.with_reasons(
+        blocking_roles=tuple(
+            sorted(
+                role_id
+                for role_id, readiness in snapshot.readiness.items()
+                if readiness.bottleneck_node_id == node_id
+            )
+        ),
+        unlocks=len(curriculum.descendants(node_id)),
+        is_frontier=snapshot.frontier[node_id],
+    )
 
 
 def unexplored(
@@ -383,10 +711,12 @@ def unexplored(
     snapshot: EngineSnapshot,
 ) -> tuple[str, ...]:
     """The cold-start backlog — nodes with no evidence, ranked by CurImp · (1 + Lev)."""
+    # `is_assessed` rather than a second spelling of `session_count == 0`: Layer 2 owns what
+    # counts as evidence, and the overlay used to carry a rival definition of the same set.
     ids = tuple(
         n.node_id
         for n in curriculum
-        if states.get(n.node_id, KnowledgeState.cold(n.node_id)).session_count == 0
+        if not states.get(n.node_id, KnowledgeState.cold(n.node_id)).is_assessed
     )
     return cold_start_queue(
         ids,
@@ -397,9 +727,16 @@ def unexplored(
 
 __all__ = [
     "EngineSnapshot",
+    "KnowledgeHealth",
     "SessionUpdate",
     "apply_session",
+    "critical_path_values",
+    "current_importance",
+    "derive_status",
     "intrinsic_importance",
+    "is_frontier",
+    "knowledge_health",
+    "leverage_values",
     "recommend",
     "recompute",
     "target_for_node",

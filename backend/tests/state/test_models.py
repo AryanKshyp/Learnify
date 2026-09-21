@@ -18,7 +18,6 @@ class TestColdDefaults:
         state = KnowledgeState.cold("prob-bayes")
         assert state.node_id == "prob-bayes"
         assert state.intrinsic_mastery == 0.0
-        assert state.status is Status.UNASSESSED
         assert state.session_count == 0
         assert not state.is_assessed
 
@@ -29,18 +28,33 @@ class TestColdDefaults:
         assert state.last_assessed_at is None
         assert state.next_review_at is None
 
-    def test_cold_node_has_no_derived_position(self):
+    def test_cold_node_has_no_evidence_quality(self):
         state = KnowledgeState.cold("prob-bayes")
-        assert state.effective_mastery == 0.0
-        assert state.retention == 0.0
         assert state.engine_confidence == 0.0
-        assert state.assessment_variance == 0.0
-        assert state.is_frontier is False
-        assert state.critical_path_value == 0.0
-        assert state.leverage == 0.0
-        assert state.current_importance == 0.0
-        assert state.learning_cost == 0.0
+        assert state.assessment_variance_raw == 0.0
+        assert state.observation_mean == 0.0
         assert state.last_gaps == ()
+
+    def test_derived_values_are_not_stored_at_all(self):
+        """C.5 originally specified these as columns; they are functions of the clock.
+
+        A stored copy is stale the hour after it is written, so they live only in
+        `EngineSnapshot`, recomputed from evidence on every read. `extra="forbid"` makes
+        writing one a loud failure rather than a field nobody notices is wrong.
+        """
+        for derived in (
+            "effective_mastery",
+            "retention",
+            "is_frontier",
+            "critical_path_value",
+            "leverage",
+            "current_importance",
+            "learning_cost",
+            "status",
+        ):
+            assert not hasattr(KnowledgeState.cold("x"), derived), derived
+            with pytest.raises(ValidationError):
+                KnowledgeState(node_id="x", **{derived: 0.5})
 
     def test_bare_construction_matches_cold(self):
         assert KnowledgeState(node_id="x") == KnowledgeState.cold("x")
@@ -70,13 +84,7 @@ class TestStateIsImmutable:
 class TestStateFieldRanges:
     @pytest.mark.parametrize(
         "field",
-        [
-            "intrinsic_mastery",
-            "effective_mastery",
-            "retention",
-            "assessment_variance",
-            "engine_confidence",
-        ],
+        ["intrinsic_mastery", "engine_confidence", "observation_mean"],
     )
     @pytest.mark.parametrize("bad", [-0.01, 1.01])
     def test_scores_are_bounded(self, field, bad):
@@ -92,16 +100,53 @@ class TestStateFieldRanges:
             KnowledgeState(node_id="x", stability=0.0)
         assert KnowledgeState(node_id="x", stability=1.0).stability == 1.0
 
-    def test_current_importance_may_exceed_one(self):
-        """CALC_ENGINE_SPEC.md §10 multiplies importance by date and bottleneck factors."""
-        assert KnowledgeState(node_id="x", current_importance=1.8).current_importance == 1.8
+    def test_raw_variance_is_unbounded_and_non_negative(self):
+        """σ²_raw is EWMA state, not a score.
 
-    def test_learning_cost_is_hours_not_a_score(self):
-        assert KnowledgeState(node_id="x", learning_cost=8.0).learning_cost == 8.0
+        It was typed as a 0..1 `Score`, which forced normalising and clamping on write and
+        rescaling on read. At the shipped tunables the clamp never fires, but the typing made
+        storage bound the engine's arithmetic and made `variance_normalizer` retroactively
+        reinterpret every persisted row. See the round-trip tests in the engine suite.
+        """
+        loud = KnowledgeState(node_id="x", assessment_variance_raw=1.8)
+        assert loud.assessment_variance_raw == 1.8
+        with pytest.raises(ValidationError):
+            KnowledgeState(node_id="x", assessment_variance_raw=-0.01)
+
+    @pytest.mark.parametrize(
+        "changes",
+        [
+            {"status": "practiced"},          # a field this model no longer has
+            {"effective_mastery": 0.5},       # ditto
+            {"nonsense": 1},                  # never existed
+            {"intrinsic_mastery": 99.0},      # out of range
+            {"session_count": -1},
+            {"assessment_variance_raw": -0.5},
+        ],
+    )
+    def test_replace_validates(self, changes):
+        """`replace` is the only way state is ever written, so it is the validation boundary.
+
+        It used to be `model_copy(update=...)`, which writes straight into the instance without
+        validating — unknown field names became phantom attributes and out-of-range scores went
+        through untouched. The sole remaining check was a Postgres constraint the in-memory
+        repository does not have, so the fast test path could not see a bad value at all.
+        """
+        with pytest.raises(ValidationError):
+            KnowledgeState.cold("x").replace(**changes)
+
+    def test_replace_still_round_trips_good_values(self):
+        state = KnowledgeState.cold("x").replace(
+            intrinsic_mastery=0.8, session_count=2, last_gaps=("a gap",)
+        )
+        assert state.intrinsic_mastery == 0.8
+        assert state.last_gaps == ("a gap",)
+        assert KnowledgeState.cold("x").intrinsic_mastery == 0.0, "the original is untouched"
 
     def test_status_must_be_on_the_ladder(self):
-        with pytest.raises(ValidationError):
-            KnowledgeState(node_id="x", status="pretty-good")
+        """The ladder is still a contract — it is just the engine's output, not a column."""
+        with pytest.raises(ValueError):
+            Status("pretty-good")
 
 
 class TestSessionRecord:

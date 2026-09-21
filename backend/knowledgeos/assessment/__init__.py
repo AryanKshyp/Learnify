@@ -21,6 +21,7 @@ from .errors import (
     UnknownNodeReferenceError,
     UnknownSessionError,
 )
+from .postgres import PostgresPendingSessionStore
 from .schemas import (
     SCHEMA_A_NAME,
     SCHEMA_B_NAME,
@@ -55,6 +56,7 @@ __all__ = [
     "IngestResult",
     "Observations",
     "PendingSessionStore",
+    "PostgresPendingSessionStore",
     "PrerequisiteContext",
     "RoleContext",
     "RoleNotApplicableError",

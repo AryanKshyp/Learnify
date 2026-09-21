@@ -214,7 +214,7 @@ class TestRoundTrip:
         a, b = results
         assert a.intrinsic_mastery == b.intrinsic_mastery
         assert a.stability == b.stability
-        assert a.assessment_variance == b.assessment_variance
+        assert a.assessment_variance_raw == b.assessment_variance_raw
         assert a.observation_mean == b.observation_mean
 
     def test_recompute_updates_downstream_nodes(self, service):
@@ -233,7 +233,9 @@ class TestRoundTrip:
     def test_status_is_derived_not_left_unassessed(self, service):
         schema_a = service.generate("prob-axioms", now=NOW)
         result = service.ingest(schema_b_payload(schema_a), now=NOW)
-        assert result.state_after.status is not Status.UNASSESSED
+        assert result.status_before is Status.UNASSESSED
+        assert result.status_after is not Status.UNASSESSED
+        assert result.status_after is result.snapshot.status["prob-axioms"]
 
     def test_a_session_can_only_be_ingested_once(self, service):
         schema_a = service.generate("prob-axioms", now=NOW)
@@ -264,7 +266,7 @@ class TestRoundTrip:
             now=later,
         )
         assert result.state_after.observation_mean != state_1.observation_mean
-        assert result.state_after.assessment_variance > state_1.assessment_variance, (
+        assert result.state_after.assessment_variance_raw > state_1.assessment_variance_raw, (
             "wildly inconsistent sessions must raise variance"
         )
 

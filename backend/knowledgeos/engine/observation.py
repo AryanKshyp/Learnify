@@ -22,6 +22,17 @@ def clamp(value: float, low: float = 0.0, high: float = 1.0) -> float:
     return max(low, min(high, value))
 
 
+def normalized_variance(variance_raw: float, config: EngineConfig = DEFAULT_CONFIG) -> float:
+    """σ² on 0..1, for the thresholds and for display.
+
+    The *raw* value is the EWMA state and the thing worth persisting; this is a lens on it.
+    Deriving it on demand rather than storing it is what keeps the round trip lossless: raw
+    variance above `variance_normalizer` saturates here, so a stored normalised value could
+    never be turned back into the number the EWMA needs on the next session.
+    """
+    return clamp(variance_raw / config.variance_normalizer)
+
+
 @dataclass(frozen=True, slots=True)
 class Observation:
     """The raw observations a Schema B carries (BUILD_SPEC.md C.8)."""
@@ -120,7 +131,7 @@ def evidence_quality(
         mean = previous_mean + kappa * (ability.value - previous_mean)
         deviation = ability.value - mean
         variance_raw = (1.0 - kappa) * (previous_variance_raw + kappa * deviation**2)
-    variance = clamp(variance_raw / config.variance_normalizer)
+    variance = normalized_variance(variance_raw, config)
 
     saturation = 1.0 - exp(-session_count / config.evidence_half_count)
     saturation_next = 1.0 - exp(-(session_count + 1) / config.evidence_half_count)

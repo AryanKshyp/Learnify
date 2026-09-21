@@ -128,26 +128,31 @@ User's fixed priority order (v1): `ai-research(1) > ai-engineer(2) > data-scienc
   "node_id": "attention-self",
   "intrinsic_mastery": 0.0,             // M: latent estimate of what the user ACTUALLY knows; evidence, never
                                         //    modified by prerequisites/decay/time. 0.0 = never assessed (cold)
-  "effective_mastery": 0.0,             // EM = M · R · PC. The only score reflecting time + prerequisites
-  "retention": 0.0,                     // R: recall probability now, given decay since last review
   "stability": null,                    // S: forgetting time-constant (days); null until first session
   "difficulty": null,                   // D: node difficulty 0..1; defaults by depth tier, adjusts slowly
-  "assessment_variance": 0.0,           // σ²: normalized variance of observations (high ⇒ needs more evidence)
+  "assessment_variance_raw": 0.0,       // σ²_raw: running variance of observations, UNBOUNDED, in the engine's
+                                        //    own units (high ⇒ needs more evidence). EWMA state, not a score —
+                                        //    the 0..1 form is derived on read, see below
   "engine_confidence": 0.0,             // C: engine-owned confidence in M (NOT the LLM's self-report)
+  "observation_mean": 0.0,              // μ: running mean of observed ability; EWMA state for σ² (see below)
   "session_count": 0,
   "last_assessed_at": null,             // ISO-8601 or null
   "next_review_at": null,               // scheduler output; null until first session
-  "is_frontier": false,                 // DERIVED: EM < τ AND prerequisites sufficiently ready
-  "critical_path_value": 0.0,           // CPV: gateway value toward high-importance downstream nodes
-  "leverage": 0.0,                      // Lev: breadth of impact of improving this node
-  "current_importance": 0.0,            // CurImp: dynamic importance (role/date/bottleneck/leverage-adjusted)
-  "learning_cost": 0.0,                 // Cost: estimated effort to reach the depth target τ
-  "status": "unassessed",               // DERIVED, never user-set: unassessed|learning|practiced|retained|mastered
   "last_gaps": [],                      // sub-gap strings from most recent Schema B
   "schema_version": 1
 }
 ```
-**Rules:** `status`, `is_frontier`, and every derived score above are *always* computed by the engine (per `CALC_ENGINE_SPEC.md`); there is no manual override anywhere. Cold ground truth is `intrinsic_mastery = 0.0`, `status = "unassessed"`. **`intrinsic_mastery` is never modified by prerequisites, decay, or time — only `effective_mastery` reflects those.** All derived-value definitions and formulas live in `CALC_ENGINE_SPEC.md`; this schema only fixes the storage contract.
+**Rules:** this record holds **evidence only**. Cold ground truth is `intrinsic_mastery = 0.0` and no sessions. **`intrinsic_mastery` is never modified by prerequisites, decay, or time — only `effective_mastery` reflects those.** All derived-value definitions and formulas live in `CALC_ENGINE_SPEC.md`; this schema only fixes the storage contract.
+
+**Derived values are NOT stored** (revised 2026-09-16). `effective_mastery` (EM = M · R · PC), `retention` (R), `is_frontier`, `critical_path_value` (CPV), `leverage` (Lev), `current_importance` (CurImp), `learning_cost` (Cost) and `status` are computed by the engine per `CALC_ENGINE_SPEC.md` and live in its snapshot, recomputed from this record on every read. They are not columns and not fields on this contract.
+
+Every one of them is a function of elapsed time — retention decays by the hour, and effective mastery, status and cost move with it — so a stored copy is already wrong the hour after it is written, with nothing to signal that it is. This schema originally specified them as stored fields; in practice seven of the eight were written on every ingest and read by nothing, because the API served them from the snapshot instead. See PROJECT_STATE.md issue #17.
+
+**`assessment_variance_raw` replaced `assessment_variance`** (revised 2026-09-16). The field previously held σ² normalised to 0..1 as `raw / variance_normalizer`, clamped. That made a `[TUNABLE]` retroactive — retuning `variance_normalizer` silently reinterpreted every row already written — and forced the engine to know the storage format in order to rescale the value back before each EWMA update. It now stores the engine's own unbounded value; `engine.observation.normalized_variance` derives the 0..1 form, and `EngineSnapshot.variance` carries it for the §13 status gates and for display.
+
+At the shipped κ = 0.5 the EWMA ceiling is ≈0.0625, below the 0.10 normalizer, so the clamp never fired and nothing stored was ever truncated. This was a latent trap rather than a live defect; a test now pins that the clamp stays unreachable, so a future change to κ or the normalizer has to notice.
+
+`status` remains DERIVED and never user-set (`unassessed|learning|practiced|retained|mastered`); a cold node's status is `unassessed` because it has no evidence, which the engine derives from `session_count == 0` rather than reading from storage.
 
 ### C.6 Session history record (append-only, per assessment)
 ```jsonc

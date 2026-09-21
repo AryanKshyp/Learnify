@@ -1,26 +1,33 @@
 """Status derivation (§13) and the forgetting model (§6).
 
 The status tests matter more than they look: the spec's stated evaluation order is wrong, and
-`status.py` deliberately deviates from it. These pin the corrected behaviour so nobody
+`derive_status` deliberately deviates from it. These pin the corrected behaviour so nobody
 "restores" the literal reading later.
 """
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 import pytest
 
-from knowledgeos.curriculum import Depth
-from knowledgeos.engine import (
-    DEFAULT_CONFIG,
+from knowledgeos.curriculum import Depth, fixture_repository
+from knowledgeos.engine import DEFAULT_CONFIG, Observation, apply_session, recompute, retention
+from knowledgeos.engine.observation import normalized_variance
+from knowledgeos.engine.pipeline import derive_status
+from knowledgeos.engine.readiness import role_priority_weights
+from knowledgeos.engine.retention import (
     days_until_review,
-    derive_status,
     initial_difficulty,
     is_due,
-    retention,
-    role_priority_weights,
     update_stability,
 )
-from knowledgeos.state import Status
+from knowledgeos.state import (
+    InMemoryKnowledgeStateRepository,
+    KnowledgeState,
+    StateOverlay,
+    Status,
+)
 
 
 def status(em, *, r=1.0, var=0.0, n=3, target=0.8):
@@ -151,3 +158,97 @@ class TestRolePriorityWeights:
         ranked = sorted(curriculum.roles, key=lambda r: r.priority_rank)
         values = [weights[r.role_id] for r in ranked]
         assert values == sorted(values, reverse=True)
+
+
+class TestVarianceRoundTrip:
+    """σ² survives storage unchanged, whatever the tunables say. CALC_ENGINE_SPEC.md §4.
+
+    Variance is EWMA state: each session's update needs the previous *raw* value back. It used
+    to be persisted in the 0..1 form — divided by `variance_normalizer` and clamped on write,
+    multiplied back on read — which coupled two things that should not be coupled. The engine
+    had to know the storage format, and storage bounded the engine's arithmetic.
+
+    Measured honestly: with κ = 0.5 the EWMA ceiling is ≈0.0625 raw, below the 0.10 normalizer,
+    so the clamp never actually fired and no stored value was ever truncated. What the old
+    scheme really cost was a latent trap — the tests below pin the two properties that make it
+    unreachable rather than merely unlikely.
+    """
+
+    def a_state(self, **overrides):
+        return KnowledgeState.cold("prob-axioms").replace(**overrides)
+
+    def disagreeing_run(self, rounds=20, config=DEFAULT_CONFIG):
+        """Alternate strong and weak sessions, threading state the way ingestion does."""
+        state = self.a_state()
+        mean = 0.0
+        for index in range(rounds):
+            observed = 1.0 if index % 2 == 0 else 0.0
+            update = apply_session(
+                state=state,
+                observation=Observation(observed, observed, observed),
+                required_depth=Depth.WORKING,
+                previous_running_mean=mean,
+                config=config,
+            )
+            mean = update.running_mean
+            state = state.replace(
+                intrinsic_mastery=update.intrinsic_mastery,
+                session_count=update.session_count,
+                stability=update.stability,
+                difficulty=update.difficulty,
+                observation_mean=update.running_mean,
+                assessment_variance_raw=update.variance_raw,
+            )
+        return state
+
+    def test_the_stored_value_does_not_depend_on_the_tunable(self):
+        """The property worth having: `variance_normalizer` is a display choice, not a unit.
+
+        Under the old scheme the persisted number was `raw / variance_normalizer`, so retuning
+        that constant silently reinterpreted every row already in the database. Now it scales
+        only the lens.
+        """
+        loose = replace(DEFAULT_CONFIG, variance_normalizer=0.10)
+        tight = replace(DEFAULT_CONFIG, variance_normalizer=0.02)
+
+        assert (
+            self.disagreeing_run(config=loose).assessment_variance_raw
+            == self.disagreeing_run(config=tight).assessment_variance_raw
+        )
+
+    def test_a_tighter_normalizer_would_have_truncated_the_stored_value(self):
+        """The trap the old scheme was one config change away from.
+
+        At the shipped 0.10 the EWMA never reaches the clamp. At 0.02 it does — and the old
+        write-then-rescale round trip loses the real number, while the raw one does not.
+        """
+        config = replace(DEFAULT_CONFIG, variance_normalizer=0.02)
+        produced = self.disagreeing_run(config=config).assessment_variance_raw
+
+        assert normalized_variance(produced, config) == 1.0, "the lens saturates here"
+        lossy = normalized_variance(produced, config) * config.variance_normalizer
+        assert lossy < produced, "the old round trip would have truncated it"
+
+    def test_at_the_shipped_tunables_the_clamp_never_fires(self):
+        """Stated as a test so a future change to κ or the normalizer has to notice."""
+        peak = self.disagreeing_run().assessment_variance_raw
+        assert peak < DEFAULT_CONFIG.variance_normalizer, (
+            f"raw variance reached {peak}, which the 0..1 lens would now saturate"
+        )
+
+    def test_raw_variance_survives_a_save_and_reload(self):
+        overlay = StateOverlay(
+            fixture_repository().get(), InMemoryKnowledgeStateRepository()
+        )
+        overlay.save(self.a_state(session_count=3, assessment_variance_raw=0.42))
+        assert overlay.state_for("prob-axioms").assessment_variance_raw == 0.42
+
+    def test_the_snapshot_carries_the_normalised_value_for_the_status_gates(self):
+        """Derived, like every other computed value — it lives on the snapshot, not the row."""
+        curriculum = fixture_repository().get()
+        states = {
+            n.node_id: KnowledgeState.cold(n.node_id).replace(assessment_variance_raw=0.18)
+            for n in curriculum
+        }
+        snapshot = recompute(curriculum, states)
+        assert all(v == 1.0 for v in snapshot.variance.values())

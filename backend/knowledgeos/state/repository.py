@@ -18,8 +18,8 @@ from collections.abc import Iterable
 from typing import Protocol, runtime_checkable
 from uuid import UUID
 
-from .errors import DuplicateSessionError, SessionNotFoundError
-from .models import KnowledgeState, SessionRecord
+from .errors import DocumentNotFoundError, DuplicateSessionError, SessionNotFoundError
+from .models import DocumentRecord, KnowledgeState, SessionRecord
 
 
 @runtime_checkable
@@ -124,3 +124,60 @@ class InMemorySessionHistoryRepository:
 
     def __len__(self) -> int:
         return len(self._records)
+
+
+@runtime_checkable
+class DocumentRepository(Protocol):
+    """Saved document prep records.
+
+    Mutable rather than append-only, unlike session history. A document is a *goal*, not
+    evidence — deleting one you no longer care about changes nothing about what you know, so
+    the append-only discipline that protects assessments would only be clutter here.
+    """
+
+    def save(self, record: DocumentRecord) -> None: ...
+
+    def get(self, document_id: UUID) -> DocumentRecord | None: ...
+
+    def all(self) -> tuple[DocumentRecord, ...]:
+        """Every document, newest first."""
+        ...
+
+    def delete(self, document_id: UUID) -> None:
+        """Remove one. Raises DocumentNotFoundError if it is not there."""
+        ...
+
+
+class InMemoryDocumentRepository:
+    """Dict-backed documents, for tests and single-process runs."""
+
+    def __init__(self, records: Iterable[DocumentRecord] = ()) -> None:
+        self._records: dict[UUID, DocumentRecord] = {r.document_id: r for r in records}
+
+    def save(self, record: DocumentRecord) -> None:
+        self._records[record.document_id] = record
+
+    def get(self, document_id: UUID) -> DocumentRecord | None:
+        return self._records.get(document_id)
+
+    def all(self) -> tuple[DocumentRecord, ...]:
+        # created_at descending, ties broken on id so the order never depends on insertion
+        return tuple(
+            sorted(
+                self._records.values(),
+                key=lambda r: (r.created_at, str(r.document_id)),
+                reverse=True,
+            )
+        )
+
+    def delete(self, document_id: UUID) -> None:
+        if document_id not in self._records:
+            raise DocumentNotFoundError(document_id)
+        del self._records[document_id]
+
+    def clear(self) -> None:
+        self._records.clear()
+
+    def __len__(self) -> int:
+        return len(self._records)
+

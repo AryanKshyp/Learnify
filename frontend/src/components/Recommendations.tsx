@@ -8,9 +8,10 @@
  * unit of effort, so hiding the effort would make the ranking impossible to sanity-check.
  */
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { api } from "../api/client";
+import { useServerState } from "../api/server-state";
 import type { RecommendationGroup, Role } from "../api/types";
 import { DOMAINS, formatHours, sectionName } from "../lib/domain";
 
@@ -19,32 +20,22 @@ type Lens = { kind: "overall" } | { kind: "role"; key: string } | { kind: "compe
 interface Props {
   roles: Role[];
   sections: string[];
-  refreshKey: number;
   onSelect: (nodeId: string) => void;
   onAssess: (nodeId: string) => void;
 }
 
-export function Recommendations({ roles, sections, refreshKey, onSelect, onAssess }: Props) {
+export function Recommendations({ roles, sections, onSelect, onAssess }: Props) {
   const [lens, setLens] = useState<Lens>({ kind: "overall" });
-  const [group, setGroup] = useState<RecommendationGroup | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    const fetch =
+  const { data: group, problems, loading } = useServerState<RecommendationGroup>(
+    () =>
       lens.kind === "overall"
         ? api.recommendations(8)
         : lens.kind === "role"
           ? api.recommendationsByRole(lens.key, 8)
-          : api.recommendationsByCompetency(lens.key, 8);
-    fetch
-      .then((data) => !cancelled && setGroup(data))
-      .finally(() => !cancelled && setLoading(false));
-    return () => {
-      cancelled = true;
-    };
-  }, [lens, refreshKey]);
+          : api.recommendationsByCompetency(lens.key, 8),
+    [lens.kind, lens.kind === "overall" ? "" : lens.key],
+  );
 
   const orderedSections = DOMAINS.flatMap((d) => d.sections).filter((s) => sections.includes(s));
 
@@ -89,6 +80,14 @@ export function Recommendations({ roles, sections, refreshKey, onSelect, onAsses
           ))}
         </select>
       </div>
+
+      {problems.length > 0 && (
+        <div className="error">
+          {problems.map((problem) => (
+            <div key={problem}>{problem}</div>
+          ))}
+        </div>
+      )}
 
       {loading && <div className="spinner">Loading…</div>}
 

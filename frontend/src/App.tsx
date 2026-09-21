@@ -5,57 +5,49 @@
  * live behind their own tab so they are available without becoming the thing you look at
  * instead of studying.
  *
- * `refreshKey` is bumped after every ingestion. One assessment changes effective mastery
+ * Server reads go through `useServerState`, which owns fetching, cancellation and errors, and
+ * re-reads everything when `invalidate()` fires. One assessment changes effective mastery
  * across the whole graph through prerequisite propagation, so every open view has to re-read —
  * caching a node's state locally would show stale numbers on exactly the nodes the user just
  * affected.
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { api } from "./api/client";
+import { useInvalidate, useServerState } from "./api/server-state";
 import type { GraphOut, Role } from "./api/types";
 import { Browse } from "./components/Browse";
 import { GraphView } from "./components/GraphView";
 import { NodeInspector } from "./components/NodeInspector";
 import { Overview } from "./components/Overview";
+import { Prep } from "./components/Prep";
 import { Recommendations } from "./components/Recommendations";
 import { SessionFlow } from "./components/SessionFlow";
 import { DOMAINS, sectionName } from "./lib/domain";
 
-type Tab = "graph" | "browse" | "recommendations" | "overview";
+type Tab = "graph" | "browse" | "recommendations" | "prep" | "overview";
 
 export default function App() {
   const [tab, setTab] = useState<Tab>("graph");
-  const [graph, setGraph] = useState<GraphOut | null>(null);
-  const [roles, setRoles] = useState<Role[]>([]);
-  // Every section, fetched once. `graph.sections` narrows to whatever the current filter
-  // returned, so using it to build the section filter would leave you unable to switch
-  // sections once you picked one.
-  const [allSections, setAllSections] = useState<string[]>([]);
   const [role, setRole] = useState<string | undefined>();
   const [section, setSection] = useState<string | undefined>();
   const [focusId, setFocusId] = useState<string | null>(null);
   const [depth, setDepth] = useState(1);
   const [assessing, setAssessing] = useState<string | null>(null);
-  const [refreshKey, setRefreshKey] = useState(0);
-  const [error, setError] = useState<string | null>(null);
+  const invalidate = useInvalidate();
 
-  useEffect(() => {
-    api.roles().then(setRoles).catch((e) => setError(String(e)));
-    api.sections().then(setAllSections).catch((e) => setError(String(e)));
-  }, []);
+  const rolesRead = useServerState<Role[]>(() => api.roles(), []);
+  // Every section, fetched once. `graph.sections` narrows to whatever the current filter
+  // returned, so using it to build the section filter would leave you unable to switch
+  // sections once you picked one.
+  const sectionsRead = useServerState<string[]>(() => api.sections(), []);
+  const graphRead = useServerState<GraphOut>(() => api.graph({ role, section }), [role, section]);
 
-  useEffect(() => {
-    let cancelled = false;
-    api
-      .graph({ role, section })
-      .then((data) => !cancelled && setGraph(data))
-      .catch((e) => !cancelled && setError(String(e)));
-    return () => {
-      cancelled = true;
-    };
-  }, [role, section, refreshKey]);
+  const roles = rolesRead.data ?? [];
+  const allSections = sectionsRead.data ?? [];
+  const graph = graphRead.data;
+  const problems = [...rolesRead.problems, ...sectionsRead.problems, ...graphRead.problems];
 
   const select = useCallback((nodeId: string) => {
     setFocusId(nodeId);
@@ -69,8 +61,8 @@ export default function App() {
 
   const finish = useCallback(() => {
     // propagation touches far more than the assessed node, so everything re-reads
-    setRefreshKey((key) => key + 1);
-  }, []);
+    invalidate();
+  }, [invalidate]);
 
   return (
     <div className="app">
@@ -88,6 +80,9 @@ export default function App() {
             onClick={() => setTab("recommendations")}
           >
             What next
+          </button>
+          <button className={tab === "prep" ? "active" : ""} onClick={() => setTab("prep")}>
+            Prep
           </button>
           <button
             className={tab === "overview" ? "active" : ""}
@@ -116,9 +111,11 @@ export default function App() {
         )}
       </header>
 
-      {error && (
+      {problems.length > 0 && (
         <div className="error" style={{ margin: 12 }}>
-          {error}
+          {problems.map((problem) => (
+            <div key={problem}>{problem}</div>
+          ))}
         </div>
       )}
 
@@ -179,12 +176,19 @@ export default function App() {
             <Recommendations
               roles={roles}
               sections={graph?.sections ?? []}
-              refreshKey={refreshKey}
               onSelect={select}
               onAssess={assess}
             />
           )}
-          {tab === "overview" && <Overview refreshKey={refreshKey} onSelect={select} />}
+          {tab === "prep" && (
+            <Prep
+              roles={roles}
+              sections={allSections}
+              onSelect={select}
+              onAssess={assess}
+            />
+          )}
+          {tab === "overview" && <Overview onSelect={select} />}
         </main>
 
         <aside className="inspector">
@@ -200,7 +204,6 @@ export default function App() {
             <NodeInspector
               nodeId={focusId}
               role={role}
-              refreshKey={refreshKey}
               onSelect={setFocusId}
               onAssess={assess}
             />

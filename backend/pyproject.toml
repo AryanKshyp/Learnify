@@ -71,6 +71,10 @@ name = "Layers are strictly ordered (higher may import lower, never the reverse)
 type = "layers"
 layers = [
     "knowledgeos.api",
+    # Document prep is a second boundary to an external LLM, peer to assessment in kind but
+    # listed above it so the layers stay a strict order rather than a partial one. They do not
+    # import each other today; if that changes, the direction is fixed here rather than debated.
+    "knowledgeos.documents",
     "knowledgeos.assessment",
     "knowledgeos.engine",
     "knowledgeos.state",
@@ -117,5 +121,6 @@ forbidden_modules = [
     "knowledgeos.state",
     "knowledgeos.engine",
     "knowledgeos.assessment",
+    "knowledgeos.documents",
     "knowledgeos.api",
 ]

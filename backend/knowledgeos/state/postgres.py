@@ -16,9 +16,9 @@ from uuid import UUID
 from sqlalchemy import Engine, delete, insert, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
-from .errors import DuplicateSessionError, UnknownNodeError
-from .models import KnowledgeState, SessionRecord, Status
-from .tables import knowledge_state, session_history
+from .errors import DocumentNotFoundError, DuplicateSessionError, UnknownNodeError
+from .models import DocumentRecord, KnowledgeState, SessionRecord
+from .tables import document_plans, knowledge_state, session_history
 
 
 class PostgresKnowledgeStateRepository:
@@ -122,20 +122,75 @@ class PostgresSessionHistoryRepository:
             ).rowcount or len(self.all())
 
 
+class PostgresDocumentRepository:
+    """Saved document prep records. Upsert-on-save, keyed by document_id."""
+
+    def __init__(self, engine: Engine) -> None:
+        self._engine = engine
+
+    def save(self, record: DocumentRecord) -> None:
+        row = _document_to_row(record)
+        statement = pg_insert(document_plans).values(row)
+        statement = statement.on_conflict_do_update(
+            index_elements=[document_plans.c.document_id],
+            set_={k: statement.excluded[k] for k in row if k != "document_id"},
+        )
+        with self._engine.begin() as connection:
+            connection.execute(statement)
+
+    def get(self, document_id: UUID) -> DocumentRecord | None:
+        with self._engine.connect() as connection:
+            row = (
+                connection.execute(
+                    select(document_plans).where(document_plans.c.document_id == document_id)
+                )
+                .mappings()
+                .first()
+            )
+        return _to_document(row) if row else None
+
+    def all(self) -> tuple[DocumentRecord, ...]:
+        with self._engine.connect() as connection:
+            rows = (
+                connection.execute(
+                    select(document_plans).order_by(
+                        document_plans.c.created_at.desc(),
+                        document_plans.c.document_id.desc(),
+                    )
+                )
+                .mappings()
+                .all()
+            )
+        return tuple(_to_document(row) for row in rows)
+
+    def delete(self, document_id: UUID) -> None:
+        with self._engine.begin() as connection:
+            result = connection.execute(
+                delete(document_plans).where(document_plans.c.document_id == document_id)
+            )
+        if result.rowcount == 0:
+            raise DocumentNotFoundError(document_id)
+
+    def clear(self) -> None:
+        with self._engine.begin() as connection:
+            connection.execute(delete(document_plans))
+
+    def __len__(self) -> int:
+        return len(self.all())
+
+
 # ------------------------------------------------------------------ mapping
 
 
 def _to_row(state: KnowledgeState) -> dict:
     data = state.model_dump()
     data["last_gaps"] = list(state.last_gaps)
-    data["status"] = state.status.value
     return data
 
 
 def _to_state(row) -> KnowledgeState:
     data = dict(row)
     data["last_gaps"] = tuple(data.get("last_gaps") or ())
-    data["status"] = Status(data["status"])
     return KnowledgeState.model_validate(data)
 
 
@@ -149,3 +204,15 @@ def _record_to_row(record: SessionRecord) -> dict:
 
 def _to_record(row) -> SessionRecord:
     return SessionRecord.model_validate(dict(row))
+
+
+def _document_to_row(record: DocumentRecord) -> dict:
+    return record.model_dump(mode="json") | {
+        "document_id": record.document_id,
+        "created_at": record.created_at,
+    }
+
+
+def _to_document(row) -> DocumentRecord:
+    return DocumentRecord.model_validate(dict(row))
+

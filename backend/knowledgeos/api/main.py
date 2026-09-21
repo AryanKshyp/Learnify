@@ -13,8 +13,10 @@ import logging
 
 import sqlalchemy as sa
 
+from knowledgeos.assessment import PostgresPendingSessionStore
 from knowledgeos.config import settings
 from knowledgeos.state import (
+    PostgresDocumentRepository,
     PostgresKnowledgeStateRepository,
     PostgresSessionHistoryRepository,
 )
@@ -24,9 +26,19 @@ from .app import create_app
 logger = logging.getLogger(__name__)
 
 
+#: The fallback below is only useful if it is quick. Without an explicit timeout the probe
+#: waits on the OS default — minutes, with nothing in the log — so a machine with Docker
+#: stopped looks like a hung startup rather than the documented fallback.
+STARTUP_PROBE_TIMEOUT_SECONDS = 3
+
+
 def _build():
     try:
-        engine = sa.create_engine(settings.database_url, pool_pre_ping=True)
+        engine = sa.create_engine(
+            settings.database_url,
+            pool_pre_ping=True,
+            connect_args={"connect_timeout": STARTUP_PROBE_TIMEOUT_SECONDS},
+        )
         with engine.connect() as connection:
             connection.execute(sa.text("select 1"))
     except Exception as exc:
@@ -43,6 +55,8 @@ def _build():
     return create_app(
         states=PostgresKnowledgeStateRepository(engine),
         history=PostgresSessionHistoryRepository(engine),
+        pending=PostgresPendingSessionStore(engine),
+        documents_repo=PostgresDocumentRepository(engine),
     )
 
 

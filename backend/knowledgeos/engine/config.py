@@ -147,6 +147,22 @@ class EngineConfig:
     #: "critical" = intrinsic importance at or above this for the active role
     critical_importance_threshold: float = 0.7
 
+    # -- document prep ---------------------------------------------------------
+    # Not in CALC_ENGINE_SPEC.md: document prep is a lens over the same graph, added after the
+    # staged build. It introduces no new mastery mathematics — it reuses τ, φ, ε and the
+    # standard cost model — but the closure walk needs its own attenuation constants.
+
+    #: how much of a concept's document weight survives one prerequisite hop. Mirrors the
+    #: critical-path discount (§9): a prerequisite of a prerequisite matters, but less.
+    document_prerequisite_decay: float = 0.6
+    #: below this document weight a closure-added concept is dropped. Without a floor, a
+    #: single stated concept drags in most of the graph at vanishing weight and the plan stops
+    #: being a plan.
+    document_weight_floor: float = 0.05
+    #: cap on how many concepts a plan will list, after ranking. A study plan that does not
+    #: fit on a screen is not actionable.
+    document_plan_limit: int = 25
+
     # -- §13 status thresholds -------------------------------------------------
     status_learning_em: float = 0.40
     status_learning_variance: float = 0.5

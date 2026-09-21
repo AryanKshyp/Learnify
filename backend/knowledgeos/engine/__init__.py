@@ -12,21 +12,40 @@ fixes the ordering (never compute EM before PC, nor readiness before EM).
 
 Time enters as `days_elapsed`/`days_since_last_session` and review scheduling comes back as a
 number of days — the engine reads no clock, which is what makes every score reproducible.
+
+## What this exports, and what it does not
+
+Everything below is what a caller outside Layer 3 needs: the entry points, the config, and the
+result types those entry points hand back. Individual stage functions — `session_ability`,
+`propagate`, `derive_status`, `knowledge_health`, `score_candidates` and the rest — are NOT
+re-exported. They have exactly one caller each, `pipeline.recompute`, and promoting them here
+made the package interface wider than the thing it was meant to summarise.
+
+They remain importable from their own modules, which is how the engine's own tests reach them:
+
+    from knowledgeos.engine.propagation import propagate       # internal seam, for tests
+    from knowledgeos.engine import recompute                   # external seam, for callers
+
+That distinction is the point. The stage functions are an internal seam private to the
+implementation; `recompute` is the interface, and it is the surface a change to the engine
+should be verified through.
 """
 
 from .config import DEFAULT_CONFIG, EngineConfig, ObservationWeights
-from .health import KnowledgeHealth, knowledge_health
-from .observation import (
-    EvidenceQuality,
-    Observation,
-    SessionAbility,
-    clamp,
-    evidence_quality,
-    session_ability,
-    update_intrinsic_mastery,
+from .document import (
+    DocumentReadiness,
+    PlanStep,
+    Requirement,
+    StatedConcept,
+    document_plan,
+    document_readiness,
+    requirement_closure,
+    total_effort,
 )
+from .observation import Observation
 from .pipeline import (
     EngineSnapshot,
+    KnowledgeHealth,
     SessionUpdate,
     apply_session,
     recommend,
@@ -34,91 +53,32 @@ from .pipeline import (
     target_for_node,
     unexplored,
 )
-from .position import (
-    critical_path_values,
-    current_importance,
-    intrinsic_importance,
-    is_frontier,
-    leverage_values,
-    min_max_normalize,
-)
-from .propagation import (
-    PrerequisiteInput,
-    effective_mastery,
-    prerequisite_confidence,
-    propagate,
-)
-from .readiness import (
-    RoleReadiness,
-    all_role_readiness,
-    role_priority_weights,
-    role_readiness,
-)
-from .recommend import (
-    Candidate,
-    cold_start_queue,
-    diversify,
-    expected_readiness_gain,
-    learning_cost,
-    score_candidates,
-    similarity,
-)
-from .retention import (
-    adjust_difficulty,
-    days_until_review,
-    initial_difficulty,
-    is_due,
-    retention,
-    update_stability,
-)
-from .status import derive_status
+from .readiness import RoleReadiness
+from .recommend import Candidate
+from .retention import retention
 
 __all__ = [
-    "DEFAULT_CONFIG",
     "Candidate",
+    "DEFAULT_CONFIG",
+    "DocumentReadiness",
     "EngineConfig",
     "EngineSnapshot",
-    "EvidenceQuality",
     "KnowledgeHealth",
     "Observation",
     "ObservationWeights",
-    "PrerequisiteInput",
+    "PlanStep",
+    "Requirement",
     "RoleReadiness",
-    "SessionAbility",
     "SessionUpdate",
-    "adjust_difficulty",
-    "all_role_readiness",
+    "StatedConcept",
     "apply_session",
-    "clamp",
-    "cold_start_queue",
-    "critical_path_values",
-    "current_importance",
-    "days_until_review",
-    "derive_status",
-    "diversify",
-    "effective_mastery",
-    "evidence_quality",
-    "expected_readiness_gain",
-    "initial_difficulty",
-    "intrinsic_importance",
-    "is_due",
-    "is_frontier",
-    "knowledge_health",
-    "learning_cost",
-    "leverage_values",
-    "min_max_normalize",
-    "prerequisite_confidence",
-    "propagate",
+    "document_plan",
+    "document_readiness",
     "recommend",
     "recompute",
+    "requirement_closure",
     "retention",
-    "role_priority_weights",
-    "role_readiness",
-    "score_candidates",
-    "session_ability",
-    "similarity",
     "target_for_node",
+    "total_effort",
     "unexplored",
-    "update_intrinsic_mastery",
-    "update_stability",
 ]

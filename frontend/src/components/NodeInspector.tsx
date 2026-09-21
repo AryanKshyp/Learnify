@@ -7,45 +7,38 @@
  * nothing, and the two that matter get lost among them.
  */
 
-import { useEffect, useState } from "react";
-
 import { api } from "../api/client";
+import { useServerState } from "../api/server-state";
 import type { NodeDetail } from "../api/types";
 import { STATUS_COLOR, STATUS_LABEL, formatHours, pct, sectionName } from "../lib/domain";
 
 interface Props {
   nodeId: string | null;
   role: string | undefined;
-  refreshKey: number;
   onSelect: (nodeId: string) => void;
   onAssess: (nodeId: string) => void;
 }
 
-export function NodeInspector({ nodeId, role, refreshKey, onSelect, onAssess }: Props) {
-  const [detail, setDetail] = useState<NodeDetail | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!nodeId) {
-      setDetail(null);
-      return;
-    }
-    let cancelled = false;
-    setLoading(true);
-    api
-      .node(nodeId, role)
-      .then((data) => !cancelled && setDetail(data))
-      .finally(() => !cancelled && setLoading(false));
-    return () => {
-      cancelled = true;
-    };
-  }, [nodeId, role, refreshKey]);
+export function NodeInspector({ nodeId, role, onSelect, onAssess }: Props) {
+  const { data: detail, problems, loading } = useServerState<NodeDetail>(
+    nodeId ? () => api.node(nodeId, role) : null,
+    [nodeId, role],
+  );
 
   if (!nodeId) {
     return (
       <div className="muted small">
         Select a concept in the graph to see its detail, or start an assessment from a
         recommendation.
+      </div>
+    );
+  }
+  if (problems.length > 0) {
+    return (
+      <div className="error">
+        {problems.map((problem) => (
+          <div key={problem}>{problem}</div>
+        ))}
       </div>
     );
   }

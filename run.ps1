@@ -292,6 +292,23 @@ Step 'Starting servers'
 
 if (Test-Port $API_PORT) {
     Note "backend already running on $API_PORT - leaving it"
+
+    # ...but say so if it is not the backend you think it is. A backend started by hand, or by
+    # a test run, may be using in-memory storage while Postgres sits there healthy and unread.
+    # From the outside the app looks fine and simply shows no data, which reads as "my
+    # assessments are gone" rather than "you are talking to the wrong store".
+    try {
+        $running = Invoke-RestMethod -Uri "$API_URL/health" -TimeoutSec 10
+        if ($usingPostgres -and $running.storage -eq 'memory') {
+            Warn "the backend already on $API_PORT is using IN-MEMORY storage, not Postgres."
+            Warn "your saved data will not appear, and anything you do now will be lost."
+            Warn "stop it and re-run:  .un.ps1 -Stop ; .un.ps1"
+        } elseif ($running.storage) {
+            Note "  storage: $($running.storage)"
+        }
+    } catch {
+        Warn "could not read $API_URL/health - cannot confirm which store it is using"
+    }
 } else {
     # Its own window, so the log is visible and Ctrl+C there stops just the backend.
     #
@@ -329,9 +346,14 @@ Ok 'frontend ready'
 
 # ---------------------------------------------------------------- summary
 
+# Read the storage from the API rather than from $usingPostgres. This script knows whether it
+# *brought Postgres up*, which is not the same question as what the live backend is reading -
+# and reporting the wrong one of those sent someone hunting for lost data that was never lost.
+$storage = $null
 try {
     $health = Invoke-RestMethod -Uri "$API_URL/health" -TimeoutSec 10
     $concepts = $health.curriculum_nodes
+    $storage = $health.storage
 } catch { $concepts = '?' }
 
 Write-Host ""
@@ -339,10 +361,12 @@ Write-Host "  Learnify is running" -ForegroundColor Green
 Write-Host "    app       $WEB_URL"
 Write-Host "    api docs  $API_URL/docs"
 Write-Host "    curriculum $concepts concepts" -ForegroundColor DarkGray
-if (-not $usingPostgres) {
+if ($storage -eq 'memory' -or (-not $storage -and -not $usingPostgres)) {
     Write-Host "    storage   IN MEMORY - nothing is saved when you stop" -ForegroundColor Yellow
+} elseif ($storage) {
+    Write-Host "    storage   $storage" -ForegroundColor DarkGray
 } else {
-    Write-Host "    storage   postgres" -ForegroundColor DarkGray
+    Write-Host "    storage   unknown - /health did not answer" -ForegroundColor Yellow
 }
 Write-Host ""
 Write-Host "  Stop with:  .\run.ps1 -Stop" -ForegroundColor DarkGray

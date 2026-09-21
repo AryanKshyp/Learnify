@@ -158,7 +158,95 @@ export interface IngestResponse {
   computation_trace: Record<string, unknown>;
 }
 
+// --------------------------------------------------------------------- documents
+
+/** Schema C: the prompt to paste, and the catalogue it refers to. */
+export interface Catalogue {
+  prompt: string;
+  catalogue: string;
+  catalogue_filename: string;
+  concept_count: number;
+  sections: string[];
+  role_id: string | null;
+  /** true when the catalogue is embedded in the prompt rather than needing an attachment */
+  fits_inline: boolean;
+  approx_tokens: number;
+}
+
+/** One concept a document needs — named by it, or implied by the prerequisite closure. */
+export interface Requirement {
+  node_id: string;
+  name: string;
+  section: string;
+  competency: string;
+  /** the mastery THIS DOCUMENT demands, not what a role demands */
+  target: number;
+  weight: number;
+  /** false means the closure pulled it in; the document never mentioned it */
+  stated: boolean;
+  required_for: string | null;
+  required_for_name: string | null;
+  distance: number;
+  mastery: number;
+  /** min(mastery / target, 1) — 1.0 means no gap here */
+  sufficiency: number;
+  status: Status;
+}
+
+export interface PlanStep {
+  node_id: string;
+  name: string;
+  section: string;
+  target: number;
+  mastery: number;
+  sufficiency: number;
+  weight: number;
+  stated: boolean;
+  required_for_name: string | null;
+  expected_gain: number;
+  learning_cost_hours: number;
+  priority: number;
+  blocked_by: string[];
+  reason: string;
+}
+
+export interface OutOfCurriculum {
+  label: string;
+  evidence: string;
+}
+
+export interface DocumentSummary {
+  document_id: string;
+  title: string;
+  kind: string;
+  source: string | null;
+  summary: string;
+  created_at: string;
+  readiness: number;
+  bottleneck_node_id: string | null;
+  bottleneck_name: string | null;
+  concept_count: number;
+  gap_count: number;
+  stated_count: number;
+  implied_count: number;
+  total_hours: number;
+}
+
+export interface DocumentPlan extends DocumentSummary {
+  requirements: Requirement[];
+  steps: PlanStep[];
+  out_of_curriculum: OutOfCurriculum[];
+}
+
 /** The API's single error envelope. */
+/**
+ * The one error envelope, matching `api/errors.py`.
+ *
+ * Every optional key below is one the backend actually attaches, checked against the handlers
+ * rather than guessed. `session_id`, `node_id`, `role_id` and `valid_roles` were missing, so an
+ * unknown-session or wrong-role rejection degraded to the bare message and silently dropped the
+ * one detail that said which session or which roles were valid.
+ */
 export interface ApiErrorBody {
   type: string;
   message: string;
@@ -167,4 +255,42 @@ export interface ApiErrorBody {
   field?: string;
   expected?: string;
   received?: string;
+  session_id?: string;
+  node_id?: string;
+  role_id?: string;
+  valid_roles?: string[];
+}
+
+// ----------------------------------------------------------------- sessions
+
+/** Body of `POST /sessions`. Mirrors `SessionRequest` in `api/schemas.py`. */
+export interface SessionRequest {
+  node_id: string;
+  /** 1..50, enforced by the backend. */
+  min_questions?: number;
+  role_id?: string;
+}
+
+/**
+ * Schema A, as far as the frontend reads it.
+ *
+ * Typed loosely on purpose, and no further: this is the payload the learner hands to an
+ * external engine verbatim, so the app must not depend on more of its shape than it displays.
+ * It used to cross as `Record<string, unknown>` and be cast blind at three call sites.
+ */
+export interface SchemaAPayload {
+  session_id: string;
+  target: { node_id: string; name: string };
+  role_context: { role_id: string };
+  [key: string]: unknown;
+}
+
+/** Response of `GET /sessions/open/{id}/prompt`. Six keys, not the three declared before. */
+export interface PromptOut {
+  session_id: string;
+  node_id: string;
+  node_name: string;
+  phase: string;
+  description: string;
+  prompt: string;
 }

@@ -33,6 +33,11 @@ from knowledgeos.state.tables import metadata
 
 NOW = datetime(2026, 8, 1, 12, 0, tzinfo=UTC)
 
+#: Skipping is only useful if it is fast. Without this, a machine with Docker stopped waits on
+#: the OS connect timeout — minutes, twice — before the suite decides Postgres is unreachable,
+#: which reads as a hang rather than as the documented skip.
+CONNECT_TIMEOUT = {"connect_timeout": 3}
+
 
 @pytest.fixture(scope="session")
 def engine():
@@ -56,7 +61,7 @@ def engine():
 
     try:
         _create_database_if_absent(url)
-        engine = sa.create_engine(url, pool_pre_ping=True)
+        engine = sa.create_engine(url, pool_pre_ping=True, connect_args=CONNECT_TIMEOUT)
         with engine.connect() as connection:
             connection.execute(sa.text("select 1"))
     except Exception as exc:  # pragma: no cover - environment dependent
@@ -71,7 +76,11 @@ def _create_database_if_absent(url) -> None:
     Connects to the `postgres` maintenance database, which always exists, so a fresh clone
     needs no manual setup step before `pytest` works.
     """
-    admin = sa.create_engine(url.set(database="postgres"), isolation_level="AUTOCOMMIT")
+    admin = sa.create_engine(
+        url.set(database="postgres"),
+        isolation_level="AUTOCOMMIT",
+        connect_args=CONNECT_TIMEOUT,
+    )
     with admin.connect() as connection:
         exists = connection.execute(
             sa.text("select 1 from pg_database where datname = :name"),
@@ -95,25 +104,65 @@ def history(engine, states):
     return PostgresSessionHistoryRepository(engine)
 
 
+@pytest.fixture
+def pending(engine):
+    """Open Schema A payloads. Cleared around every test, like the other two stores.
+
+    Not covered by `states.clear()`: pending sessions deliberately have no foreign key to
+    knowledge_state, so nothing cascades to them.
+    """
+    from knowledgeos.assessment import PostgresPendingSessionStore
+
+    store = PostgresPendingSessionStore(engine)
+    store.clear()
+    yield store
+    store.clear()
+
+
+def a_schema_a(node_id="prob-axioms", session_id=None):
+    """A minimal but complete Schema A, built directly rather than through the service."""
+    from knowledgeos.assessment import (
+        AssessmentDirectives,
+        CurrentState,
+        PrerequisiteContext,
+        RoleContext,
+        SchemaA,
+        TargetNode,
+    )
+
+    return SchemaA(
+        session_id=session_id or uuid4(),
+        generated_at=NOW,
+        target=TargetNode(
+            node_id=node_id, name="Axioms of probability", section="probability",
+            competency="foundations",
+        ),
+        role_context=RoleContext(
+            role_id="ai-research", importance=0.9, required_depth="derivation"
+        ),
+        current_state=CurrentState(
+            intrinsic_mastery=0.0, retention=0.0, session_count=0, last_gaps=()
+        ),
+        prerequisite_context=(
+            PrerequisiteContext(node_id="prob-bayes", name="Bayes", intrinsic_mastery=0.4),
+        ),
+        assessment_directives=AssessmentDirectives(
+            min_questions=5, must_probe_depth="derivation", focus_hints=("probe transfer",)
+        ),
+    )
+
+
 def a_state(node_id="prob-bayes", **overrides) -> KnowledgeState:
     base = KnowledgeState.cold(node_id).replace(
         intrinsic_mastery=0.62,
-        effective_mastery=0.41,
-        retention=0.83,
         stability=12.5,
         difficulty=0.6,
-        assessment_variance=0.18,
+        assessment_variance_raw=0.18,
         engine_confidence=0.55,
         session_count=3,
         observation_mean=0.6,
         last_assessed_at=NOW,
         next_review_at=NOW + timedelta(days=2),
-        is_frontier=True,
-        critical_path_value=0.34,
-        leverage=0.72,
-        current_importance=0.88,
-        learning_cost=1.9,
-        status=Status.PRACTICED,
         last_gaps=("softmax scaling", "why divide by sqrt(d_k)"),
     )
     return base.replace(**overrides) if overrides else base
@@ -147,10 +196,6 @@ class TestKnowledgeStateRoundTrip:
         loaded = states.get("prob-bayes")
         assert loaded.last_assessed_at.tzinfo is not None
         assert loaded.last_assessed_at == NOW
-
-    def test_status_round_trips_as_enum(self, states):
-        states.save(a_state(status=Status.MASTERED))
-        assert states.get("prob-bayes").status is Status.MASTERED
 
     def test_missing_node_returns_none(self, states):
         assert states.get("nope") is None
@@ -302,7 +347,7 @@ class TestParityWithInMemory:
         curriculum = fixture_repository().get()
         overlay = StateOverlay(curriculum, states)
         assert len(overlay.all()) == len(curriculum)
-        assert overlay.state_for("prob-bayes").status is Status.UNASSESSED
+        assert overlay.state_for("prob-bayes").session_count == 0
 
 
 class TestFullFlowThroughPostgres:
@@ -339,8 +384,109 @@ class TestFullFlowThroughPostgres:
         reloaded = PostgresKnowledgeStateRepository(states._engine).get("prob-axioms")
         assert reloaded.intrinsic_mastery == result.state_after.intrinsic_mastery
         assert reloaded.last_gaps == ("shaky on countable additivity",)
-        assert reloaded.status is not Status.UNASSESSED
+        assert result.status_after is not Status.UNASSESSED, (
+            "status is derived from the snapshot, never read back off the row"
+        )
 
         stored = PostgresSessionHistoryRepository(states._engine).all()
         assert len(stored) == 1
         assert stored[0].computation_trace["stage_2_evidence"]["llm_weight_cap"] == 0.20
+
+
+class TestPendingSessions:
+    """Open Schema A payloads, persisted.
+
+    The half of the session loop that used to live in a process dict. A learner opens a
+    session, copies the Schema A into another tool, and comes back forty minutes later — the
+    server has no business forgetting what it asked in the meantime.
+    """
+
+    def test_schema_a_round_trips(self, pending):
+        schema_a = a_schema_a()
+        pending.open(schema_a)
+        assert pending.peek(schema_a.session_id) == schema_a
+
+    def test_peek_leaves_it_open_and_take_removes_it(self, pending):
+        schema_a = a_schema_a()
+        pending.open(schema_a)
+        assert pending.peek(schema_a.session_id) is not None
+        assert pending.take(schema_a.session_id) == schema_a
+        assert pending.take(schema_a.session_id) is None, "a session is ingested exactly once"
+        assert pending.peek(schema_a.session_id) is None
+
+    def test_unknown_session_is_none_not_an_error(self, pending):
+        assert pending.peek(uuid4()) is None
+        assert pending.take(uuid4()) is None
+
+    def test_reopening_the_same_session_replaces_it(self, pending):
+        """Asking for the Schema A again is legitimate — the learner lost the paste."""
+        session_id = uuid4()
+        pending.open(a_schema_a(session_id=session_id))
+        pending.open(a_schema_a(session_id=session_id))
+        assert len(pending.all()) == 1
+
+    def test_satisfies_the_protocol(self, pending):
+        from knowledgeos.assessment import PendingSessionStore
+
+        assert isinstance(pending, PendingSessionStore)
+
+    def test_a_session_survives_a_restart(self, engine, states, history, pending):
+        """The failure this store exists to prevent.
+
+        Open a session, throw away every object holding it — a deploy, a crash, an autoscale —
+        and rebuild the whole stack from the database. The Schema B must still land. With the
+        in-memory store this raised UnknownSessionError and the assessment was unrecoverable,
+        with no history row recording that it ever happened.
+        """
+        from knowledgeos.assessment import AssessmentService, PostgresPendingSessionStore
+
+        curriculum = fixture_repository().get()
+        opening = AssessmentService(
+            curriculum, StateOverlay(curriculum, states), history, pending=pending
+        )
+        schema_a = opening.generate("prob-axioms", now=NOW)
+        del opening
+
+        # a completely fresh stack over the same database
+        restarted = AssessmentService(
+            curriculum,
+            StateOverlay(curriculum, PostgresKnowledgeStateRepository(engine)),
+            PostgresSessionHistoryRepository(engine),
+            pending=PostgresPendingSessionStore(engine),
+        )
+        result = restarted.ingest(
+            {
+                "schema": "knowledgeos.assessment.output",
+                "schema_version": 1,
+                "session_id": str(schema_a.session_id),
+                "node_id": "prob-axioms",
+                "completed_at": (NOW + timedelta(minutes=45)).isoformat(),
+                "observations": {"recall": 0.85, "depth": 0.7, "transfer": 0.55},
+                "response_time_rating": 0.7,
+                "llm_confidence": 0.8,
+                "gaps_identified": [],
+                "prerequisite_flags": [],
+                "recommended_next_concepts": [],
+                "evidence_summary": "Good recall.",
+            },
+            now=NOW,
+        )
+        assert result.state_after.intrinsic_mastery > 0
+        assert pending.peek(schema_a.session_id) is None, "ingested sessions stop being open"
+
+    def test_pending_stores_agree(self, pending):
+        """Parity, the same as for state and history — the protocol is only worth having if
+        everything above Layer 4 can be tested against the in-memory one."""
+        from knowledgeos.assessment import InMemoryPendingSessionStore
+
+        memory = InMemoryPendingSessionStore()
+        written = [a_schema_a() for _ in range(3)]
+        for store in (pending, memory):
+            for schema_a in written:
+                store.open(schema_a)
+
+        assert pending.all() == memory.all()
+        assert pending.peek(written[0].session_id) == memory.peek(written[0].session_id)
+        assert pending.take(written[0].session_id) == memory.take(written[0].session_id)
+        assert pending.all() == memory.all()
+        assert pending.peek(uuid4()) == memory.peek(uuid4())

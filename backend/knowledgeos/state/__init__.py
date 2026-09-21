@@ -8,25 +8,29 @@ the curriculum; never mutates it. Changes ONLY via validated assessment evidence
 
     overlay = StateOverlay(fixture_repository().get(), InMemoryKnowledgeStateRepository())
     overlay.state_for("prob-bayes")   # cold until assessed
-    overlay.unassessed()              # the cold-start backlog
+    overlay.all()                     # every node joined to its state
 
 This layer stores and retrieves. It computes nothing: every derived field holds its cold
 default until the Stage 3 engine produces a value for it.
 """
 
 from .errors import (
+    DocumentNotFoundError,
     DuplicateSessionError,
     SessionNotFoundError,
     StateError,
     UnknownNodeError,
 )
-from .models import KnowledgeState, SessionRecord, Status
+from .models import DocumentRecord, KnowledgeState, SessionRecord, Status
 from .overlay import NodeState, StateOverlay
 from .postgres import (
+    PostgresDocumentRepository,
     PostgresKnowledgeStateRepository,
     PostgresSessionHistoryRepository,
 )
 from .repository import (
+    DocumentRepository,
+    InMemoryDocumentRepository,
     InMemoryKnowledgeStateRepository,
     InMemorySessionHistoryRepository,
     KnowledgeStateRepository,
@@ -34,14 +38,19 @@ from .repository import (
 )
 
 __all__ = [
+    "DocumentNotFoundError",
+    "DocumentRecord",
+    "DocumentRepository",
     "DuplicateSessionError",
-    "PostgresKnowledgeStateRepository",
-    "PostgresSessionHistoryRepository",
+    "InMemoryDocumentRepository",
     "InMemoryKnowledgeStateRepository",
     "InMemorySessionHistoryRepository",
     "KnowledgeState",
     "KnowledgeStateRepository",
     "NodeState",
+    "PostgresDocumentRepository",
+    "PostgresKnowledgeStateRepository",
+    "PostgresSessionHistoryRepository",
     "SessionHistoryRepository",
     "SessionNotFoundError",
     "SessionRecord",

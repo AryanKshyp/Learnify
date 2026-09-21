@@ -6,6 +6,8 @@
  * flat sections is too many to scan; six domains is not.
  */
 
+import type { Status } from "../api/types";
+
 export interface Domain {
   label: string;
   sections: string[];
@@ -51,8 +53,13 @@ export const sectionName = (section: string): string =>
 export const sectionCode = (section: string): string =>
   SECTION_META[section]?.code ?? section.slice(0, 3).toUpperCase();
 
-/** Status colours. Deliberately a ramp, so progress reads as movement along one axis. */
-export const STATUS_COLOR: Record<string, string> = {
+/** Status colours. Deliberately a ramp, so progress reads as movement along one axis.
+ *
+ * Keyed by `Status` rather than `string`: typed loosely, the union declared in `api/types` was
+ * thrown away and adding a status to the backend enum compiled clean and rendered a colourless
+ * node. Now it is a compile error until the ramp is extended.
+ */
+export const STATUS_COLOR: Record<Status, string> = {
   unassessed: "#8a8a80",
   learning: "#c2703d",
   practiced: "#c9a227",
@@ -60,7 +67,7 @@ export const STATUS_COLOR: Record<string, string> = {
   mastered: "#2f6b4f",
 };
 
-export const STATUS_LABEL: Record<string, string> = {
+export const STATUS_LABEL: Record<Status, string> = {
   unassessed: "Unassessed",
   learning: "Learning",
   practiced: "Practiced",

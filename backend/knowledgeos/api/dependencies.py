@@ -22,6 +22,7 @@ from fastapi import Depends, Request
 
 from knowledgeos.assessment import AssessmentService
 from knowledgeos.curriculum import CurriculumGraph
+from knowledgeos.documents import DocumentService
 from knowledgeos.engine import EngineSnapshot
 
 
@@ -36,6 +37,10 @@ def get_curriculum(request: Request) -> CurriculumGraph:
 
 def get_service(request: Request) -> AssessmentService:
     return request.app.state.service
+
+
+def get_documents(request: Request) -> DocumentService:
+    return request.app.state.documents
 
 
 @dataclass(slots=True)
@@ -84,4 +89,5 @@ def get_context(
 Context = Annotated[RequestContext, Depends(get_context)]
 Curriculum = Annotated[CurriculumGraph, Depends(get_curriculum)]
 Service = Annotated[AssessmentService, Depends(get_service)]
+Documents = Annotated[DocumentService, Depends(get_documents)]
 Now = Annotated[datetime, Depends(get_now)]

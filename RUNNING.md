@@ -289,6 +289,36 @@ Expected on a fresh install — nothing is assessed yet. `python seed.py --demo`
 something to show. The graph home deliberately opens on the **learning frontier** (concepts
 whose prerequisites are already met), so an untouched install shows only root concepts.
 
+### My assessments have disappeared
+
+Check which store the running backend is actually using:
+
+```powershell
+curl http://localhost:8000/health
+```
+
+If it says `"storage": "memory"`, **nothing is lost** — the app is reading an in-memory instance
+and your data is still in Postgres, unread. This happens when a backend was already listening on
+:8000 before you ran `.
+un.cmd`: it is idempotent and leaves a running backend alone, so a
+throwaway one started by hand or by a smoke check stays in place.
+
+```powershell
+.
+un.cmd -Stop
+.
+un.cmd
+```
+
+`run.cmd` now reads storage from `/health` rather than assuming, and warns when it leaves a
+backend alone that turns out to be in-memory while Postgres is up. To confirm your data is
+there before restarting:
+
+```powershell
+docker exec knowledgeos-postgres psql -U knowledgeos -d knowledgeos `
+  -c "select node_id, intrinsic_mastery, session_count from knowledge_state where session_count > 0;"
+```
+
 ---
 
 ## Running without Docker
@@ -303,7 +333,8 @@ uvicorn knowledgeos.api.main:app --reload
 
 The curriculum still loads (it comes from `curriculum_graph.json`, not the database), and the
 full session loop works. **Everything you record is lost when the process stops.** The fallback
-is deliberately loud in the log so you never lose work believing it was saved.
+is deliberately loud in the log, and `/health` reports `"storage": "memory"`, so you can always
+tell from outside the process which store you are talking to.
 
 ---
 

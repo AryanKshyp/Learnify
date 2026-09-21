@@ -18,11 +18,11 @@ from __future__ import annotations
 
 import pytest
 
-from knowledgeos.engine import (
-    DEFAULT_CONFIG,
+from knowledgeos.engine import DEFAULT_CONFIG
+from knowledgeos.engine.pipeline import is_frontier
+from knowledgeos.engine.propagation import (
     PrerequisiteInput,
     effective_mastery,
-    is_frontier,
     prerequisite_confidence,
 )
 

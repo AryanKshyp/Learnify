@@ -12,6 +12,7 @@ become a dashboard; detail is opt-in, one node at a time.
 from __future__ import annotations
 
 from datetime import datetime
+from uuid import UUID
 
 from pydantic import BaseModel, Field
 
@@ -218,6 +219,109 @@ class IngestResponse(BaseModel):
     next_review_at: datetime | None
     session: SessionRecordOut
     computation_trace: dict
+
+
+# ------------------------------------------------------------------ documents
+
+
+class CatalogueOut(BaseModel):
+    """Schema C on the wire: the prompt to paste, and the catalogue it refers to."""
+
+    prompt: str
+    catalogue: str
+    catalogue_filename: str
+    concept_count: int
+    sections: tuple[str, ...]
+    role_id: str | None
+    fits_inline: bool = Field(
+        description="true when the catalogue is embedded in the prompt rather than attached"
+    )
+    approx_tokens: int
+
+
+class RequirementOut(BaseModel):
+    """One concept a document needs — named by it, or implied by the prerequisite closure."""
+
+    node_id: str
+    name: str
+    section: str
+    competency: str
+    target: float = Field(description="tau_doc — the mastery THIS DOCUMENT demands")
+    weight: float = Field(description="how central to the document; the readiness weight")
+    stated: bool = Field(description="false means the closure pulled it in, not the document")
+    required_for: str | None = None
+    required_for_name: str | None = None
+    distance: int = Field(description="prerequisite hops from the nearest stated concept")
+    mastery: float = Field(description="current effective mastery")
+    sufficiency: float = Field(description="min(mastery / target, 1) — 1.0 means no gap here")
+    status: Status
+
+
+class PlanStepOut(BaseModel):
+    """One study step, with everything needed to justify its position in the order."""
+
+    node_id: str
+    name: str
+    section: str
+    target: float
+    mastery: float
+    sufficiency: float
+    weight: float
+    stated: bool
+    required_for_name: str | None
+    expected_gain: float = Field(description="how much THIS document's readiness would rise")
+    learning_cost_hours: float
+    priority: float
+    blocked_by: tuple[str, ...] = Field(
+        description="unmet prerequisites inside this document that must come first"
+    )
+    reason: str
+
+
+class OutOfCurriculumOut(BaseModel):
+    label: str
+    evidence: str
+
+
+class DocumentSummary(BaseModel):
+    """A document in the list view: identity plus live readiness, nothing heavier."""
+
+    document_id: UUID
+    title: str
+    kind: str
+    source: str | None
+    summary: str
+    created_at: datetime
+    readiness: float
+    bottleneck_node_id: str | None
+    bottleneck_name: str | None
+    concept_count: int
+    gap_count: int
+    stated_count: int
+    implied_count: int
+    total_hours: float
+
+
+class DocumentPlanOut(BaseModel):
+    """One document in full: what it needs, what you are missing, and what to do about it."""
+
+    document_id: UUID
+    title: str
+    kind: str
+    source: str | None
+    summary: str
+    created_at: datetime
+
+    readiness: float
+    bottleneck_node_id: str | None
+    bottleneck_name: str | None
+    concept_count: int
+    gap_count: int
+    total_hours: float
+
+    requirements: tuple[RequirementOut, ...]
+    steps: tuple[PlanStepOut, ...]
+    out_of_curriculum: tuple[OutOfCurriculumOut, ...]
 
 
 def build_readiness(

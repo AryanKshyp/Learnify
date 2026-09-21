@@ -14,13 +14,31 @@ rather than needing separate rules.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from knowledgeos.curriculum import CurriculumGraph, Depth
 
 from .config import DEFAULT_CONFIG, EngineConfig
-from .position import min_max_normalize
 from .readiness import all_role_readiness, role_priority_weights
+
+
+# Lives here rather than in the pipeline because both `score_candidates` below and the pipeline's
+# CPV/leverage stages normalise the same way, and the pipeline already imports from this module —
+# the reverse edge would be a cycle.
+def min_max_normalize(values: dict[str, float]) -> dict[str, float]:
+    """Scale to 0..1 across all nodes.
+
+    A flat distribution maps to 0.0 rather than 1.0: if nothing differentiates the nodes, the
+    factor should contribute nothing to ranking instead of maximally inflating everything.
+    """
+    if not values:
+        return {}
+    low = min(values.values())
+    high = max(values.values())
+    if high - low <= 0.0:
+        return dict.fromkeys(values, 0.0)
+    span = high - low
+    return {key: (value - low) / span for key, value in values.items()}
 
 
 def learning_cost(
@@ -87,7 +105,16 @@ def expected_readiness_gain(
 
 @dataclass(frozen=True, slots=True)
 class Candidate:
-    """A node under consideration, with the factors that rank it."""
+    """A node under consideration, with the factors that rank it and the factors that explain it.
+
+    The explanation fields — `blocking_roles`, `unlocks`, `is_frontier` — are facts about the
+    graph and the snapshot, so the engine is the only place that can state them without
+    re-deriving. They are *factors*, not prose: turning them into a sentence is presentation
+    and belongs to whatever is rendering the recommendation.
+
+    They are filled in only for the nodes actually returned, since `unlocks` costs a descendant
+    traversal and the candidate set is far larger than the list.
+    """
 
     node_id: str
     expected_readiness_gain: float
@@ -96,14 +123,21 @@ class Candidate:
     current_importance: float
     priority: float = 0.0
 
+    #: Roles whose readiness this node is currently the bottleneck for.
+    blocking_roles: tuple[str, ...] = ()
+    #: How many nodes sit downstream of this one.
+    unlocks: int = 0
+    #: Whether its prerequisites are already met.
+    is_frontier: bool = False
+
     def with_priority(self, value: float) -> Candidate:
-        return Candidate(
-            node_id=self.node_id,
-            expected_readiness_gain=self.expected_readiness_gain,
-            learning_cost=self.learning_cost,
-            leverage=self.leverage,
-            current_importance=self.current_importance,
-            priority=value,
+        return replace(self, priority=value)
+
+    def with_reasons(
+        self, *, blocking_roles: tuple[str, ...], unlocks: int, is_frontier: bool
+    ) -> Candidate:
+        return replace(
+            self, blocking_roles=blocking_roles, unlocks=unlocks, is_frontier=is_frontier
         )
 
 

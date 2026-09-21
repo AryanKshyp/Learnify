@@ -32,6 +32,7 @@ from knowledgeos.state import (
     SessionHistoryRepository,
     SessionRecord,
     StateOverlay,
+    Status,
 )
 
 from .errors import (
@@ -103,16 +104,27 @@ class InMemoryPendingSessionStore:
 
 @dataclass(frozen=True, slots=True)
 class IngestResult:
-    """Everything one ingestion produced."""
+    """Everything one ingestion produced.
+
+    `status_before` comes from a snapshot taken before anything was written, and `status_after`
+    from the one taken after. Status is not stored on knowledge state — it is a function of
+    retention and effective mastery, so it moves with the clock even when no evidence has —
+    which means the only honest "before" is one computed against the same `now` as the "after".
+    """
 
     record: SessionRecord
     state_before: KnowledgeState
     state_after: KnowledgeState
+    status_before: Status
     snapshot: EngineSnapshot
 
     @property
     def mastery_delta(self) -> float:
         return self.state_after.intrinsic_mastery - self.state_before.intrinsic_mastery
+
+    @property
+    def status_after(self) -> Status:
+        return self.snapshot.status[self.record.node_id]
 
 
 class AssessmentService:
@@ -129,7 +141,9 @@ class AssessmentService:
         self._curriculum = curriculum
         self._overlay = overlay
         self._history = history
-        self._pending = pending or InMemoryPendingSessionStore()
+        # `is None` rather than `or`: a store that defines __len__ is falsy while empty, and an
+        # empty store is exactly the state an injected one is in when it is handed over.
+        self._pending = InMemoryPendingSessionStore() if pending is None else pending
         self._config = config
 
     @property
@@ -311,6 +325,10 @@ class AssessmentService:
 
         node_id = schema_b.node_id
         state_before = self._overlay.state_for(node_id)
+        # Derived values are not stored, so "the status before this session" has to be computed
+        # while the evidence is still untouched. Costs one extra pass over the graph per ingest,
+        # which is what the removed write-back cache used to cost in a 566-row upsert.
+        status_before = self.recompute(now=now).status[node_id]
         elapsed = days_between(state_before.last_assessed_at, schema_b.completed_at)
 
         update = apply_session(
@@ -330,10 +348,9 @@ class AssessmentService:
 
         state_after = state_before.replace(
             intrinsic_mastery=update.intrinsic_mastery,
-            retention=update.retention,
             stability=update.stability,
             difficulty=update.difficulty,
-            assessment_variance=update.variance,
+            assessment_variance_raw=update.variance_raw,
             engine_confidence=update.engine_confidence,
             observation_mean=update.running_mean,
             session_count=update.session_count,
@@ -358,14 +375,12 @@ class AssessmentService:
         )
         self._history.append(record)
 
-        snapshot = self.recompute(now=now)
-        self._apply_derived(snapshot)
-
         return IngestResult(
             record=record,
             state_before=state_before,
-            state_after=self._overlay.state_for(node_id),
-            snapshot=snapshot,
+            state_after=state_after,
+            status_before=status_before,
+            snapshot=self.recompute(now=now),
         )
 
     def _validate_node_references(self, schema_b: SchemaB) -> None:
@@ -396,30 +411,6 @@ class AssessmentService:
             active_role_id=active_role_id,
             config=self._config,
         )
-
-    def _apply_derived(self, snapshot: EngineSnapshot) -> None:
-        """Write the engine's derived values back onto knowledge state.
-
-        These are all recomputed values, never authored — persisting them is a cache so the API
-        can serve a node without re-running the pipeline, not a second source of truth.
-        """
-        updated = []
-        for item in self._overlay.all():
-            node_id = item.node_id
-            updated.append(
-                item.state.replace(
-                    effective_mastery=snapshot.effective_mastery[node_id],
-                    retention=snapshot.retention[node_id],
-                    is_frontier=snapshot.frontier[node_id],
-                    critical_path_value=snapshot.critical_path_value[node_id],
-                    leverage=snapshot.leverage[node_id],
-                    current_importance=snapshot.current_importance[node_id],
-                    learning_cost=snapshot.learning_cost[node_id],
-                    status=snapshot.status[node_id],
-                )
-            )
-        self._overlay.save_many(tuple(updated))
-
 
 def _days(value: float):
     """Days as a timedelta. Kept local so the import stays out of the engine's reach."""

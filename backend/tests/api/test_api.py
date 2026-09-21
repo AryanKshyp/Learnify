@@ -16,6 +16,7 @@ from fastapi.testclient import TestClient
 
 from knowledgeos.api import create_app
 from knowledgeos.api.dependencies import get_now
+from knowledgeos.assessment import InMemoryPendingSessionStore
 from knowledgeos.curriculum import fixture_repository
 
 NOW = datetime(2026, 8, 1, 12, 0, tzinfo=UTC)
@@ -58,10 +59,32 @@ class TestOpsAndDocs:
         assert body["status"] == "ok"
         assert body["curriculum_nodes"] == 26
 
+    def test_health_reports_which_store_is_really_behind_it(self, client):
+        """An in-memory instance looks identical to a persistent one until it is restarted and
+        every assessment is gone. `run.ps1` leaves an already-running backend alone, so it has
+        to be able to ask what that backend is using rather than infer it from whether a
+        database happens to be up."""
+        body = client.get("/health").json()
+        assert body["storage"] == "memory"
+        assert body["persistent"] is False
+
+    def test_the_pending_store_is_injectable_and_reported_separately(self):
+        """Open Schema A payloads are their own store, and their own way to lose data.
+
+        Knowledge state in Postgres with pending sessions in memory still drops any session
+        waiting for its Schema B, so `persistent` means both and the two are reported apart.
+        """
+        store = InMemoryPendingSessionStore()
+        application = create_app(curriculum=fixture_repository().get(), pending=store)
+        assert application.state.service.pending is store
+        body = TestClient(application).get("/health").json()
+        assert body["pending_storage"] == "memory"
+        assert body["persistent"] is False
+
     def test_openapi_renders(self, client):
         response = client.get("/openapi.json")
         assert response.status_code == 200
-        assert len(response.json()["paths"]) == 17
+        assert len(response.json()["paths"]) == 21
 
     def test_docs_render(self, client):
         assert client.get("/docs").status_code == 200
@@ -162,6 +185,25 @@ class TestRecommendations:
 
     def test_unknown_role_is_404(self, client):
         assert client.get("/recommendations/role/astronaut").status_code == 404
+
+    def test_no_role_lens_comes_back_empty(self, client):
+        """The lens narrows the candidate set in the engine, before scoring.
+
+        Filtering an over-fetched overall list afterwards could return fewer than `limit` — or
+        nothing at all — whenever a lens's eligible nodes ranked below the over-fetch window,
+        with no signal that it had happened. Exactness is pinned in the engine tests; over HTTP
+        the claim worth making is that every role has something to suggest.
+        """
+        for role in (r["role_id"] for r in client.get("/roles").json()):
+            body = client.get(f"/recommendations/role/{role}?limit=3").json()
+            assert body["recommendations"], role
+            assert len(body["recommendations"]) <= 3, role
+
+    def test_lensed_recommendations_still_explain_themselves(self, client):
+        body = client.get("/recommendations/competency/probability").json()
+        assert body["recommendations"]
+        for rec in body["recommendations"]:
+            assert rec["reason"]
 
     def test_readiness_names_its_bottleneck(self, client):
         for readiness in client.get("/readiness").json():

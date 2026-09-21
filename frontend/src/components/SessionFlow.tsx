@@ -10,13 +10,23 @@
  * exactly one paste — no manual number entry anywhere (BUILD_SPEC.md Part E). Letting someone
  * type a mastery score would make the number an opinion rather than evidence, which is the
  * failure the whole system exists to prevent.
+ *
+ * The protocol itself lives in `lib/session-protocol` — what the stages are, which requests
+ * each makes, and which failures are recoverable. This file renders whichever stage it is
+ * handed and owns nothing but the textarea and the copy-button flash.
  */
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { ApiError, api } from "../api/client";
-import type { IngestResponse, Role, RoleRequirement } from "../api/types";
+import type { IngestResponse, Role } from "../api/types";
 import { STATUS_LABEL, pct } from "../lib/domain";
+import {
+  STEPS,
+  isLoading,
+  problemsIn,
+  promptOf,
+  useSession,
+} from "../lib/session-protocol";
 
 interface Props {
   nodeId: string;
@@ -28,110 +38,18 @@ interface Props {
   onCancel: () => void;
 }
 
-type Phase = "study" | "assess" | "wrapup" | "full";
-
-const STEPS: { phase: Phase; label: string; blurb: string }[] = [
-  {
-    phase: "study",
-    label: "1 · Study",
-    blurb:
-      "Teaches the concept to the depth your target role needs, then gives reading and practice. Skip this if you have already studied.",
-  },
-  {
-    phase: "assess",
-    label: "2 · Assess",
-    blurb:
-      "Tests you. It will not teach, hint freely, or tell you how you are doing — all three would corrupt the measurement.",
-  },
-  {
-    phase: "wrapup",
-    label: "3 · Wrap up",
-    blurb:
-      "Paste when the questions are done. The LLM replies with one JSON object; paste that into the box below.",
-  },
-];
-
 export function SessionFlow({ nodeId, role, roles, onDone, onCancel }: Props) {
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [nodeName, setNodeName] = useState("");
-  // `undefined` = the node's roles have not loaded yet, so we do not know what to ask for;
-  // `null` = ask for nothing and let the application pick the node's most important role.
-  const [chosenRole, setChosenRole] = useState<string | null | undefined>(undefined);
-  const [nodeRoles, setNodeRoles] = useState<RoleRequirement[]>([]);
-  const [usedRole, setUsedRole] = useState<string | null>(null);
-  const [step, setStep] = useState<Phase>("study");
-  const [prompt, setPrompt] = useState("");
-  const [loading, setLoading] = useState(true);
+  const session = useSession(nodeId, role, onDone);
+  const { stage, nodeName, nodeRoles, chosenRole, usedRole } = session;
+
+  const [step, setStep] = useState(STEPS[0]!.phase);
   const [pasted, setPasted] = useState("");
-  const [problems, setProblems] = useState<string[]>([]);
-  const [result, setResult] = useState<IngestResponse | null>(null);
-  const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Which roles this node is even tagged for, and at what depth. Fetched before the session
-  // is opened: asking for a role the node does not serve is a hard rejection, so the default
-  // is only applied once we know it is valid.
-  useEffect(() => {
-    let cancelled = false;
-    setChosenRole(undefined);
-    api
-      .node(nodeId)
-      .then((detail) => {
-        if (cancelled) return;
-        setNodeRoles(detail.roles);
-        setNodeName(detail.name);
-        const serves = detail.roles.some((r) => r.role_id === role);
-        setChosenRole(role && serves ? role : null);
-      })
-      .catch((error) =>
-        setProblems(error instanceof ApiError ? error.problems : [String(error)]),
-      );
-    return () => {
-      cancelled = true;
-    };
-  }, [nodeId, role]);
-
-  // Open the session — again whenever the role changes, because the role is baked into the
-  // Schema A at generation time and decides every depth in the prompt.
-  useEffect(() => {
-    if (chosenRole === undefined) return;
-    let cancelled = false;
-    api
-      .openSession(nodeId, chosenRole ?? undefined)
-      .then((schemaA) => {
-        if (cancelled) return;
-        setSessionId(String(schemaA.session_id));
-        const target = schemaA.target as { name?: string } | undefined;
-        setNodeName(target?.name ?? nodeId);
-        // Read back what was actually used, so the selector shows the application's own
-        // choice rather than a blank when no role was asked for.
-        const context = schemaA.role_context as { role_id?: string } | undefined;
-        setUsedRole(context?.role_id ?? null);
-      })
-      .catch((error) =>
-        setProblems(error instanceof ApiError ? error.problems : [String(error)]),
-      );
-    return () => {
-      cancelled = true;
-    };
-  }, [nodeId, chosenRole]);
-
-  // fetch the prompt for whichever step is showing
-  useEffect(() => {
-    if (!sessionId) return;
-    let cancelled = false;
-    setLoading(true);
-    api
-      .prompt(sessionId, step)
-      .then((data) => !cancelled && setPrompt(data.prompt))
-      .catch((error) =>
-        setProblems(error instanceof ApiError ? error.problems : [String(error)]),
-      )
-      .finally(() => !cancelled && setLoading(false));
-    return () => {
-      cancelled = true;
-    };
-  }, [sessionId, step]);
+  const prompt = promptOf(stage);
+  const loading = isLoading(stage);
+  const problems = problemsIn(stage);
+  const busy = stage.kind === "submitting";
 
   const copy = async () => {
     await navigator.clipboard.writeText(prompt);
@@ -139,34 +57,13 @@ export function SessionFlow({ nodeId, role, roles, onDone, onCancel }: Props) {
     setTimeout(() => setCopied(false), 1800);
   };
 
-  const submit = async () => {
-    setBusy(true);
-    setProblems([]);
-    let parsed: unknown;
-    try {
-      // Models often wrap JSON in a fence despite being told not to. Strip it rather than
-      // rejecting — the contract that matters is the object's shape, not the packaging.
-      const cleaned = pasted.trim().replace(/^```(?:json)?\s*/i, "").replace(/```$/, "");
-      parsed = JSON.parse(cleaned);
-    } catch (error) {
-      // Caught before the request: a syntax error is a paste problem, and saying so is more
-      // useful than a 422 about a missing field.
-      setProblems([`That is not valid JSON — ${(error as Error).message}`]);
-      setBusy(false);
-      return;
-    }
-    try {
-      const response = await api.ingest(parsed);
-      setResult(response);
-      onDone(response);
-    } catch (error) {
-      setProblems(error instanceof ApiError ? error.problems : [String(error)]);
-    } finally {
-      setBusy(false);
-    }
+  const choose = (phase: (typeof STEPS)[number]["phase"]) => {
+    setStep(phase);
+    session.choosePhase(phase);
   };
 
-  if (result) {
+  if (stage.kind === "recorded") {
+    const { result } = stage;
     return (
       <div className="stack">
         <div className="between">
@@ -191,6 +88,31 @@ export function SessionFlow({ nodeId, role, roles, onDone, onCancel }: Props) {
     );
   }
 
+  // Could not open a session at all — nothing else on this panel can work, so it offers the
+  // one action that can. Previously this state rendered the error beside a permanently
+  // disabled "Loading…" button, and the only way out was closing the panel.
+  if (stage.kind === "unopened") {
+    return (
+      <div className="stack">
+        <div className="between">
+          <h2 style={{ fontSize: 18 }}>{nodeName || "Session"}</h2>
+          <button onClick={onCancel}>Close</button>
+        </div>
+        <div className="error">
+          <strong>Could not start the session.</strong>
+          <ul>
+            {problems.map((problem) => (
+              <li key={problem}>{problem}</li>
+            ))}
+          </ul>
+        </div>
+        <button className="primary" onClick={session.retry}>
+          Try again
+        </button>
+      </div>
+    );
+  }
+
   const current = STEPS.find((s) => s.phase === step) ?? STEPS[0]!;
   const roleName = (roleId: string) =>
     roles.find((r) => r.role_id === roleId)?.name ?? roleId;
@@ -208,7 +130,7 @@ export function SessionFlow({ nodeId, role, roles, onDone, onCancel }: Props) {
           <span className="label">Assessing for</span>
           <select
             value={chosenRole ?? ""}
-            onChange={(event) => setChosenRole(event.target.value || null)}
+            onChange={(event) => session.chooseRole(event.target.value || null)}
             style={{ width: "100%", marginTop: 6 }}
             title="The role decides how deep this session goes and how the concept is framed"
           >
@@ -243,8 +165,8 @@ export function SessionFlow({ nodeId, role, roles, onDone, onCancel }: Props) {
           <button
             key={s.phase}
             className={step === s.phase ? "active" : ""}
-            onClick={() => setStep(s.phase)}
-            disabled={!sessionId}
+            onClick={() => choose(s.phase)}
+            disabled={stage.kind === "opening"}
           >
             {s.label}
           </button>
@@ -284,7 +206,11 @@ export function SessionFlow({ nodeId, role, roles, onDone, onCancel }: Props) {
             placeholder='{"schema": "knowledgeos.assessment.output", ...}'
             spellCheck={false}
           />
-          <button className="primary" onClick={submit} disabled={busy || !pasted.trim()}>
+          <button
+            className="primary"
+            onClick={() => session.submit(pasted)}
+            disabled={busy || !pasted.trim()}
+          >
             {busy ? "Validating…" : "Submit"}
           </button>
         </>
