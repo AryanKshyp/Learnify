@@ -3,7 +3,7 @@
 A personal interview-preparation operating system. It maintains an evidence-based model of what
 you know across six role tracks, detects prerequisite gaps, models forgetting, and recommends
 what to study next to maximise **expected readiness gain per unit of effort** — not to close the
-biggest gap.
+biggest gap. 
 
 It is not a tutor, a notes app, or a flashcard system. Teaching and questioning happen
 elsewhere; this owns the model of your knowledge and the decisions that follow from it.
@@ -143,7 +143,7 @@ document that needed it gets more readable, with no re-extraction.
 
 ## Commands
 
-```bash
+
 # curriculum (repo root)
 python build_graph.py      # regenerate + validate curriculum_graph.json — must print ERRORS: 0
 python make_fixture.py     # regenerate the test fixture as an exact subset of the graph
@@ -161,11 +161,11 @@ npm run typecheck
 npm run build
 node drive.mjs             # headless smoke check → shot-*.png (dev server must be running)
 node drive-prep.mjs        # the same, for the Prep tab
-```
+
 
 ## Layout
 
-```
+
 CLAUDE.md              the constitution — principles that do not change
 ARCHITECTURE.md        system design, layer boundaries, confirmed stack
 PROJECT_STATE.md       current stage, decisions, known issues   ← read this first
@@ -183,7 +183,7 @@ backend/knowledgeos/
   assessment/          L4  the Schema A/B boundary
   api/                     FastAPI over L1–L4
 frontend/              React + Vite + Cytoscape.js
-```
+
 
 ## Layer boundaries are enforced, not documented
 
