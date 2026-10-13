@@ -1,4 +1,4 @@
-# KnowledgeOS
+# KnowledgeOS - Product of Learnify
 
 A personal interview-preparation operating system. It maintains an evidence-based model of what
 you know across six role tracks, detects prerequisite gaps, models forgetting, and recommends
