@@ -134,7 +134,11 @@ def ingest_session(context: Context, payload: dict[str, Any] = Body(...)) -> Ing
     the same clock as the "after".
     """
     result = context.service.ingest(payload, now=context.now)
+    return ingest_response(result)
 
+
+def ingest_response(result) -> IngestResponse:
+    """Shape an `IngestResult` for the wire. Shared by the paste path and the in-app path."""
     return IngestResponse(
         node_id=result.record.node_id,
         intrinsic_mastery_before=result.state_before.intrinsic_mastery,

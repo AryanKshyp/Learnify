@@ -3,12 +3,15 @@ import { createRoot } from "react-dom/client";
 
 import App from "./App";
 import { ServerStateProvider } from "./api/server-state";
+import { AuthGate } from "./auth/AuthGate";
 import "./styles.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ServerStateProvider>
-      <App />
-    </ServerStateProvider>
+    <AuthGate>
+      <ServerStateProvider>
+        <App />
+      </ServerStateProvider>
+    </AuthGate>
   </StrictMode>,
 );

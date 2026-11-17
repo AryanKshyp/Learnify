@@ -7,11 +7,13 @@ about the other.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 
 from knowledgeos.assessment import AssessmentService, PendingSessionStore
+from knowledgeos.config import settings
 from knowledgeos.curriculum import (
     DEFAULT_CURRICULUM_PATH,
     CurriculumGraph,
@@ -27,9 +29,14 @@ from knowledgeos.state import (
     SessionHistoryRepository,
     StateOverlay,
 )
+from knowledgeos.state.tables import LOCAL_USER
 
+from .auth import Authenticator, get_user_id
 from .errors import register_error_handlers
-from .routers import documents, graph, recommendations, sessions
+from .frontend import mount_frontend
+from .llm_settings import LlmSettingsStore
+from .routers import documents, graph, llm, recommendations, sessions
+from .stacks import Stack, StackProvider
 
 
 def _storage_label(repository: object) -> str:
@@ -79,11 +86,19 @@ def create_app(
     history: SessionHistoryRepository | None = None,
     pending: PendingSessionStore | None = None,
     documents_repo: DocumentRepository | None = None,
+    stack_factory: Callable[[str], Stack] | None = None,
+    authenticator: Authenticator | None = None,
+    llm_settings: LlmSettingsStore | None = None,
+    frontend_dist: Path | str | None = None,
 ) -> FastAPI:
     """Build the application.
 
     Defaults to the real curriculum with in-memory storage. Pass repositories to persist —
     they are protocols, so the Postgres implementations drop straight in.
+
+    Hosted use passes `stack_factory` (one service stack per user, built from user-scoped
+    repositories) and an `authenticator`; the single `states`/`history`/... arguments are the
+    single-user mode and are ignored when a factory is given.
     """
     app = FastAPI(
         title="KnowledgeOS",
@@ -107,31 +122,51 @@ def create_app(
     resolved = curriculum if curriculum is not None else JsonCurriculumRepository(
         curriculum_path
     ).get()
-    state_repository = (
-        InMemoryKnowledgeStateRepository() if states is None else states
-    )
-    overlay = StateOverlay(resolved, state_repository)
-    service = AssessmentService(
-        resolved,
-        overlay,
-        InMemorySessionHistoryRepository() if history is None else history,
-        pending=pending,
-    )
+    if stack_factory is not None:
+        stacks = StackProvider(factory=stack_factory)
+        # Only used to report which store is behind the factory; holds no user data.
+        probe = stacks.for_user(LOCAL_USER)
+    else:
+        state_repository = (
+            InMemoryKnowledgeStateRepository() if states is None else states
+        )
+        overlay = StateOverlay(resolved, state_repository)
+        service = AssessmentService(
+            resolved,
+            overlay,
+            InMemorySessionHistoryRepository() if history is None else history,
+            pending=pending,
+        )
+        probe = Stack(
+            storage=_storage_label(state_repository),
+            service=service,
+            documents=DocumentService(
+                resolved,
+                InMemoryDocumentRepository() if documents_repo is None else documents_repo,
+            ),
+        )
+        stacks = StackProvider(shared=probe)
+        # Single-user mode only: with per-user stacks there is no one global service, and
+        # exposing the probe's would invite code that quietly serves everyone as `local`.
+        app.state.service = probe.service
+        app.state.documents = probe.documents
+    service = probe.service
 
     app.state.curriculum = resolved
-    app.state.service = service
-    app.state.documents = DocumentService(
-        resolved,
-        InMemoryDocumentRepository() if documents_repo is None else documents_repo,
+    app.state.stacks = stacks
+    app.state.authenticator = authenticator
+    app.state.llm_settings = (
+        llm_settings if llm_settings is not None else LlmSettingsStore.in_memory()
     )
 
     register_error_handlers(app)
-    app.include_router(graph.router)
-    app.include_router(recommendations.router)
-    app.include_router(sessions.router)
-    app.include_router(documents.router)
+    # Every router requires a signed-in caller, including the ones that only read the shared
+    # curriculum: with accounts on there is no reason for any route but `/health` (which the
+    # host probes) to answer an anonymous request.
+    for module in (graph, recommendations, sessions, documents, llm):
+        app.include_router(module.router, dependencies=[Depends(get_user_id)])
 
-    storage = _storage_label(state_repository)
+    storage = probe.storage
     pending_storage = _storage_label(service.pending)
 
     @app.get("/health", tags=["ops"])
@@ -155,6 +190,25 @@ def create_app(
             "storage": storage,
             "pending_storage": pending_storage,
             "persistent": storage != "memory" and pending_storage != "memory",
+            "auth": "required" if authenticator is not None else "none",
         }
+
+    @app.get("/config", tags=["ops"])
+    def public_config() -> dict[str, object]:
+        """What the browser needs before anyone is signed in.
+
+        Public on purpose: the sign-in screen cannot authenticate to learn how to authenticate.
+        Contains only values that are public by design (the project URL and anon key).
+        """
+        if authenticator is None:
+            return {"auth": False}
+        return {
+            "auth": True,
+            "supabase_url": settings.supabase_url,
+            "supabase_anon_key": settings.supabase_anon_key,
+        }
+
+    if frontend_dist is not None:
+        mount_frontend(app, Path(frontend_dist))
 
     return app

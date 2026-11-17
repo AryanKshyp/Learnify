@@ -12,7 +12,7 @@
  * affected.
  */
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { api } from "./api/client";
 import { useInvalidate, useServerState } from "./api/server-state";
@@ -24,7 +24,9 @@ import { Overview } from "./components/Overview";
 import { Prep } from "./components/Prep";
 import { Recommendations } from "./components/Recommendations";
 import { SessionFlow } from "./components/SessionFlow";
+import { Settings } from "./components/Settings";
 import { DOMAINS, sectionName } from "./lib/domain";
+import { takeOpenRouterCallback } from "./lib/openrouter";
 
 type Tab = "graph" | "browse" | "recommendations" | "prep" | "overview";
 
@@ -36,6 +38,23 @@ export default function App() {
   const [depth, setDepth] = useState(1);
   const [assessing, setAssessing] = useState<string | null>(null);
   const invalidate = useInvalidate();
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [settingsNotice, setSettingsNotice] = useState<string | null>(null);
+  const [llmVersion, setLlmVersion] = useState(0);
+
+  // Returning from "Connect OpenRouter": trade the one-time code for a key and say what happened.
+  useEffect(() => {
+    const callback = takeOpenRouterCallback();
+    if (!callback) return;
+    setSettingsOpen(true);
+    api.openrouterExchange(callback.code, callback.verifier).then(
+      () => {
+        setSettingsNotice("OpenRouter is connected. Sessions will now run in the app.");
+        setLlmVersion((n) => n + 1);
+      },
+      () => setSettingsNotice("Could not connect OpenRouter. Please try again."),
+    );
+  }, []);
 
   const rolesRead = useServerState<Role[]>(() => api.roles(), []);
   // Every section, fetched once. `graph.sections` narrows to whatever the current filter
@@ -109,7 +128,19 @@ export default function App() {
             {graph.nodes.length} concepts · {graph.edges.length} links
           </span>
         )}
+        <button onClick={() => setSettingsOpen(true)}>Settings</button>
       </header>
+
+      {settingsOpen && (
+        <Settings
+          notice={settingsNotice}
+          onClose={() => {
+            setSettingsOpen(false);
+            setSettingsNotice(null);
+          }}
+          onChanged={() => setLlmVersion((n) => n + 1)}
+        />
+      )}
 
       {problems.length > 0 && (
         <div className="error" style={{ margin: 12 }}>
@@ -199,6 +230,8 @@ export default function App() {
               roles={roles}
               onDone={finish}
               onCancel={() => setAssessing(null)}
+              onOpenSettings={() => setSettingsOpen(true)}
+              llmVersion={llmVersion}
             />
           ) : (
             <NodeInspector

@@ -18,8 +18,12 @@
 
 import { useState } from "react";
 
+import { api } from "../api/client";
+import { useServerState } from "../api/server-state";
+
 import type { IngestResponse, Role } from "../api/types";
 import { STATUS_LABEL, pct } from "../lib/domain";
+import { SessionChat } from "./SessionChat";
 import {
   STEPS,
   isLoading,
@@ -36,15 +40,38 @@ interface Props {
   roles: Role[];
   onDone: (result: IngestResponse) => void;
   onCancel: () => void;
+  /** Opens Settings, where an AI provider key is added to run sessions in the app. */
+  onOpenSettings: () => void;
+  /** Bumped when the AI provider changes, so this re-reads whether one is configured. */
+  llmVersion: number;
 }
 
-export function SessionFlow({ nodeId, role, roles, onDone, onCancel }: Props) {
+export function SessionFlow({
+  nodeId,
+  role,
+  roles,
+  onDone,
+  onCancel,
+  onOpenSettings,
+  llmVersion,
+}: Props) {
   const session = useSession(nodeId, role, onDone);
   const { stage, nodeName, nodeRoles, chosenRole, usedRole } = session;
 
   const [step, setStep] = useState(STEPS[0]!.phase);
   const [pasted, setPasted] = useState("");
   const [copied, setCopied] = useState(false);
+  // Sessions run in the app when the user has connected an AI account; otherwise the original
+  // copy-paste loop is what they get, unchanged. `manual` is the user choosing paste anyway.
+  const llm = useServerState(() => api.llmSettings(), [llmVersion]);
+  const [manual, setManual] = useState(false);
+  const [appResult, setAppResult] = useState<IngestResponse | null>(null);
+  const inApp = llm.data?.configured === true && !manual;
+  // Until we know whether an AI account is connected - and, when it is, until the session has
+  // opened - show a spinner rather than briefly flashing the copy-paste layout.
+  // If that lookup itself fails, fall back to the paste layout rather than spin forever.
+  const settling =
+    (llm.data === undefined && llm.problems.length === 0) || (inApp && stage.kind !== "ready");
 
   const prompt = promptOf(stage);
   const loading = isLoading(stage);
@@ -62,8 +89,9 @@ export function SessionFlow({ nodeId, role, roles, onDone, onCancel }: Props) {
     session.choosePhase(phase);
   };
 
-  if (stage.kind === "recorded") {
-    const { result } = stage;
+  const recorded = stage.kind === "recorded" ? stage.result : appResult;
+  if (recorded) {
+    const result = recorded;
     return (
       <div className="stack">
         <div className="between">
@@ -155,11 +183,47 @@ export function SessionFlow({ nodeId, role, roles, onDone, onCancel }: Props) {
             )}
           </p>
           <p className="tiny muted" style={{ marginTop: 4 }}>
-            Changing this starts a fresh session, so choose before you paste the prompt.
+            Changing this starts a fresh session, so choose before you begin.
           </p>
         </div>
       )}
 
+      {settling && !problems.length && <div className="spinner">Opening session…</div>}
+
+      {inApp && stage.kind === "ready" && (
+        <>
+          <SessionChat
+            sessionId={stage.sessionId}
+            onRecorded={(result) => {
+              setAppResult(result);
+              onDone(result);
+            }}
+          />
+          <button className="linklike" onClick={() => setManual(true)}>
+            Use my own chat window instead (copy and paste)
+          </button>
+        </>
+      )}
+
+      {!settling && !inApp && llm.data && !llm.data.configured && (
+        <div className="card stack-tight">
+          <strong className="small">Run this session right here</strong>
+          <p className="tiny muted">
+            Connect your own AI account once and sessions run in the app, with no copying and
+            pasting. Or carry on below with any chat window.
+          </p>
+          <button onClick={onOpenSettings}>Connect an AI account</button>
+        </div>
+      )}
+
+      {manual && llm.data?.configured && (
+        <button className="linklike" onClick={() => setManual(false)}>
+          Run the session in the app instead
+        </button>
+      )}
+
+      {!settling && !inApp && (
+      <>
       <div className="row" style={{ flexWrap: "wrap" }}>
         {STEPS.map((s) => (
           <button
@@ -214,6 +278,8 @@ export function SessionFlow({ nodeId, role, roles, onDone, onCancel }: Props) {
             {busy ? "Validating…" : "Submit"}
           </button>
         </>
+      )}
+      </>
       )}
     </div>
   );

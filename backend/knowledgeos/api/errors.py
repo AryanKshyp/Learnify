@@ -34,6 +34,7 @@ from knowledgeos.documents import (
     ExtractionValidationError,
     UnknownConceptError,
 )
+from knowledgeos.llm import LlmError
 from knowledgeos.state import DocumentNotFoundError, StateError, UnknownNodeError
 
 
@@ -53,6 +54,11 @@ def register_error_handlers(app: FastAPI) -> None:
     async def _not_found(request: Request, exc: Exception) -> JSONResponse:
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND, content=error_body(exc))
+
+    @app.exception_handler(LlmError)
+    async def _llm_error(request: Request, exc: LlmError) -> JSONResponse:
+        # The message is written to be shown to the user and never contains the API key.
+        return JSONResponse(status_code=exc.status, content=error_body(exc))
 
     @app.exception_handler(UnknownSessionError)
     async def _unknown_session(request: Request, exc: UnknownSessionError) -> JSONResponse:
