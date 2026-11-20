@@ -294,3 +294,27 @@ export interface PromptOut {
   description: string;
   prompt: string;
 }
+
+// --------------------------------------------------------------------- AI provider
+
+export interface LlmProvider {
+  id: string;
+  label: string;
+  default_model: string;
+  key_help_url: string;
+  /** Can the user connect an account instead of pasting a key? */
+  oauth: boolean;
+}
+
+/** Never contains the key itself - only enough to recognise which one is saved. */
+export interface LlmSettings {
+  configured: boolean;
+  provider: string | null;
+  model: string | null;
+  key_hint: string | null;
+}
+
+export interface ChatTurn {
+  role: "user" | "assistant";
+  content: string;
+}

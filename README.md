@@ -73,6 +73,10 @@ Open `http://localhost:5173`. API docs are at `http://localhost:8000/docs`.
 Postgres is optional for a quick look — the API falls back to in-memory storage and says so
 loudly, but assessments will not survive a restart.
 
+**Putting it online for other people?** **[DEPLOY.md](DEPLOY.md)** turns this into a website with
+accounts: Supabase for sign-in and the database, one container for the app, and each user
+connecting their own AI account.
+
 **[RUNNING.md](RUNNING.md)** has the full guide: first-time setup, everyday startup, how to
 verify it works, and troubleshooting for the things that actually go wrong.
 

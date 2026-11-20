@@ -25,6 +25,9 @@ from knowledgeos.curriculum import CurriculumGraph
 from knowledgeos.documents import DocumentService
 from knowledgeos.engine import EngineSnapshot
 
+from .auth import UserId
+from .stacks import Stack
+
 
 def get_now() -> datetime:
     """The current time, injectable. Overridden in tests to make decay assertable."""
@@ -35,12 +38,17 @@ def get_curriculum(request: Request) -> CurriculumGraph:
     return request.app.state.curriculum
 
 
-def get_service(request: Request) -> AssessmentService:
-    return request.app.state.service
+def get_stack(request: Request, user_id: UserId) -> Stack:
+    """The services for the authenticated caller - never another user's."""
+    return request.app.state.stacks.for_user(user_id)
 
 
-def get_documents(request: Request) -> DocumentService:
-    return request.app.state.documents
+def get_service(stack: Annotated[Stack, Depends(get_stack)]) -> AssessmentService:
+    return stack.service
+
+
+def get_documents(stack: Annotated[Stack, Depends(get_stack)]) -> DocumentService:
+    return stack.documents
 
 
 @dataclass(slots=True)

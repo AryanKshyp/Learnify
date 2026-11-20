@@ -1,0 +1,14 @@
+.git
+**/node_modules
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/*.egg-info
+frontend/dist
+backend/.env
+*.docx
+*.xlsx
+curriculum_graph.html
+learnify_pitch_deck.html
+viz_template.html

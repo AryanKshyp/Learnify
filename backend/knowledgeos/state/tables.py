@@ -19,7 +19,7 @@ from sqlalchemy import (
     Column,
     DateTime,
     Float,
-    ForeignKey,
+    ForeignKeyConstraint,
     Integer,
     MetaData,
     String,
@@ -30,10 +30,17 @@ from sqlalchemy.dialects.postgresql import JSONB, UUID
 
 metadata = MetaData()
 
+#: The user every row belongs to when there is no authentication (local use, the test suite,
+#: and every row that existed before accounts did). Hosted deployments use the identity
+#: provider's user id instead. It is a plain string column rather than a foreign key so the
+#: schema does not depend on which identity provider is in front of it.
+LOCAL_USER = "local"
+
 
 knowledge_state = Table(
     "knowledge_state",
     metadata,
+    Column("user_id", String, primary_key=True, server_default=LOCAL_USER),
     Column("node_id", String, primary_key=True),
     # Evidence only. Derived values (effective_mastery, retention, is_frontier,
     # critical_path_value, leverage, current_importance, learning_cost, status) are NOT columns
@@ -76,13 +83,8 @@ session_history = Table(
     "session_history",
     metadata,
     Column("session_id", UUID(as_uuid=True), primary_key=True),
-    Column(
-        "node_id",
-        String,
-        ForeignKey("knowledge_state.node_id", ondelete="RESTRICT"),
-        nullable=False,
-        index=True,
-    ),
+    Column("user_id", String, nullable=False, server_default=LOCAL_USER, index=True),
+    Column("node_id", String, nullable=False, index=True),
     Column("role_context", String, nullable=False),
     Column("created_at", DateTime(timezone=True), nullable=False),
     Column("completed_at", DateTime(timezone=True), nullable=True),
@@ -96,6 +98,14 @@ session_history = Table(
         "mastery_before BETWEEN 0 AND 1 AND mastery_after BETWEEN 0 AND 1",
         name="ck_session_history_mastery_in_range",
     ),
+    # Composite, because node state is now per user: a session may only reference a state row
+    # belonging to the same user.
+    ForeignKeyConstraint(
+        ["user_id", "node_id"],
+        ["knowledge_state.user_id", "knowledge_state.node_id"],
+        ondelete="RESTRICT",
+        name="session_history_user_node_fkey",
+    ),
 )
 
 
@@ -103,6 +113,7 @@ pending_sessions = Table(
     "pending_sessions",
     metadata,
     Column("session_id", UUID(as_uuid=True), primary_key=True),
+    Column("user_id", String, nullable=False, server_default=LOCAL_USER, index=True),
     # Deliberately no foreign key to knowledge_state, unlike session_history. A session can be
     # opened on a node that has never been assessed, and that node has no state row until the
     # first Schema B lands — an FK here would refuse to open exactly the sessions that matter
@@ -122,6 +133,7 @@ document_plans = Table(
     "document_plans",
     metadata,
     Column("document_id", UUID(as_uuid=True), primary_key=True),
+    Column("user_id", String, nullable=False, server_default=LOCAL_USER, index=True),
     Column("title", String, nullable=False),
     Column("kind", String, nullable=False),
     Column("source", String, nullable=True),
@@ -134,3 +146,16 @@ document_plans = Table(
     Column("schema_version", Integer, nullable=False, server_default="1"),
 )
 
+
+
+user_llm_settings = Table(
+    "user_llm_settings",
+    metadata,
+    Column("user_id", String, primary_key=True),
+    # anthropic | openai | gemini | openrouter
+    Column("provider", String, nullable=False),
+    Column("model", String, nullable=False),
+    # Fernet ciphertext. The plaintext key is never stored and never returned by the API.
+    Column("encrypted_key", Text, nullable=False),
+    Column("created_at", DateTime(timezone=True), nullable=False),
+)

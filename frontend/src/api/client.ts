@@ -7,13 +7,17 @@
  * rather than making them fix one, re-paste, and discover the next.
  */
 
+import { authHeaders, sessionExpired } from "../auth/token";
 import type {
   ApiErrorBody,
   Catalogue,
   DocumentPlan,
   DocumentSummary,
   GraphOut,
+  ChatTurn,
   IngestResponse,
+  LlmProvider,
+  LlmSettings,
   NodeDetail,
   Overview,
   PromptOut,
@@ -56,11 +60,14 @@ export class ApiError extends Error {
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api${path}`, {
-    headers: { "Content-Type": "application/json" },
     ...init,
+    headers: { "Content-Type": "application/json", ...(await authHeaders()), ...init?.headers },
   });
 
   if (!response.ok) {
+    // An expired or revoked sign-in: send the user back to the sign-in screen instead of
+    // leaving every panel showing the same error.
+    if (response.status === 401) sessionExpired();
     let body: ApiErrorBody;
     try {
       const parsed = await response.json();
@@ -71,6 +78,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     throw new ApiError(response.status, body);
   }
 
+  if (response.status === 204) return undefined as T;
   return response.json() as Promise<T>;
 }
 
@@ -161,9 +169,36 @@ export const api = {
     request<DocumentPlan>(`/documents/${encodeURIComponent(documentId)}`),
 
   deleteDocument: (documentId: string) =>
-    fetch(`/api/documents/${encodeURIComponent(documentId)}`, { method: "DELETE" }).then(
-      (response) => {
+    authHeaders()
+      .then((headers) =>
+        fetch(`/api/documents/${encodeURIComponent(documentId)}`, { method: "DELETE", headers }),
+      )
+      .then((response) => {
+        if (response.status === 401) sessionExpired();
         if (!response.ok) throw new Error(`delete failed: ${response.status}`);
-      },
-    ),
+      }),
+
+  // ------------------------------------------------------------ AI provider + in-app sessions
+
+  llmProviders: () => request<LlmProvider[]>("/llm/providers"),
+  llmSettings: () => request<LlmSettings>("/llm/settings"),
+  saveLlmSettings: (body: { provider: string; api_key: string; model?: string }) =>
+    request<LlmSettings>("/llm/settings", { method: "PUT", body: JSON.stringify(body) }),
+  deleteLlmSettings: () => request<void>("/llm/settings", { method: "DELETE" }),
+  openrouterExchange: (code: string, codeVerifier: string) =>
+    request<LlmSettings>("/llm/openrouter/exchange", {
+      method: "POST",
+      body: JSON.stringify({ code, code_verifier: codeVerifier }),
+    }),
+
+  chat: (sessionId: string, phase: "study" | "assess", messages: ChatTurn[]) =>
+    request<{ reply: string }>(`/sessions/open/${sessionId}/chat`, {
+      method: "POST",
+      body: JSON.stringify({ phase, messages }),
+    }),
+  finish: (sessionId: string, messages: ChatTurn[]) =>
+    request<IngestResponse>(`/sessions/open/${sessionId}/finish`, {
+      method: "POST",
+      body: JSON.stringify({ messages }),
+    }),
 };

@@ -20,7 +20,7 @@ from uuid import UUID
 from sqlalchemy import Engine, delete, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
-from knowledgeos.state.tables import pending_sessions
+from knowledgeos.state.tables import LOCAL_USER, pending_sessions
 
 from .schemas import SchemaA
 
@@ -34,11 +34,13 @@ class PostgresPendingSessionStore:
     state, so the two are equivalent anyway.
     """
 
-    def __init__(self, engine: Engine) -> None:
+    def __init__(self, engine: Engine, user_id: str = LOCAL_USER) -> None:
         self._engine = engine
+        self._user = user_id
 
     def open(self, schema_a: SchemaA) -> None:
         row = {
+            "user_id": self._user,
             "session_id": schema_a.session_id,
             "node_id": schema_a.target.node_id,
             "created_at": schema_a.generated_at,
@@ -48,7 +50,8 @@ class PostgresPendingSessionStore:
         statement = pg_insert(pending_sessions).values(row)
         statement = statement.on_conflict_do_update(
             index_elements=[pending_sessions.c.session_id],
-            set_={k: statement.excluded[k] for k in row if k != "session_id"},
+            set_={k: statement.excluded[k] for k in row if k not in ("session_id", "user_id")},
+            where=pending_sessions.c.user_id == self._user,
         )
         with self._engine.begin() as connection:
             connection.execute(statement)
@@ -64,7 +67,10 @@ class PostgresPendingSessionStore:
             row = (
                 connection.execute(
                     delete(pending_sessions)
-                    .where(pending_sessions.c.session_id == session_id)
+                    .where(
+                        pending_sessions.c.user_id == self._user,
+                        pending_sessions.c.session_id == session_id,
+                    )
                     .returning(pending_sessions.c.schema_a)
                 )
                 .mappings()
@@ -77,7 +83,8 @@ class PostgresPendingSessionStore:
             row = (
                 connection.execute(
                     select(pending_sessions.c.schema_a).where(
-                        pending_sessions.c.session_id == session_id
+                        pending_sessions.c.user_id == self._user,
+                        pending_sessions.c.session_id == session_id,
                     )
                 )
                 .mappings()
@@ -94,9 +101,9 @@ class PostgresPendingSessionStore:
         with self._engine.connect() as connection:
             rows = (
                 connection.execute(
-                    select(pending_sessions.c.schema_a).order_by(
-                        pending_sessions.c.session_id
-                    )
+                    select(pending_sessions.c.schema_a)
+                    .where(pending_sessions.c.user_id == self._user)
+                    .order_by(pending_sessions.c.session_id)
                 )
                 .mappings()
                 .all()
@@ -106,7 +113,9 @@ class PostgresPendingSessionStore:
     def clear(self) -> None:
         """Test-support only. Not part of the protocol."""
         with self._engine.begin() as connection:
-            connection.execute(delete(pending_sessions))
+            connection.execute(
+                delete(pending_sessions).where(pending_sessions.c.user_id == self._user)
+            )
 
     def __len__(self) -> int:
         return len(self.all())

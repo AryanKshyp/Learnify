@@ -1,0 +1,20 @@
+# Render Blueprint: deploys the whole product as one web service from the Dockerfile.
+# Database and sign-in are Supabase (see DEPLOY.md); secrets are entered in the Render dashboard
+# and never committed.
+services:
+  - type: web
+    name: learnify
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        sync: false          # Supabase "Session pooler" connection string, postgresql+psycopg://...
+      - key: SUPABASE_URL
+        sync: false          # https://<project-ref>.supabase.co
+      - key: SUPABASE_ANON_KEY
+        sync: false          # Project Settings > API > anon / public key
+      - key: SECRETS_ENCRYPTION_KEY
+        sync: false          # see DEPLOY.md for how to generate; never change once users exist
